@@ -1,0 +1,20 @@
+{
+  "name": "realize-es6-functions",
+  "version": "1.0.0",
+  "description": "手动实现es6的方法或设计模式",
+  "main": "./src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc --watch"
+  },
+  "keywords": [
+    "es6",
+    "js",
+    "设计模式"
+  ],
+  "author": "chenxiaoxiang",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^12.7.12"
+  }
+}

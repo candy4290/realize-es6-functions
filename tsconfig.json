@@ -1,0 +1,16 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+      "baseUrl": "./",
+      "noImplicitAny": false,
+      "noEmitOnError": true,
+      "removeComments": false,
+      "sourceMap": false,
+      "target": "es2015",
+      "module": "commonjs",
+      "outDir": "./dist"
+    },
+    "exclude": [
+      "node_modules"
+    ]
+  }
