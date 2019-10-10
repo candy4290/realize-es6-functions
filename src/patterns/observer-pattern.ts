@@ -7,7 +7,7 @@
  */
 export class ObserverPattern {
     handles: {
-        key?: Function[]
+        [key: string]: Function[]
     }; // 注册的监听事件的回调事件对象
     constructor() {
         this.handles = {};
