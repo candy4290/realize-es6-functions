@@ -87,7 +87,6 @@ function Partition(arr: number[], low: number, high: number) {
     return i;
 }
 function swap(a: number, b: number, arr: number[]) {
-    console.log(arr[a],arr[b]);
     const temp = arr[a];
     arr[a] = arr[b];
     arr[b] = temp;
