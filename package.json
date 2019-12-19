@@ -16,6 +16,7 @@
   "author": "chenxiaoxiang",
   "license": "ISC",
   "dependencies": {
-    "@types/node": "^12.7.12"
+    "@types/node": "^12.7.12",
+    "http-server": "^0.12.0"
   }
 }

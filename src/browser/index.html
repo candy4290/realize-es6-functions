@@ -15,12 +15,17 @@
         <li><a onclick="navigate('green')">turn green</a></li>
     </ul>
     <script>
+        // 使用history.pushState来进行浏览器URL地址更新
         function navigate(url) {
             console.log('点击');
             history.pushState({}, url, url);
+            // 根据当前URL来匹配对应的component,并更新dom
+
         }
-        window.addEventListener('popState', () => {
+        // 前一页&后一页触发
+        window.addEventListener('popstate', () => {
             console.log('----');
+            // 根据当前页面URL来匹配对应的component,并更新dom
         })
     </script>
 </body>
