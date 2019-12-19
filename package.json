@@ -5,7 +5,8 @@
   "main": "./src/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "tsc --watch"
+    "start": "tsc --watch",
+    "serve:dist": "http-server dist/browser -a 0.0.0.0 -p 8888 -o"
   },
   "keywords": [
     "es6",
