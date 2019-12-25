@@ -15,10 +15,23 @@ import { BinarySearchTree } from './patterns/binary-search-tree';
 // observer.off('complate', callback);
 
 const bt = new BinarySearchTree();
-bt.insert(1);
-bt.insert(2);
+bt.insert(11);
+bt.insert(7);
+bt.insert(15);
+bt.insert(5);
 bt.insert(3);
+bt.insert(9);
+bt.insert(8);
+bt.insert(10);
+bt.insert(13);
+bt.insert(12);
+bt.insert(14);
+bt.insert(20);
+bt.insert(18);
+bt.insert(25);
 bt.insert(6);
-bt.insert(4);
-console.log(bt);
+function print(value) {
+    console.log(value);
+}
+bt.inOrderTraverse(print);
 console.log('-------');
