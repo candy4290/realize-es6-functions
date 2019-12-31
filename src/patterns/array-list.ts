@@ -123,4 +123,15 @@ export class ArrayList {
             result.push(right[rightIndex++]);
         }
     }
+
+
+    /**
+     * 快速排序，采用分冶思想
+     * 算法复杂度n*log(n)
+     *
+     * @memberof ArrayList
+     */
+    quickSort() {
+        
+    }
 }
