@@ -77,7 +77,6 @@ graph.addEdge('H', 'D');
 //     }
 //     console.log(s);
 // });
-graph.dfs((v) => {
-    console.log('visited: ' + v);
-})
-
+// graph.dfs((v) => {
+//     console.log('visited: ' + v);
+// })

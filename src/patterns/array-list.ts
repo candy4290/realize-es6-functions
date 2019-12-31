@@ -41,6 +41,7 @@ export class ArrayList {
     /**
      * 选择排序
      * 思路：找到最小的值放到第一位，第二小放到第二位，以此类推
+     * 时间复杂度o(n^2)
      *
      * @memberof ArrayList
      */
@@ -48,7 +49,78 @@ export class ArrayList {
         const len = this.array.length;
         let indexMin;
         for (let i = 0; i < len - 1; i++) {
+            indexMin = i;
+            for (let j = 1; j < len; j ++) {
+                if (this.array[indexMin] > this.array[j]) {
+                    indexMin = j;
+                }
+            }
+            if (i !== indexMin) {
+                this.swap(i, indexMin);
+            }
+        }
+    }
 
+    /**
+     * 插入排序
+     * 时间复杂度o(n)~o(n^2)
+     *
+     * @memberof ArrayList
+     */
+    insertSort() {
+        const len = this.array.length;
+        let temp, j;
+        for (let i = 1; i < len; i++) {
+            temp = this.array[i];
+            j = i;
+            while(j > 0 && this.array[j - 1] > temp) {
+                this.array[j] = this.array[j - 1];
+                j--;
+            }
+            this.array[j] = temp;
+        }
+    }
+
+    /**
+     * 归并排序，采用分冶的思想
+     * 算法复杂度n*log(n)
+     *
+     * @memberof ArrayList
+     */
+    mergeSortRec(array: any[]) {
+        const len = array.length;
+        if (len === 1) {
+            return array;
+        }
+        let mid = Math.floor(len / 2);
+        let left = array.slice(0, mid);
+        let right = array.slice(mid);
+        return this.merge(this.mergeSortRec(left), this.mergeSortRec(right));
+    }
+
+    /**
+     * left,right都已经排序好，将他们合并为一个排序好的数组。
+     *
+     * @param {any[]} left
+     * @param {any[]} right
+     * @memberof ArrayList
+     */
+    merge(left: any[], right: any[]) {
+        const result = [];
+        let leftIndex = 0, leftLength = left.length, 
+        rightIndex = 0, rightLength = right.length;
+        while (leftIndex < leftLength && rightIndex < rightLength) {
+            if (left[leftIndex] < right[rightIndex]) {
+                result.push(left[leftIndex++]);
+            } else {
+                result.push(right[rightIndex++]);
+            }
+        }
+        while (leftIndex < leftLength) {
+            result.push(left[leftIndex++]);
+        }
+        while(rightIndex < rightLength) {
+            result.push(right[rightIndex++]);
         }
     }
 }
