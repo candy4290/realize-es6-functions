@@ -83,7 +83,7 @@ export class ArrayList {
     }
 
     /**
-     * 归并排序，采用分冶的思想
+     * 归并排序，采用分治的思想
      * 算法复杂度n*log(n)
      *
      * @memberof ArrayList
@@ -129,7 +129,7 @@ export class ArrayList {
 
 
     /**
-     * 快速排序，采用分冶思想
+     * 快速排序，采用分治思想
      * 算法复杂度n*log(n)
      *
      * @memberof ArrayList
@@ -150,6 +150,7 @@ export class ArrayList {
         let index;
         if (array.length > 1) {
             index = this.partition(array, left, right);
+            console.log(left, right, index);
             if (left < index - 1) {
                 this.quick(array, left, index - 1);
             }
@@ -169,7 +170,7 @@ export class ArrayList {
             while (array[j] > pivot) {
                 j++;
             }
-            if (i < j) {
+            if (i <= j) {
                 this.swap(i, j);
                 i++;
                 j--;

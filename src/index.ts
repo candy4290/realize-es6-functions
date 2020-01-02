@@ -91,5 +91,5 @@ temp.insert(4);
 temp.insert(7);
 temp.insert(2);;
 console.log(temp.toString());
-console.log(temp.bubbleSort());
+console.log(temp.quickSort());
 console.log(temp.toString());
