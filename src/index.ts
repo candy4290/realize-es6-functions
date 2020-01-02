@@ -2,6 +2,7 @@ import { ObserverPattern } from './patterns/observer-pattern';
 import { BinarySearchTree } from './patterns/binary-search-tree';
 import { Picture } from './patterns/picture';
 import { Stack } from './patterns/stack';
+import { ArrayList } from './patterns/array-list';
 
 // const observer = new ObserverPattern();
 // function callback() {
@@ -38,30 +39,30 @@ import { Stack } from './patterns/stack';
 // bt.inOrderTraverse(print);
 // console.log('-------');
 
-const graph = new Picture();
-const myVertices = ['A','B','C','D','E','F','G','H','I'];
-myVertices.forEach(vertice => {
-    graph.addVertex(vertice);
-});
-graph.addEdge('A', 'B'); //{9}
-graph.addEdge('A', 'C');
-graph.addEdge('A', 'D');
-graph.addEdge('B', 'A');
-graph.addEdge('B', 'E');
-graph.addEdge('B', 'F');
-graph.addEdge('E', 'B');
-graph.addEdge('E', 'I');
-graph.addEdge('I', 'E');
-graph.addEdge('F', 'B');
-graph.addEdge('C', 'A');
-graph.addEdge('C', 'D');
-graph.addEdge('C', 'G');
-graph.addEdge('D', 'A');
-graph.addEdge('D', 'G');
-graph.addEdge('D', 'H');
-graph.addEdge('G', 'C');
-graph.addEdge('G', 'D');
-graph.addEdge('H', 'D');
+// const graph = new Picture();
+// const myVertices = ['A','B','C','D','E','F','G','H','I'];
+// myVertices.forEach(vertice => {
+//     graph.addVertex(vertice);
+// });
+// graph.addEdge('A', 'B'); //{9}
+// graph.addEdge('A', 'C');
+// graph.addEdge('A', 'D');
+// graph.addEdge('B', 'A');
+// graph.addEdge('B', 'E');
+// graph.addEdge('B', 'F');
+// graph.addEdge('E', 'B');
+// graph.addEdge('E', 'I');
+// graph.addEdge('I', 'E');
+// graph.addEdge('F', 'B');
+// graph.addEdge('C', 'A');
+// graph.addEdge('C', 'D');
+// graph.addEdge('C', 'G');
+// graph.addEdge('D', 'A');
+// graph.addEdge('D', 'G');
+// graph.addEdge('D', 'H');
+// graph.addEdge('G', 'C');
+// graph.addEdge('G', 'D');
+// graph.addEdge('H', 'D');
 // const shortestPath = graph.bfs('A');
 // const fromVertex = myVertices[0];
 // myVertices.forEach(vertice => {
@@ -80,3 +81,15 @@ graph.addEdge('H', 'D');
 // graph.dfs((v) => {
 //     console.log('visited: ' + v);
 // })
+
+const temp = new ArrayList();
+temp.insert(3);
+temp.insert(5);
+temp.insert(1);
+temp.insert(6);
+temp.insert(4);
+temp.insert(7);
+temp.insert(2);;
+console.log(temp.toString());
+console.log(temp.bubbleSort());
+console.log(temp.toString());

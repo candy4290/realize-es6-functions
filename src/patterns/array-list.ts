@@ -50,7 +50,7 @@ export class ArrayList {
         let indexMin;
         for (let i = 0; i < len - 1; i++) {
             indexMin = i;
-            for (let j = 1; j < len; j ++) {
+            for (let j = i + 1; j < len; j ++) {
                 if (this.array[indexMin] > this.array[j]) {
                     indexMin = j;
                 }
@@ -64,6 +64,7 @@ export class ArrayList {
     /**
      * 插入排序
      * 时间复杂度o(n)~o(n^2)
+     * 思路：从第二项开始，与第一项做比较，判断是否应该插入到第一项前还是不变位置，以此类推
      *
      * @memberof ArrayList
      */
@@ -122,6 +123,8 @@ export class ArrayList {
         while(rightIndex < rightLength) {
             result.push(right[rightIndex++]);
         }
+        console.log('将数组，' + left + '和数组，' + right + '合并为数组，' + result);
+        return result;
     }
 
 
@@ -132,6 +135,46 @@ export class ArrayList {
      * @memberof ArrayList
      */
     quickSort() {
-        
+        this.quick(this.array, 0, this.array.length - 1);
+    }
+
+    /**
+     *
+     *
+     * @param {number[]} array
+     * @param {number} left 左指针
+     * @param {number} right 右指针
+     * @memberof ArrayList
+     */
+    quick(array: number[], left: number, right: number) {
+        let index;
+        if (array.length > 1) {
+            index = this.partition(array, left, right);
+            if (left < index - 1) {
+                this.quick(array, left, index - 1);
+            }
+            if (index < right) {
+                this.quick(array, index, right);
+            }
+        }
+    }
+
+    partition(array: number[], left: number, right: number) {
+        const pivot = array[Math.floor(right + left) / 2];
+        let i = left, j = right;
+        while (i <= j) {
+            while (array[i] < pivot) {
+                i++;
+            }
+            while (array[j] > pivot) {
+                j++;
+            }
+            if (i < j) {
+                this.swap(i, j);
+                i++;
+                j--;
+            }
+        }
+        return i;
     }
 }
