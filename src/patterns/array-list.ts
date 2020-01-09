@@ -129,7 +129,8 @@ export class ArrayList {
 
 
     /**
-     * 快速排序，采用分治思想
+     * 快速排序，采用分治思想.选取一个基准点，比其大的放右边，比其小的放左边。
+     * 此处使用双指针，不需要任何额外空间
      * 算法复杂度n*log(n)
      *
      * @memberof ArrayList
@@ -139,8 +140,7 @@ export class ArrayList {
     }
 
     /**
-     *
-     *
+     * 采用递归
      * @param {number[]} array
      * @param {number} left 左指针
      * @param {number} right 右指针
@@ -150,7 +150,6 @@ export class ArrayList {
         let index;
         if (array.length > 1) {
             index = this.partition(array, left, right);
-            console.log(left, right, index);
             if (left < index - 1) {
                 this.quick(array, left, index - 1);
             }
@@ -160,15 +159,17 @@ export class ArrayList {
         }
     }
 
+    // 划分过程
     partition(array: number[], left: number, right: number) {
-        const pivot = array[Math.floor(right + left) / 2];
+        const flag = Math.floor((right + left) / 2);
+        const pivot = array[flag];
         let i = left, j = right;
         while (i <= j) {
             while (array[i] < pivot) {
                 i++;
             }
             while (array[j] > pivot) {
-                j++;
+                j--;
             }
             if (i <= j) {
                 this.swap(i, j);
