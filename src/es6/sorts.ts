@@ -104,3 +104,24 @@ const start2 = Date.now();
 quickSort(arr2, 0, arr2.length - 1);
 console.log('耗时：' + (Date.now() - start2) + 'ms')
 console.log(arr2);
+
+
+// 递归实现快排
+// function quickA(arr) {
+//     const len = arr.length;
+//     if (len <= 1) {
+//         return arr;
+//     }
+//     const leftArr = [];
+//     const rightArr = [];
+//     const mid = Math.floor(len / 2);
+//     const midNumber = arr.splice(mid, 1)[0];
+//     arr.forEach(item => {
+//         if (item < midNumber) {
+//             leftArr.push(item);
+//         } else {
+//             rightArr.push(item);
+//         }
+//     });
+//     return quickA(leftArr).concat([midNumber], quickA(rightArr));
+//     }
