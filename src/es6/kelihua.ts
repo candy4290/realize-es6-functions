@@ -25,3 +25,25 @@ function addT(a, b) {
     return a+b;
 }
 const addCurry = curry(addT);
+
+/* 偏函数 */
+function partial(fn) {
+    const args = [].slice.call(arguments, 1);
+    return function() {
+        const newArgs = args.concat([].slice.call(arguments));
+        return fn.apply(this, newArgs)
+    }
+}
+
+function add1(a, b) {
+    return a + b + this.value;
+}
+
+// var addOne = partial(add1, 1);
+
+// var value = 1;
+// var obj = {
+//     value: 2,
+//     addOne: addOne
+// }
+// obj.addOne(2); // 5
