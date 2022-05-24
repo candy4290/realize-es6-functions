@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+        body, ul {
+            margin: 0;
+        }
+    </style>
+  </head>
+  <body>
+    <div
+      id="conten"
+      style="height: 500px; overflow-y: scroll; background-color: aqua"
+    >
+    <!-- // 外层容器（高度为所有数据都展示的高度，用来撑起容器，展示滚动条） -->
+      <div style="height: 60000px">
+        <ul id="uul" style="text-decoration: none"></ul>
+      </div>
+    </div>
+
+    <script>
+      const list = new Array(Math.floor(500 / 60) + 4)
+        .fill(1)
+        .map((item, index) => index);
+      const total = new Array(1000).fill(1).map((item, index) => index);
+
+	  // 初始展示首屏数据，多展示几条保证快速滑动能看到数据
+      init(list);
+
+      function init(arr, offset = 0) {
+        uul.innerHTML = "";
+        arr.forEach((item) => {
+          const li = document.createElement("li");
+          li.style = `text-align:center;height:60px;border:1px solid red;box-sizing: border-box;`;
+          li.innerHTML = item + 1;
+          uul.appendChild(li);
+        });
+        
+        // 这里因为内容被滚动到上面去了，所以往下平移
+        uul.style = `transform:translateY(${offset}px)`;
+      }
+
+      conten.addEventListener("scroll", (e) => {
+        const top = e.target.scrollTop;
+        const num = Math.floor(top / 60);
+		    // 截取要展示的数据
+        const newList = total.slice(num, num + Math.floor(500 / 60) + 4);
+        // 计算出偏移量
+        const offset = top - (top % 60);
+        console.log(offset)
+        init(newList, offset);
+      });
+    </script>
+  </body>
+</html>
+

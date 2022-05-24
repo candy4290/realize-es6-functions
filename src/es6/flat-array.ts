@@ -42,3 +42,17 @@ function flatten3(arr) {
     }
 }
 
+/**
+ * 数组扁平化---使用generator生成器
+ *
+ * @param {*} arr
+ */
+function* flatten4(arr) {
+    if (Array.isArray(arr)) {
+        for(let i = 0; i < arr.length; i++) {
+            yield* flatten4(arr[i])
+        }
+    } else {
+        yield arr;
+    }
+}

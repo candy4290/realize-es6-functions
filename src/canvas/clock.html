@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+</body>
+<script>
+    const canvasWH = 600; /* canvas容器大小 */
+    const radius = 200; /* 表盘半径 */
+    const biaopanWidth = 8;
+    const centerCircleRadius = 8;
+    const keduWidth = 12; /* 刻度宽度 */
+    const keduHeight = 4; /* 刻度高度 */
+    const offsetKedu = 4; /* 刻度离表盘距离 */
+    const offsetNum = offsetKedu + keduWidth + 30;
+    const canvas = document.createElement('canvas');
+    document.body.append(canvas);
+    canvas.width = canvasWH;
+    canvas.height = canvasWH;
+    const ctx = canvas.getContext('2d')
+    
+    setInterval(() => {
+        ctx.save();
+        ctx.clearRect(0,0,canvasWH,canvasWH);
+        ctx.translate(canvasWH/2,canvasWH/2); /* 原点移动到300，300 */
+        ctx.save();
+    
+        /* 画表盘-大圆 */
+        ctx.lineWidth = biaopanWidth;
+        ctx.strokeStyle = '#eee';
+        ctx.beginPath();
+        ctx.arc(0, 0, radius, 0, 2 * Math.PI);
+        ctx.closePath();
+        ctx.stroke();
+    
+        /* 画中间小圆 */
+        ctx.beginPath();
+        ctx.arc(0,0,centerCircleRadius,0,2*Math.PI);
+        ctx.fillStyle = '#000';
+        ctx.fill();
+        ctx.closePath();
+        /* 画刻度 */
+        for (let i = 1; i< 5 * 12 + 1; i++) {
+            ctx.beginPath();
+            ctx.rotate(Math.PI*2/12/5)
+            ctx.rect(0 - keduHeight/2,-radius + biaopanWidth/2 + offsetKedu,keduHeight,keduWidth)
+            if (i%5 === 0) {
+                ctx.fillStyle = '#000';
+            } else {
+                ctx.fillStyle = '#eee';
+            }
+            ctx.fill();
+            ctx.closePath();
+        }
+        /* 画整点文字 */
+        for(let i=1;i<13;i++){
+            ctx.font="30px "+"Arial";
+            ctx.textAlign="center";
+            ctx.textBaseline="middle";
+            ctx.fillStyle="black";
+            let x=(radius-offsetNum)*Math.cos(Math.PI/6*i - Math.PI/2);
+            let y=(radius-offsetNum)*Math.sin(Math.PI/6*i - Math.PI/2);
+            ctx.fillText(i,x,y);
+        }
+
+        const date = new Date();
+        const hour = date.getHours() % 12;
+        const min = date.getMinutes();
+        const sec = date.getSeconds();
+        
+        /* 画时针 */
+        ctx.lineWidth = 1;
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(0,0)
+        ctx.rotate(Math.PI/6 * (hour+min/60 + sec/60/60) - Math.PI/2)
+        ctx.lineTo(20,-(centerCircleRadius - 4));
+        ctx.lineTo(radius - 90,0);
+        ctx.lineTo(20,(centerCircleRadius - 4));
+        ctx.lineTo(0,0);
+        ctx.fill();
+        ctx.closePath();
+        ctx.restore();
+    
+        /* 画分针 */
+        ctx.beginPath();
+        ctx.moveTo(0,0)
+        ctx.rotate(Math.PI/30 * (min + sec/60) - Math.PI/2);
+        ctx.lineTo(20,-(centerCircleRadius - 5));
+        ctx.lineTo(radius - 70,0);
+        ctx.lineTo(20,(centerCircleRadius - 5));
+        ctx.lineTo(0,0);
+        ctx.fill();
+        ctx.closePath();
+        ctx.restore();
+    
+        /* 画秒针 */
+        ctx.beginPath();
+        ctx.fillStyle = 'red';
+        ctx.shadowOffsetX = 3;
+        ctx.shadowOffsetY = 3;
+        ctx.shadowBlur= 16 ;
+        ctx.shadowColor="black";
+        ctx.rotate(Math.PI/30 * sec - Math.PI/2);
+        ctx.moveTo(-20,0)
+        ctx.lineTo(20,-(centerCircleRadius - 6));
+        ctx.lineTo(radius - 50,0);
+        ctx.lineTo(20,(centerCircleRadius - 6));
+        ctx.lineTo(-20,0);
+        ctx.fill();
+        ctx.closePath();
+        ctx.restore();
+    },1000);
+</script>
+<style>
+    canvas {
+        background: url('./clock.jpg') no-repeat;
+        background-position: 49% 45%;
+    }
+</style>
+</html>

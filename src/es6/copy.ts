@@ -24,3 +24,6 @@ function deepClone(obj) {
     }
     return newObj;
 }
+
+enum Color {Red = 1, Green, Blue = 4}
+const a: Color = Color.Red

@@ -24,9 +24,16 @@ var tt = {
 test.myApplyTest();
 test.myApplyTest.myApply(tt, ['m', 'y', 'a', 'p', 'p', 'l', 'y']);
 
-Function.prototype.myApply2 = function(context) {
-    var context = context || window;
-    context._fn = this;
-    context._fn(Array.prototype.slice.call(arguments, 1));
-    delete context._fn;
+Function.prototype.myApply = function(context, arr) {
+   if (typeof this !== 'function') {
+      throw new Error('只有函数可以调用myApply方法！')
+    }
+    const ctx = context || window;
+    ctx._fn = this;
+    if (!arr) {
+      ctx._fn();
+    } else {
+      ctx._fn(...arr); 
+    }
+    delete ctx._fn;
 }
