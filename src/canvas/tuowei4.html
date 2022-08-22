@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>拖尾</title>
+    <style>
+        body {
+            overflow: hidden;
+            background: #000;
+        }
+
+        body,
+        html {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #myCache {
+            width: 400px;
+            height: 200px;
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            z-index: 10;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="myCache"></div>
+</body>
+<script>
+    window.cacheDiv = document.getElementById("myCache");
+
+    //兼容写法
+    window.RAF = (function () {
+        return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame ||
+            window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback) {
+                window.setTimeout(callback, 1000 / 60);
+            };
+    })();
+
+
+    window.tuowei = {
+        cache: {},
+        eleConvas: null,// 这就是上面说到的 三个区域 最左边的那个剪裁Canvas
+        conts: null,//eleConvas.getContext("2d") 
+        imgData: null,//剪裁后的图像数据
+        imgW: 0,
+        imgH: 0,
+        id: 0,
+        getNextID: function () {
+            this.id++;
+            return this.id;
+        },
+        addCvs: function (w, h) {
+            var cvs = document.createElement("canvas");
+            cvs.id = this.getNextID();
+            cvs.width = w;
+            cvs.height = h;
+            cvs.style.border = "1px solid #f00";
+            window.cacheDiv.appendChild(cvs);
+            this.cache[cvs.id] = cvs;
+            return cvs;
+        },
+        // r 半径
+        renderWeiba: function (r, wad) {
+            //这些注释 只是作者用来看的，方便查找问题，实际这下面还有比这更复杂一大段，这只是简化了一些
+            //原本还想做 拖尾扩散的宽度大于圆形的直径的，实际看了下规则和实际的效果，果断放弃了
+            //width r/3*4+2*r+(3-wad)*r/3*3
+            //height r/3*5+3*r+(3-wad)*r/3*4
+            //top r/3*2+r + (3-wad)*r/3*3 || 作用于top (2+1)
+            //left r/3*2+r + (3-wad)*r/3*2	|| 作用于 left 与 right
+
+            if (wad > 3) wad = 3;
+            if (wad < 1) wad = 1;
+            if (!(wad == 1 || wad == 2 || wad == 3)) wad = 3; // 3 拖尾收缩 2 收缩一点 1 最大收缩
+
+            //这一段的大概是 以 半径的三分之一为基础的偏移量做的准备
+            var rs = r / 3;
+            var zj = r * 2;// 直径 看不懂的憋说话
+            var wads = (3 - wad) * rs; //3-wad 整体缩放偏移量
+            var max_w = rs * 4 + zj;// rs*4 r 的半径扩大了 3分子2 加上 直径 就是红色圆的大小
+            var max_h = rs * 5 + zj + r + wads * 4; // 这个 rs*5 算起来比较坑 我都忘了
+
+            var left = max_w / 2; // 简单 最大的圆的半径 也就是红色圆的半径 绿色圆的中心起点位置
+            var top = rs * 2 + r + wads * 3; //  rs*2+r 绿色圆的中心距离顶部的距离 在无缩放Wads = 3 的时候 rs*2 就是给 黑色圆进行偏移的
+            var top1 = top + rs * 4 + wads;
+            // rs*4 基于绿色圆想下偏移到红色圆的位置
+            //（可能说的有点怪怪的，是以 r/3 的四倍距离来确定 拖尾 渐变填充的图形的位置）
+
+            var top2 = r + wads; // 渐变填充参数的第二个圆的顶部距离（可不是第二个参数哦），wads 是使用缩放后，目标填充区域的中心 蓝色圆会变小，反而外面的那个 黑色 的圆会变大
+            var r1 = r - wads;// 蓝色圆半径
+            var r2 = r + wads;// 黑色圆半径
+            var r3 = r + rs * 2;// 红色圆半径
+
+            var cont = this.addCvs(max_w, max_h).getContext("2d");
+            //我喜欢叫 渐变填充器
+            var grad = cont.createRadialGradient(left, top1, r1, left, top2, r2);
+            grad.addColorStop(1, "rgba(255,145,188,1)");//按效果 我喜欢 从1到0 
+            //  		grad.addColorStop(0.8,"rgba(0,0,255,1)");//看到一点点
+            //  		grad.addColorStop(0.6,"rgba(0,0,0,0.7)");//1
+            //  		grad.addColorStop(0.4,"rgba(255,0,0,0.5)");//2
+            //  		grad.addColorStop(0.2,"rgba(255,255,0,0.3)");//3
+            //  		grad.addColorStop(0.1,"rgba(0,255,255,0.1)");//4
+            // 			grad.addColorStop(0,"rgba(255,0,255,0)");//5
+            grad.addColorStop(0.7, "rgba(255,145,188,1)");//6
+            grad.addColorStop(0, "rgba(255,255,255,0)");//7
+
+            //上面一大堆 addColorStop 就是插入渐变的节点 
+            // 第一个参数是相对渐变开始和结束的 比例 
+
+            /* 没测过自己是不是色盲，就把几个简单的颜色记录下
+            * 255 - - 红
+            * - 255 - 绿
+            * - - 255 蓝
+            * - 255 255 青
+            * 255 255 - 黄
+            * 255 - 255 紫红
+            * 255 145 188 //粉红
+            */
+
+            //紧接着的这个图形就是绘制的拖尾
+            cont.beginPath();
+            cont.arc(left, top1, r3, 0, Math.PI * 2);
+            cont.fillStyle = grad;
+            cont.strokeStyle = "red"; // 这个用来看边框用的 下方还有个没有边框的
+            cont.fill();
+            cont.stroke();
+
+            //我用的圆形，所以这代表图形的位置
+            cont.beginPath();
+            cont.arc(left, top, r, 0, Math.PI * 2);
+            cont.strokeStyle = "green";
+            cont.stroke();
+
+            //1  createRadialGradient 的第一个渐变圆的位置描画出来看
+            cont.beginPath();
+            cont.arc(left, top1, r1, 0, Math.PI * 2);
+            cont.strokeStyle = "blue";
+            cont.stroke();
+
+            //2 createRadialGradient 的第二个渐变圆的位置描画出来看
+            cont.beginPath();
+            cont.arc(left, top2, r2, 0, Math.PI * 2);
+            cont.strokeStyle = "black";
+            cont.stroke();
+
+            //这就是我们要拖尾的效果
+            var cont2 = this.addCvs(max_w, max_h).getContext("2d");
+            cont2.beginPath();
+            cont2.arc(left, top1, r3, 0, Math.PI * 2);
+            cont2.fillStyle = grad;
+            cont2.fill();
+
+            //在上一个拖尾的效果上覆盖上一个图形 看上去大功告成
+            cont2.beginPath();
+            cont2.arc(left, top, r, 0, Math.PI * 2);
+            cont2.fillStyle = "rgba(255,145,188,1)";
+            cont2.fill();
+
+            //准备剪切出实际有效的区域
+            var r_l = left - r;
+            var r_t = top - r;
+            var r_r = left + r;
+            var r_b = top1 + r1;
+
+            //copy 
+            this.imgW = zj;
+            this.imgH = r_b - r_t;
+            //getImageData 获取一个指定矩形区域的图像数据
+            this.imgData = cont2.getImageData(r_l, r_t, r_r, r_b);
+            this.eleConvas = this.addCvs(zj, r_b - r_t);
+            this.conts = this.eleConvas.getContext("2d");
+            //putImageData 将 getImageData 的图像填充到执行 x y 开始的位置。
+            this.conts.putImageData(this.imgData, 0, 0);
+            //putImageData 这个坑爹的填充不能使用旋转，烦的一批
+        },
+        getImgData: function () {
+            _this = this;
+            return {
+                imgW: _this.imgW,
+                imgH: _this.imgH,
+                imgData: _this.imgData,
+                eleConvas: _this.eleConvas,
+                conts: _this.conts
+            }
+        }
+    }
+    //半径为 60 拖尾缩放为 2 级 
+    window.tuowei.renderWeiba(60, 2);
+
+    var c = document.getElementById("myCanvas");
+    var ctx = c.getContext("2d");
+    var grd = ctx.createRadialGradient(130, 100, 70, 100, 100, 100);
+    grd.addColorStop(1, "red");
+    grd.addColorStop(0, "white");
+    ctx.fillStyle = grd;
+    ctx.arc(100, 100, 100, 0, Math.PI * 2);
+    ctx.fill();
+</script>
+
+</html>

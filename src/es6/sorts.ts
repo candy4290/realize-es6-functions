@@ -72,24 +72,17 @@ function popSort(arr: number[]) {
 function Partition(arr: number[], low: number, high: number) {
     let i = low, j = high, pivot = arr[i];
     while(i !== j) {
-        while(i < j && arr[j] > pivot)
+        while(i < j && arr[j] > pivot) {
             j--;
-        if (i < j) {
-            swap(i++, j, arr);
         }
-
-        while(i < j && arr[i] <= pivot)
+        arr[i] = arr[j];
+        while(i < j && arr[i] <= pivot) {
             i++;
-        if (i < j) {
-            swap(i, j--, arr);
         }
+       arr[j] = arr[i]
     }
+    arr[i] = pivot; 
     return i;
-}
-function swap(a: number, b: number, arr: number[]) {
-    const temp = arr[a];
-    arr[a] = arr[b];
-    arr[b] = temp;
 }
 function quickSort(arr: number[], low: number, high: number) {
     let mid: number;
@@ -125,3 +118,8 @@ console.log(arr2);
 //     });
 //     return quickA(leftArr).concat([midNumber], quickA(rightArr));
 //     }
+
+
+export function isObject(value: any): value is Object {
+    return value !== null && typeof value === "object"
+}

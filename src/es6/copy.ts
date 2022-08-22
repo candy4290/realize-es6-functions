@@ -13,8 +13,8 @@ function shallowCopy(obj) {
 
 // 深拷贝
 function deepClone(obj) {
-    if (typeof obj !== 'object') { // 只拷贝对象
-        return;
+    if (obj == null || typeof obj !== 'object') { // 只拷贝对象
+        return obj;
     }
     const newObj = obj instanceof Array ? [] : {};
     for (let key in obj) {

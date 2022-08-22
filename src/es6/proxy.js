@@ -10,7 +10,7 @@
  * @return {*} 
  */
 function observer(obj) {
-    if (typeof obj === 'object') {
+    if (obj !== null && typeof obj === 'object') {
         for (let key in obj) {
             defineReactive(obj, key, obj[key])
         }

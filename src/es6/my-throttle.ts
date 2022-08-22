@@ -40,3 +40,19 @@ function MyThrottle2(fn: Function, delay: number) {
         }
     }
 }
+
+function myThrottle(fn, wait) {
+    let flag;
+    return function() {
+        let that = this;
+        if (!flag) {
+            flag = true;
+            const args = arguments;
+            const t$ = setTimeout(() => {
+                flag = false;
+                fn.apply(that, args);
+                clearTimeout(t$);
+            }, wait)
+        }
+    }
+}

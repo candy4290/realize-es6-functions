@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>跟随光标七彩泡泡</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            overflow: hidden;
+        }
+
+        #canvas {
+            background-color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas"></canvas>
+</body>
+<script>
+    var canvas = document.querySelector('#canvas');
+    var ctx = canvas.getContext("2d");
+    var starlist = [];
+    function init() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    init();
+    window.onresize = init;
+    canvas.addEventListener('mousemove', function (e) {
+        starlist.push(new Star(e.offsetX, e.offsetY));
+        console.log(starlist)
+    })
+    function random(min, max) {
+        return Math.floor((max - min) * Math.random() + min);
+    }
+    function Star(x, y) {
+        this.x = x;
+        this.y = y;
+        this.vx = (Math.random() - 0.5) * 2.5;
+        this.vy = (Math.random() - 0.5) * 2.5;
+        this.color = 'rgb(' + random(0, 200) + ',' + random(0, 200) + ',' + random(0, 200) + ')';
+        this.a = 1;
+        console.log(this.color);
+        this.draw();
+    }
+    Star.prototype = {
+        draw: function () {
+            ctx.beginPath();
+            ctx.fillStyle = this.color;
+            ctx.globalCompositeOperation = 'lighter' /* 两个重叠图形的颜色是通过颜色值相加来确定的。 */
+            ctx.globalAlpha = this.a; /* 设置接下来绘制图像的透明度 */
+            ctx.arc(this.x, this.y, 30, 0, Math.PI * 2, false);
+            ctx.fill();
+            this.updata();
+        },
+        updata() {
+            this.x += this.vx;
+            this.y += this.vy;
+            this.a *= .98;
+        }
+    }
+    console.log(new Star(10, 20));
+    function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+        starlist.forEach((item, i) => {
+            item.draw();
+            if (item.a < 0.05) {
+                starlist.splice(i, 1);
+            }
+        })
+        requestAnimationFrame(render);
+    }
+    render();	
+</script>
+
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <canvas class="canvas" width="340" height="160"></canvas>
+</body>
+<script>
+    /**
+ * @Author   SuZhe
+ * @DateTime 2019-03-15
+ * @desc     兼容 requestAnimFrame
+ * @return   {[Function]}    requestAnimFrame不兼容的浏览器使用定时器代替
+ */
+    window.requestAnimFrame = (function () {
+        return window.requestAnimationFrame ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame ||
+            function (callback) {
+                window.setTimeout(callback, 1000 / 60);
+            };
+    })();
+
+    /**
+    * @Author   SuZhe
+    * @DateTime 2019-03-15
+    * @desc     椭圆动画效果  star运动
+    * @param    {[Object]}   canvasId [画布布id]
+    */
+    function CanvasAnimation(param) {
+        if (param.ele) {
+            this.canvas = param.ele;
+            this.cxt = this.canvas.getContext('2d');
+            this.param = param;
+
+            // arc
+            this.a = 168; //长 半 径
+            this.b = 53;  //短 半 径
+            this.posi = []; //位置集合
+            this.posiNext = [];
+            this.radius = 2;
+            this.time = 0; //步长
+
+            this.animation();
+        }
+    }
+    CanvasAnimation.prototype = {
+        animation: function () {
+            var that = this;
+
+            //arc
+            this.draw();
+
+            window.requestAnimFrame(function () {
+                that.animation();
+            });
+        },
+        draw: function () {
+            var y = 56;
+            this.cxt.clearRect(0, 0, 340, 160);
+            this.trail(y, this.posi);
+            this.time += 0.02;
+        },
+        trail: function (y, posi) {
+            var context = this.cxt,
+                x = 170, a, b,
+                param = {};
+                a = this.a;
+                b = this.b;
+            //圆弧坐标
+            param.arcX = x + a * Math.cos(this.time),
+                param.arcY = y + b * Math.sin(this.time);
+            posi.push(param);
+            if (posi.length > 25) {
+                posi.shift();
+            }
+            for (var i = 0, len = posi.length; i < len; i++) {
+                var alphar = 1;
+                if (i < len - 1) {
+                    alphar = i / 30;
+                }
+                context.fillStyle = "rgba(0, 246, 255, " + alphar + ")";
+                context.beginPath();
+                context.arc(posi[i].arcX, posi[i].arcY, this.radius, 0, 2 * Math.PI);
+                context.closePath();
+                context.fill();
+            }
+        },
+    }
+
+    var arc = new CanvasAnimation({
+        ele: document.getElementsByClassName('canvas')[0]
+    });
+</script>
+
+</html>

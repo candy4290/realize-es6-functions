@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="main">
+        <div class="box">四个角切角效果</div>
+    </div>
+    <style>
+        .box{
+            width: 200px;
+            height: 200px;
+            background:#ace;
+            background:linear-gradient(135deg, transparent 15px, #F8E2EB 0) top left,
+            linear-gradient(-135deg, transparent 15px, #ace 0) top right,
+            linear-gradient(-45deg, transparent 15px, #F8E2EB 0) bottom right,
+            linear-gradient(45deg, transparent 15px, #ace 0) bottom left;
+            background-size:50% 50%;  /*每个块在水平和垂直方向上都占元素尺寸的50%*/
+            background-repeat:no-repeat;   
+        }
+    </style>
+</body>
+</html>
