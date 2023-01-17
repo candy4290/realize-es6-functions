@@ -14,9 +14,9 @@ const obj = {
     d:4
 };
 Object.defineProperty(obj, Symbol.iterator, {
-    enumerable: false,
+    enumerable: false, // 是否可在for...in...和Object.keys()中被枚举
     writable: false,
-    configurable: true,
+    configurable: true, // 属性可否被删除，以及除value和writable特性外的其他特性是否可被修改
     value: function() {
         var o = this;
         var idx = 0;
@@ -31,10 +31,12 @@ Object.defineProperty(obj, Symbol.iterator, {
         }
     }
 })
-var it = obj[Symbol.iterator]();
-it.next(); // { value:2, done:false }
-it.next(); // { value:3, done:false }
-it.next(); // { value:undefined, done:true }
+var it2 = obj[Symbol.iterator]();
+it2.next(); // { value:1, done:false }
+it2.next(); // { value:2, done:false }
+it2.next(); // { value:3, done:false }
+it2.next(); // { value:4, done:false }
+it2.next(); // { value:undefined, done:true }
 // 用 for..of 遍历 myObject
 for (var v of obj) {
     console.log( v )

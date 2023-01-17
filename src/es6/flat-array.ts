@@ -28,7 +28,7 @@ function flatten(arr) {
 function flatten2(arr) {
     return arr.reduce((prev, next) => {
         return prev.concat(Array.isArray(next) ? flatten2(next) : next)
-    })
+    }, [])
 }
 
 /**
@@ -40,6 +40,7 @@ function flatten3(arr) {
     while (arr.some(i => Array.isArray(i))) {
         arr = [].concat(...arr);
     }
+    return arr;
 }
 
 /**
