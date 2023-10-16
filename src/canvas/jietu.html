@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>截图示例</title>
+    <style>
+      #canvas {
+        position: fixed;
+        left: 0;
+        top: 0;
+        z-index: 9999;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>截图示例</h1>
+    <p>这是一个简单的截图示例。</p>
+    <button id="btn" style="position: absolute;z-index: 9999999;">截1图</button>
+    <canvas id="canvas"></canvas>
+    <script>
+      const canvas = document.getElementById('canvas');
+      const ctx = canvas.getContext('2d');
+      const btn = document.getElementById('btn');
+      console.log(btn)
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      btn.addEventListener('click', () => {
+        console.log('---------------------------')
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(document.documentElement, 0, 0);
+        const imgData = canvas.toDataURL();
+        console.log(imgData);
+      });
+    </script>
+  </body>
+</html>

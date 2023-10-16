@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/annyang/2.6.1/annyang.min.js"></script>
+</head>
+<script>
+    [][0].a
+    console.log(annyang)
+    if (annyang) {
+      // Let's define a command.
+      const commands = {
+        'hello': () => { alert('Hello world!'); }
+      };
+    
+      // Add our commands to annyang
+      annyang.addCommands(commands);
+    
+      // Start listening.
+      annyang.start();
+    }
+    </script>
+<body>
+    say hello
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    .box1{
+      width: 200px;
+      height: 100px;
+      background-color: red;
+      margin-bottom: 100px;
+    }
+    .box2{
+      width: 300px;
+      height: 200px;
+      background-color: blue;
+      margin-top: 50px;
+    }
+   
+  </style>
+  <!-- <script>console.log('start')</script> -->
+  <script>
+function sheetLoad() {
+  console.log('css 已加载完毕')
+}
+  </script>
+  <link href="https://unpkg.com/layui@2.8.17/dist/css/layui.css" rel="stylesheet"
+  onload="sheetLoad()">
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('DOMContentLoaded')
+    })
+    addEventListener("load", (event) => {console.log('load')});
+  </script>
+  <!-- <script>console.log('---------------')</script> -->
+</head>
+<body>
+  <script src="./t.js" type="text/javascript" defer></script>
+  <!-- <script>console.log(1)</script> -->
+  <!-- <img src="https://unsplash.it/1200/800?image=1015" /> -->
+  <div>
+    <div class="box2"></div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #f5f5f5;
+    }
+
+    .wrap {
+      position: relative;
+      width: 300px;
+      height: 200px;
+    }
+
+    .scrollbar-wrap {
+      position: absolute;
+      height: 200px;
+      width: 8px;
+      top: 0;
+      right: 0;
+    }
+
+    .div1 {
+      height: 200px;
+      width: 300px;
+      margin: 50px auto;
+      background: white;
+      padding: 0 20px;
+      overflow: auto;
+      position: relative;
+    }
+
+    .div1::-webkit-scrollbar {
+      display: none;
+    }
+
+    li {
+      height: 200px;
+      background-color: bisque;
+    }
+
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      background-color: aquamarine;
+      height: 400px;
+    }
+
+    .scrollbar {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 0;
+      background-color: #cdcdcd;
+      width: 8px;
+      border-radius: 4px;
+      height: 10px;
+      user-select: none;
+      transition: background-color 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+    }
+
+    .scrollbar:hover {
+      background-color: #8d8d8d;
+    }
+
+    .wrap:hover .scrollbar {
+      display: block;
+    }
+
+    .show {
+      display: block;
+      background-color: #8d8d8d;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="div1">
+      <ul>
+        <li>1</li>
+      </ul>
+
+    </div>
+    <div class="scrollbar-wrap">
+      <div class="scrollbar" id="scrollbar"></div>
+    </div>
+  </div>
+  <script>
+    const scrollbar = document.getElementById('scrollbar')
+    const container = document.getElementsByClassName('div1')[0]
+    const { offsetHeight, scrollHeight } = container
+    scrollbar.style.height = parseInt(offsetHeight / scrollHeight * 100) + '%'
+
+    container.addEventListener('scroll', () => {
+      const { scrollTop } = container
+      scrollbar.style.top = parseInt(scrollTop / scrollHeight * 100) + '%'
+    })
+
+    let flag = false
+    let eventTop = 0
+    let scrollTop = 0
+    scrollbar.addEventListener('mousedown', (e) => {
+      flag = true
+      eventTop = e.clientY
+      scrollTop = scrollbar.offsetTop
+    })
+    document.addEventListener('mousemove', (e) => {
+      if (!flag) return
+      scrollbar.classList.add('show')
+      // 滚动方向
+      let direction = e.clientY > eventTop ? 'down' : 'up'
+      // 移动距离
+      const moveLen = Math.abs(e.clientY - eventTop)
+      let top = 0
+      if (direction === 'up') {
+        if (scrollTop - moveLen < 0) {
+          top = 0
+        } else {
+          top = scrollTop - moveLen
+        }
+      } else {
+        if (scrollTop + moveLen + scrollbar.offsetHeight > offsetHeight) {
+          top = offsetHeight - scrollbar.offsetHeight
+        } else {
+          top = scrollTop + moveLen
+        }
+      }
+      scrollbar.style.top = top + 'px'
+      const rate = top / offsetHeight
+      container.scrollTop = scrollHeight * rate
+    })
+    document.addEventListener('mouseup', () => {
+      flag = false
+      scrollbar.classList.remove('show')
+    })
+  </script>
+</body>
+
+</html>

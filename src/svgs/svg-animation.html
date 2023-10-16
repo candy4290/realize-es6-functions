@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+margin: 0;
+padding: 0;
+overflow: hidden;
+}
+
+#container {
+position: relative;
+width: 100vw;
+height: 100vh;
+}
+
+.particle {
+position: absolute;
+width: 10px;
+height: 10px;
+background-color: #ff0000;
+border-radius: 50%;
+}
+  </style>
+</head>
+<body>
+  <div id="container">
+    <div class="particle"></div>
+    </div>
+</body>
+</html>
+<script>
+  var container = document.getElementById('container');
+var particle = document.querySelector('.particle');
+
+var angle = 0;
+var a = 100; // 长半轴
+var b = 50; // 短半轴
+var speed = 0.01;
+
+function update() {
+var x = a * Math.cos(angle);
+var y = b * Math.sin(angle);
+
+particle.style.left = container.offsetWidth / 2 + x + 'px';
+particle.style.top = container.offsetHeight / 2 + y * 2 + 'px';
+
+angle += speed;
+
+requestAnimationFrame(update);
+}
+
+update();
+</script>
