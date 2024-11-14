@@ -1,0 +1,67 @@
+1.单例服务有哪几种方式
+  1>@Injectable({providedIn: root})
+  2>在某个模块中providers: [xx]，且该模块只在根模块中导入
+  constructor(@Optional() @SkipSelf() parentModule?: GreetingModule) {
+      if (parentModule) {
+        throw new Error(
+          'GreetingModule is already loaded. Import it in the AppModule only');
+      }
+    }
+2.angular如何启动HMR
+ng serve --hmr=true
+3.rxjs取消订阅的几种方式（内存泄漏）
+  每一个单独unsubscribe、
+  收集到一个统一的Subscription实例中去，统一unsubscribe、
+  声明一个Subject实例，每个地方使用takeUntil，最后takeUntil发出一个值，并将自身complate
+4.Service可以实现OnDestory,何时执行。
+  非懒加载模块，在此模块页面都销毁后执行。如果是在组件中提供，则组件销毁时执行。
+5.多级注入器;依赖注入
+  angular会把@NgModule.providers中的提供者添加到应用的根注入器中...除非该模块是惰性加载的，这种情况下，angular会创建一个子注入器。
+  值提供者useValue
+  类提供者useClass
+  别名提供者useExisting
+  工厂提供者useFactory
+  constructor(heroService: HeroService)是一种缩写，写全是：constructor(@Inject(HeroService): heroService: HeroService)
+  依赖提供者：即providers元数据，作用1>告诉注入器如何提供依赖值，作用2>限制服务可使用的范围
+6.rxjs常用操作符
+  fromEvent,
+  of-单一值转为流,
+  from-数组转为流,
+  concat-串联,
+  merge-并联,
+  map-转换,
+  mergeMap-并联+转换,
+  zip-拉链,
+  debounceTime-防抖,
+  filter-过滤,
+  takeUntil-等到第二个流发出值，就结束第一个流。
+7.Observable与Promise区别
+  执行时机：Observable在订阅时才执行，Promise定义之后立马执行
+  可观察对象可以提供多个值，Promise只提供一个---resolve一个值后，就结束了。
+8.JIT与AOT
+  AOT（ahead-of-time,预先编译），在构建阶段，把angular的html代码和typescript代码转换成高效的js代码。构建阶段发生在浏览器下载并运行所生成的代码之前。能减少加载时间，提升性能
+  JTI（just-in-time,即时编译），在运行期间，把angular的html代码和typescript代码转换成高效的js代码。
+9.优化
+  onPush及纯管道
+10.生命周期
+  ngOnChanges、
+  ngOnInit、
+  ngDoCheck、
+  ngAfterContentInit、
+  ngAfterConentChecked、
+  ngAfterViewInit、
+  ngAfterViewChecked、
+  ngOnDestory
+11.zone变更检测
+  zone.js用来检测应用程序状态何时可能已更改。比如setTimeout,网络请求和事件侦听器。
+  避免为给定代码段调度的任务调用变更检测：this.ngZone.runOutsideAngular
+  优化方法：1>优化算法，提高计算效率 2>使用纯管道进行缓存 3>避免在生命周期钩子中触发重绘/回流
+  有变更时，将会在整个组件树中自上而下执行变更检车。
+12.冷、热流;多播
+  Subject可以将值多播到多个Oberver;普通的Observable是单播的；
+  每次订阅的时候，重新创建“生产者”，则是冷的/单播。
+  每次订阅的时候共用一个“生产者”，则是热的/多播。
+  BehaviorSubject需要一个初始值，在订阅时，会发送其当前值。
+  使用share操作符，可以将冷流/单播，变为热流/多播。
+13.增量DOM
+angular不使用虚拟DOM，而是使用增量DOM。没有创建中间树（现有树就地改变）

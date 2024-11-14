@@ -1,0 +1,91 @@
+1.js typeof及instanceof区别
+typeof的可能返回值:string、number、boolean、object、undefined、symbol、function、bigint
+元不同，typeof是一元操作符、instanceof是二元操作符。
+原理不同，typeof原理是通过2进制的前三位来表示类型，typeof null返回'object'（null二进制的前三位是000,000代表object类型），instanceof是通过判断构造函数的prototype属性是否出现在实例对象的原型链上。
+返回值不同，typeof返回字符串，instanceof返回boolean类型。
+
+2.instanceof和isPrototypeOf区别
+instanceof用于检测构造函数的prototype属性是否出现在实例对象的原型链上。
+isPrototypeOf用于检查一个对象是否在另一个对象的原型链上。
+区别：
+1>object instanceof Afunction,会检查object的原型链是否与Afunction.prototype匹配，而不是与Afunction匹配。
+2>instanceof子在前，父在后。isPrototypeOf父在前，子在后
+
+3.==、===、Object.is();四种相等算法；
+==与===区别在于，==比较时可能在发生隐式类型转换。
+===与Object.is的区别在于，-0和+0，NaN和NaN的判断结果不一样。
+
+四种相等算法：
+    1>宽松相等：==
+    2>严格相等：===
+    3>同值相等：Object.is
+    4>零值相等：与同值相等唯一的区别在于，认为+0和-0是相等的，该api没有暴露出来。Array.prototype.includes及Map、Set的key判断都是使用该算法
+
+==的隐式类型转换规则（两边类型不一致时候发生）：
+1>存在boolean类型，将其转为数字，false-0,true-1
+2>数字与字符串比较时候，将字符串转为数字
+3>存在对象，将对象转为原始值。先调用valueOf，如果没有返回原始值，再调用toString将其转为原始值
+
+4.内存泄漏可能原因及其排查方法
+1>意外的全局变量。使用严格模式来解决该问题
+2>console.log输出的对象不会被垃圾回收。可以在生产环境禁用console
+3>不合理的闭包使用
+4>dom泄漏，操作dom,引用一直没有得到释放
+5>定时器没有销毁
+6>监听事件没有解绑
+排查方式：chrome的Performance
+
+5.数组中哪些方法会改变原有数组，哪些不会
+会改变：sort、push、pop、shift、unshift
+不会：concat、filter、map
+
+6.for...of,for...in,for循环区别
+for...of遍历可迭代对象。
+for...in遍历对象的可枚举属性，遍历对象时，包含了原型链中的可枚举属性。
+for循环用于手动控制循环次数的情况。
+
+7.new一个对象的过程中发生了什么
+1>创建一个空对象
+2>将空对象的__proto__属性链接至构造函数的原型对象
+3>将步骤一创建的对象，作为this的上下文
+4>执行构造函数的内部代码（给新对象添加属性）
+5>如果构造函数没有显示返回任何东西，则返回第一步创建的对象。否则返回构造函数返回的对象。
+
+8.Map和Object的区别
+1>Object存在原型，可能有隐式的key
+2>Object的key只能是string或者symbol类型的
+3>Map的key的有序的
+4>Map的size可以通过size属性轻松获取
+5>Map是可迭代的
+6>频繁增删的场景下map的性能更好
+7>Map没有序列化和解析的支持。
+
+9.bind,call,apply区别
+都是可以用来改变this的指向。其中call,apply会自动执行。call,bind以逗号分隔的方式接受参数，apply接受数组形式的参数。
+
+10.检测变量a是否是数组，至少5种
+1>Array.isArray(a)
+2>a instanceof Array
+3>Array.prototype.isPrototypeOf(a)
+4>a.constructor === Array
+5>Object.prototype.toString.call(a) === '[object Array]'
+
+11.迭代器，生成器
+迭代器：[Symbol.iterator], 是通过使用next()方法实现了迭代器协议的任何一个对象，该方法返回{value:any,done:boolean}
+在以下场景中会默认调用Iterator接口(即Symbol.Iterator方法)：1>for...of... 2>直接调用[Symbol.Iterator]() 3>解构赋值 4>扩展运算符 5>yield*
+生成器：function * xx() {}
+
+12.严格模式和非严格模式有什么区别
+严格模式消除js语法的一些不合理，不严谨之处，减少一些怪异行为；IE10支持严格模式
+写在文件第一行，或者函数内部第一行。
+不允许使用未声明的变量
+不允许删除变量或函数
+函数中不允许有同名的参数
+不允许对只读属性赋值
+不允许使用八进制
+不允许对一个使用getter方法读取的属性进行赋值
+不允许删除一个不允许删除的值
+不允许使用eval作为变量名
+不允许使用arguments作为变量名
+不允许使用with语句
+eval会创建独立的作用域；（eval中声明的变量，在eval外无法使用）
