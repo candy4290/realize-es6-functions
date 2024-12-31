@@ -22,8 +22,9 @@ d3.js关系图谱
 3>前端导出excel,使用webworker,避免卡顿
 4>懒加载
 5>大批量数据，利用pako压缩。利用get请求，缓存。geoserver。
-6>请求体过大、nginx用户没有proxy_temp的写入权限。请求路径过长。rtmp转发视频流不能用http代理。
-
+6>请求体过大、nginx用户没有proxy_temp的写入权限。请求路径过 长。rtmp转发视频流不能用http代理。
+7>幽灵依赖导致的问题，幽灵依赖：指的是项目中未在 dependencies 或 devDependencies 声明，但由于各种原因依然能够在运行或开发中被访问的依赖
+npx depcheck,用来检测项目中package.json声明了，但未使用的依赖。或者未直接声明，但是使用的依赖。
 项目：
 1>勤务
 排班：
