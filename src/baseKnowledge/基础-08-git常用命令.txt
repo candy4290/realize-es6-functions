@@ -14,6 +14,13 @@ git rebase -i 让提交记录干净整洁；还可以合并前几次commit；还
 
 git cherry-pick a1b2c3d4：合并某一次commit
 
+git commit --amend: 将更改合并到最后一次提交中去
+
+git commit后，如何撤销：
+1>git reset --soft HEAD~1 , 代码保持切处于staged状态 
+2>git reset --mixed HEAD~1，代码没有保持在staged状态
+3>git reset --hard HEAD~1，修改的文件丢失
+
 开源贡献
 先fork开源项目到自己的仓库，然后clone到自己本地
 添加主代码库：git remote add upstream https://github.com/ant-design/ant-design.git

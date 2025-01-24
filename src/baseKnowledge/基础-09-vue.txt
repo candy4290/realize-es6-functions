@@ -1,3 +1,75 @@
 1.Provide,Inject跨层级传递，不是响应式的，需要绑定data中的数据，且必须是对象。不能改变对象的引用，否则子组件感受不到。
 但是一data中的某个对象，必须要改变引用，页面才能感知到变化
-2.生命周期有哪些，执行顺序。created与mounted区别
+
+2.生命周期
+beforeCreate（不能访问data,methods,computed）->
+created（不能访问dom）->
+beforeMount->
+mounted（可以访问dom）->
+beforeDestroy->
+destroyed
+
+创建+挂载阶段 beforeCreate -> created -> beforeMount -> mounted
+                    ↑                        ↓
+更新阶段         beforeUpdate -> updated
+                    ↑                        ↓
+卸载阶段         beforeDestroy -> destroyed
+
+父子组件：
+创建+挂载阶段 父beforeCreate->父created->父beforeMount->子beforeCreate -> 子created -> 子beforeMount -> 子mounted -> 父mounted
+更新阶段 父beforeUpdate->子beforeUpdate->子updated->父updated
+卸载阶段 父beforeUpdate->子beforeDestroy->子destroyed->父destroyed
+
+3.父子组件通讯方式
+1>props传值
+2>vuex
+3>provide,inject
+4>子组件通过this.$emit来派发自定义事件xxx，父组件@xxx="yyy"来监听子组件派发的自定义事件
+5>v-model双向绑定
+6>事件总线Event Bus, const t = new Vue() t.emit('xxx', params) t.$on('xxx', function)
+
+4.指令
+对普通dom进行底层操作【drag指令，拖拽模态框。权限指令，无权限不展示】
+
+5.过滤器
+文本转换（千分位及日期格式转换器）
+
+6.混入
+路由跳转时候，禁用tooltip。
+逻辑复用。【字典值获取】
+this.$options.xxx (自定义选项)。
+
+7.动态组件：按需渲染，而不是一次性全部加载
+
+8.插件
+插件通常用来为 Vue 添加全局功能。
+使用插件：Vue.use(MyPlugin)，内部会调用MyPlugin.install()
+
+9.beforeEach禁用鼠标事件，afterEnter后再放开【针对直接原页面刷新，根据from路径，来在afterEach中放开】
+beforeEach->afterEach->beforeEnter->afterEnter
+
+10.vue性能优化
+1>避免滥用water
+2>合理使用v-if,v-show
+3>路由懒加载
+4>异步组件
+5>数据扁平化，避免深层次嵌套
+
+11.vuex
+store:全局单例。
+action: 用来提交muation,可以包含异步操作
+mutation: 同步函数
+
+12.异步组件
+本质上都是两次渲染，第一次渲染生成一个注释节点，当异步获取组件成功后，再通过 forceRender 强制重新渲染，这样就能正确渲染出我们异步加载的组件了。
+
+13.响应式
+通过defineProperty来设置getter,setter. 用来收集依赖、派发更新【观察者模式】
+
+14.nextTick
+本次DOM更新后执行回调函数
+
+15.给对象增加属性
+this.$set(x, 'key', 'value')
+
+16.计算属性适用于模板渲染。侦听属性适用于监听变化，处理业务逻辑。

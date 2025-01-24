@@ -36,7 +36,7 @@ isPrototypeOf用于检查一个对象是否在另一个对象的原型链上。
 排查方式：chrome的Performance
 
 5.数组中哪些方法会改变原有数组，哪些不会
-会改变：sort、push、pop、shift、unshift
+会改变：sort、push、pop、shift、unshift、splice、reverse
 不会：concat、filter、map
 
 6.for...of,for...in,for循环区别
@@ -73,12 +73,12 @@ for循环用于手动控制循环次数的情况。
 11.迭代器，生成器
 迭代器：[Symbol.iterator], 是通过使用next()方法实现了迭代器协议的任何一个对象，该方法返回{value:any,done:boolean}
 在以下场景中会默认调用Iterator接口(即Symbol.Iterator方法)：1>for...of... 2>直接调用[Symbol.Iterator]() 3>解构赋值 4>扩展运算符 5>yield*
-生成器：function * xx() {}
+生成器：基于迭代器的特殊函数，function * xx() {}，可以在执行过程中暂停。
 
 12.严格模式和非严格模式有什么区别
 严格模式消除js语法的一些不合理，不严谨之处，减少一些怪异行为；IE10支持严格模式
 写在文件第一行，或者函数内部第一行。
-禁止使用未声明的变量。
+禁止使用未声明的变量。(比如赋值给未声明的变量)
 在函数中this的值是，undefined。而非严格模式下指向window。
 不允许删除变量或函数或参数
 禁止函数有同名的参数
