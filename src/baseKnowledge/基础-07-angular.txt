@@ -1,14 +1,14 @@
 1.单例服务有哪几种方式
   1>@Injectable({providedIn: root})
   2>在某个模块中providers: [xx]，且该模块只在根模块中导入
-  constructor(@Optional() @SkipSelf() parentModule?: GreetingModule) {
+    constructor(@Optional() @SkipSelf() parentModule?: GreetingModule) {
       if (parentModule) {
         throw new Error(
           'GreetingModule is already loaded. Import it in the AppModule only');
       }
     }
 2.angular如何启动HMR
-ng serve --hmr=true
+  ng serve --hmr=true
 3.rxjs取消订阅的几种方式（内存泄漏）
   每一个单独unsubscribe、
   收集到一个统一的Subscription实例中去，统一unsubscribe、
@@ -16,10 +16,11 @@ ng serve --hmr=true
 4.Service可以实现OnDestory,何时执行。
   非懒加载模块，在此模块页面都销毁后执行。如果是在组件中提供，则组件销毁时执行。
 5.多级注入器;依赖注入
+  依赖注入其实是将一个模块所依赖的部分作为参数传入，而不是由模块自己去构造。
   angular会把@NgModule.providers中的提供者添加到应用的根注入器中...除非该模块是惰性加载的，这种情况下，angular会创建一个子注入器。
   值提供者useValue
   类提供者useClass
-  别名提供者useExisting
+  别名提供者useExisting 【场景：一个新的服务，取代旧的服务】
   工厂提供者useFactory
   constructor(heroService: HeroService)是一种缩写，写全是：constructor(@Inject(HeroService): heroService: HeroService)
   依赖提供者：即providers元数据，作用1>告诉注入器如何提供依赖值，作用2>限制服务可使用的范围

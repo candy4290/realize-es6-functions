@@ -1,5 +1,9 @@
-1.Provide,Inject跨层级传递，不是响应式的，需要绑定data中的数据，且必须是对象。不能改变对象的引用，否则子组件感受不到。
-但是一data中的某个对象，必须要改变引用，页面才能感知到变化
+1.Provide,Inject 是什么，是否响应式，如何让它响应式?
+跨层级传递，不是响应式的。
+1>需要绑定data中的数据，且必须是对象。不能改变对象的引用，否则子组件感受不到。
+2>provide() {return {b: () => this.a}},然后子组件中调用b();
+
+但是data中的某个对象，必须要改变引用，页面才能感知到变化
 
 2.生命周期
 beforeCreate（不能访问data,methods,computed）->
@@ -18,7 +22,7 @@ destroyed
 父子组件：
 创建+挂载阶段 父beforeCreate->父created->父beforeMount->子beforeCreate -> 子created -> 子beforeMount -> 子mounted -> 父mounted
 更新阶段 父beforeUpdate->子beforeUpdate->子updated->父updated
-卸载阶段 父beforeUpdate->子beforeDestroy->子destroyed->父destroyed
+卸载阶段 父beforeDestroy->子beforeDestroy->子destroyed->父destroyed
 
 3.父子组件通讯方式
 1>props传值
@@ -39,7 +43,7 @@ destroyed
 逻辑复用。【字典值获取】
 this.$options.xxx (自定义选项)。
 
-7.动态组件：按需渲染，而不是一次性全部加载
+7.动态组件：按需渲染，而不是一次性全部加载。使用:is="xxx"
 
 8.插件
 插件通常用来为 Vue 添加全局功能。
@@ -69,7 +73,11 @@ mutation: 同步函数
 14.nextTick
 本次DOM更新后执行回调函数
 
+原理：Promise.then,MutationObserver,setImmmediate,setTimeout(fn,0);
+
+
 15.给对象增加属性
 this.$set(x, 'key', 'value')
 
-16.计算属性适用于模板渲染。侦听属性适用于监听变化，处理业务逻辑。
+16.计算属性
+计算属性适用于模板渲染。侦听属性适用于监听变化，处理业务逻辑。

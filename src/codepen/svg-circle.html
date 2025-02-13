@@ -30,8 +30,6 @@ function sheetLoad() {
   console.log('css 已加载完毕')
 }
   </script>
-  <link href="https://unpkg.com/layui@2.8.17/dist/css/layui.css" rel="stylesheet"
-  onload="sheetLoad()">
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       console.log('DOMContentLoaded')
@@ -45,7 +43,9 @@ function sheetLoad() {
   <!-- <script>console.log(1)</script> -->
   <!-- <img src="https://unsplash.it/1200/800?image=1015" /> -->
   <div>
-    <div class="box2"></div>
+    <div class="box2" id="bx"></div>
   </div>
+  <link href="https://unpkg.com/layui@2.8.17/dist/css/layui.css" rel="stylesheet"
+  onload="sheetLoad()">
 </body>
 </html>

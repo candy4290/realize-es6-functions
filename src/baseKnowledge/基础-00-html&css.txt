@@ -1,0 +1,97 @@
+1.BFC是什么？特点？触发方式？使用场景？
+定义：block formatting context,区块格式化上下文。BFC 是一个独立的渲染区域，内部的元素布局不会影响外部元素。
+特点：
+1>BFC内部的块级元素会按照垂直方向一个接一个排列
+2>同一个BFC中，相邻块级元素的上下外边距会合并。不同BFC之间的外边距不会合并。
+3>BFC会包含其内部的所有浮动元素，避免父元素高度坍塌
+4>BFC区域不会与浮动元素重叠
+5>BFC内部的元素布局不会影响外部元素，反之亦然
+触发方式：
+1>根元素(<html>)
+2>浮动元素(float值不为none)
+3>绝对定位元素(position值为absolute或fixed)
+4>行内块元素(display值为inline-block)
+5>表格单元格(display值为table-cell)
+6>表格标题(display值为table-caption)
+7>匿名表格单元格元素(display值为table、table-row、table-row-group、table-header-group、table-footer-group（分别是HTML table、tr、tbody、thead、tfoot的默认值）或inline-table)
+8>overflow值不为visible、clip的块元素
+9>display值为flow-root的元素
+10>contain值为layout、content或paint的元素
+11>弹性元素(display值为flex或inline-flex元素的直接子元素),如果它们本身既不是flex、grid也不是table
+12>网格元素(display值为grid或inline-grid元素的直接子元素)，如果它们本身既不是flex、grid也不是table
+使用场景：
+1>a元素margin-bottom:100px,b元素margin-top:100px,此时页面上a,b上下距离为100px
+处理方法1，a、b分别包裹一个父级元素，并给父级元素设置为BFC。
+处理方法2，.a,.b {display: table-caption}
+处理方法3，a、b的父元素上设置display:grid或者display:flex,flex-direction:column
+处理方法4，.b {display: inline-block}
+2>父元素内部元素都是浮动布局，导致父元素高度为0
+处理方法1，将父元素设置为BFC
+处理方法2， clear用于指定一个元素是否必须引动到（清除浮动后）在它之前的浮动元素下面。 &::after {content: '';
+                display: block;
+                clear: both}
+2.哪些属性可以继承？哪些不可继承
+1>可继承：
+字体系列：font-family,font-weight,font-size,font-style
+文本系列：text-indent,text-align,line-height,word-spacing,letter-spacing,color
+visibility、cursor
+2>不可继承
+border、padding、margin、width、height、position、display、float
+
+3.文本超出显示省略号，单行，多行。
+1>单行, {white-space:nowrap;overflow:hidden;text-overflow: ellipsis}
+2>多行，{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;text-overflow:ellipsis}
+
+4.如何隐藏一个元素，有什么区别？
+visibility:hidden,不影响布局，不可点击
+display:none,影响布局，不可点击
+position:absolute,top:-99999px,影响布局，可点击
+opacity:0,不影响布局，可点击。
+
+5.伪类、伪元素。:与::区别。
+伪类：用于选择元素的特定状态或位置（如 :hover、:active、:disabled、:focus、:nth-child、:first-child）。
+伪元素：用于选择元素的特定部分或生成内容（如 ::before、::first-letter、::placeholder、::first-line、::selection）。
+
+6.css选择器有哪些？优先级？权重计算方式？
+CSS 选择器的优先级可以用 (A, B, C, D) 四元组表示：
+1>A（1000）：内联样式（style=""）
+2>B（100）：ID 选择器（#id）
+3>C（10）：类、伪类、属性选择器（.class、:hover、[type="text"]）
+4>D（1）：元素、伪元素选择器（div、h1、::before）
+相同权重的，后定义的覆盖前面定义的。
+
+7.为元素设置background,颜色会填充哪些区域？
+content,padding,border区域。
+
+8.css实现动画步骤
+1>@keyframes定义关键帧,
+2>将刚才定义的关键帧应用到元素上，animation-name: xx,animation-duration: 2s,animation-timing-function: ease-in-out, animation-delay:.2s,animation-iteration-count:infinite
+可选设置：
+animation-fill-mode(指定动画结束后元素的状态)
+animation-direction(指定动画播放的方向)
+animation-play-state(控制动画的播放状态)
+
+9.块级元素、内联元素、置换元素
+块级元素：div、p、h1-h6、ul、li
+内联元素：span、a、strong、em、img、
+置换元素：img、video、iframe
+
+10.语义化标签
+header、nav、main、article、section、aside、footer、
+figure、figcation、time
+
+11.html5中，input元素的type属性有哪些？
+text
+password
+radio
+checkbox
+number
+range
+date
+time
+file
+color
+hidden
+submit
+reset
+button

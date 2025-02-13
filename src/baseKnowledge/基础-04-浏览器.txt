@@ -16,7 +16,7 @@
 如果同时设置了async和defer,执行async。
 
 4.link标签引入外部css是否会阻塞页面解析、渲染；是否会阻塞js下载及执行。
-    link标签不会阻塞解析，但是会阻塞渲染，会阻塞JS的执行。
+    link标签不会阻塞解析，但是会阻塞渲染(如果link标签放在body标签前面的话)，会阻塞后面JS的执行。
     如果link标签后没有script标签，则立即触发DomContentLoaded事件。否则，会阻塞js脚本，也就阻塞了DomContentLoaded事件。
     如果加上media="print",<link rel="stylesheet" href="xxx" media="print" />是非阻塞渲染的。
 
