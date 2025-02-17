@@ -31,6 +31,8 @@ destroyed
 4>子组件通过this.$emit来派发自定义事件xxx，父组件@xxx="yyy"来监听子组件派发的自定义事件
 5>v-model双向绑定
 6>事件总线Event Bus, const t = new Vue() t.emit('xxx', params) t.$on('xxx', function)
+7>使用ref
+8>$parent,$root
 
 4.指令
 对普通dom进行底层操作【drag指令，拖拽模态框。权限指令，无权限不展示】
@@ -79,5 +81,20 @@ mutation: 同步函数
 15.给对象增加属性
 this.$set(x, 'key', 'value')
 
-16.计算属性
+16.计算属性，computed
 计算属性适用于模板渲染。侦听属性适用于监听变化，处理业务逻辑。
+具有缓存机制
+不支持异步
+
+17.vue2初始化过程做了哪些事情
+1>合并配置
+2>初始化生命周期
+3>初始化事件
+4>初始化渲染
+5>调用beforeCreate钩子函数
+6>init injections and reactivity(
+    这个阶段属性都已注入绑定，但是$el还是没有生成，也就是DOM没有生成
+)
+7>初始化state状态（初始化了data,props,computed,watch）
+8>调用created钩子
+9>在初始化的最后，检测到如果有了el属性，则调用vm.$mount方法挂载vm,挂载的目标就是把模版渲染成最终的DOM

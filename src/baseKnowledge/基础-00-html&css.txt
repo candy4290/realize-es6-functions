@@ -1,11 +1,10 @@
 1.BFC是什么？特点？触发方式？使用场景？
 定义：block formatting context,区块格式化上下文。BFC 是一个独立的渲染区域，内部的元素布局不会影响外部元素。
 特点：
-1>BFC内部的块级元素会按照垂直方向一个接一个排列
-2>同一个BFC中，相邻块级元素的上下外边距会合并。不同BFC之间的外边距不会合并。
-3>BFC会包含其内部的所有浮动元素，避免父元素高度坍塌
-4>BFC区域不会与浮动元素重叠
-5>BFC内部的元素布局不会影响外部元素，反之亦然
+1>同一个BFC中，相邻块级元素的上下外边距会合并。不同BFC之间的外边距不会合并。
+2>BFC会包含其内部的所有浮动元素，避免父元素高度坍塌
+3>BFC区域不会与浮动元素重叠(排除外部浮动)
+
 触发方式：
 1>根元素(<html>)
 2>浮动元素(float值不为none)
@@ -14,11 +13,11 @@
 5>表格单元格(display值为table-cell)
 6>表格标题(display值为table-caption)
 7>匿名表格单元格元素(display值为table、table-row、table-row-group、table-header-group、table-footer-group（分别是HTML table、tr、tbody、thead、tfoot的默认值）或inline-table)
-8>overflow值不为visible、clip的块元素
+8>overflow值不为visible、clip的块元素 【clip与hidden的区别是，clip不可通过编程的方式滚动、hidden可以通过编程的方式滚动】
 9>display值为flow-root的元素
 10>contain值为layout、content或paint的元素
-11>弹性元素(display值为flex或inline-flex元素的直接子元素),如果它们本身既不是flex、grid也不是table
-12>网格元素(display值为grid或inline-grid元素的直接子元素)，如果它们本身既不是flex、grid也不是table
+11>弹性元素(display值为flex或inline-flex元素的直接子元素)
+12>网格元素(display值为grid或inline-grid元素的直接子元素)
 使用场景：
 1>a元素margin-bottom:100px,b元素margin-top:100px,此时页面上a,b上下距离为100px
 处理方法1，a、b分别包裹一个父级元素，并给父级元素设置为BFC。
@@ -30,6 +29,7 @@
 处理方法2， clear用于指定一个元素是否必须引动到（清除浮动后）在它之前的浮动元素下面。 &::after {content: '';
                 display: block;
                 clear: both}
+
 2.哪些属性可以继承？哪些不可继承
 1>可继承：
 字体系列：font-family,font-weight,font-size,font-style
@@ -43,13 +43,13 @@ border、padding、margin、width、height、position、display、float
 2>多行，{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;text-overflow:ellipsis}
 
 4.如何隐藏一个元素，有什么区别？
-visibility:hidden,不影响布局，不可点击
-display:none,影响布局，不可点击
+visibility:hidden,不影响布局，不可点击。可继承。子元素可以通过visibility:visible来让子元素显示出来。
+display:none,影响布局，不可点击。不可继承。子元素不可以通过display:block来让子元素显示出来
 position:absolute,top:-99999px,影响布局，可点击
 opacity:0,不影响布局，可点击。
 
 5.伪类、伪元素。:与::区别。
-伪类：用于选择元素的特定状态或位置（如 :hover、:active、:disabled、:focus、:nth-child、:first-child）。
+伪类：用于选择元素的特定状态或位置（如 :hover、:active、:disabled、:focus、:fullscreen、:nth-child、:first-child、:not(),:has()）。
 伪元素：用于选择元素的特定部分或生成内容（如 ::before、::first-letter、::placeholder、::first-line、::selection）。
 
 6.css选择器有哪些？优先级？权重计算方式？
