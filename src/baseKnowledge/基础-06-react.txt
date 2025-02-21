@@ -31,7 +31,7 @@ react17,18,原生事件捕获->合成事件捕获+冒泡->原生事件冒泡【V
 
 4.react组件性能优化
 1>使用新的api来利用并发特性，避免页面卡顿
-useDeferredValue(使用Object.is进行比较),useTransition来延迟更新，避免页面卡顿。 【echarts,多轨迹地图动效卡顿时】
+useDeferredValue(使用Object.is进行比较，延迟更新UI的某些部分),useTransition来延迟更新，避免页面卡顿。 【echarts,多轨迹地图动效卡顿时】
 2>使用useMemo（可以量化，>1ms，再缓存结果）,useCallback,memo来避免重复渲染
 3>尽量减少不必要的useState的使用。
 4>尽量减少不必要的useEffect的使用：不必使用useEffect来转换渲染所需要的数据、不必使用useEffect来处理用户事件(点击等操作)
@@ -46,7 +46,7 @@ useDeferredValue(使用Object.is进行比较),useTransition来延迟更新，避
 3>redux不支持异步操作，需要借助于中间件。mobx支持异步操作。
 
 6.父子组件通信方式
-1>props或者render props(也称为渲染属性，子组件数据网上抛。)
+1>props或者render props(也称为渲染属性，子组件数据往上抛。)
 2>context
 3>ref+forwardRef+useImperativeHandle。最新的react19已经不需要forwardRef包裹了
 4>redux等状态管理库

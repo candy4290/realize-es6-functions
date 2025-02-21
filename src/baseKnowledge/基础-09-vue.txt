@@ -98,3 +98,8 @@ this.$set(x, 'key', 'value')
 7>初始化state状态（初始化了data,props,computed,watch）
 8>调用created钩子
 9>在初始化的最后，检测到如果有了el属性，则调用vm.$mount方法挂载vm,挂载的目标就是把模版渲染成最终的DOM
+
+18.v-show,v-if
+v-if，会将DOM元素完全移除
+v-show,相当于display:none,dom仍然会被渲染
+

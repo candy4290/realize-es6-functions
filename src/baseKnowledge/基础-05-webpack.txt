@@ -1,11 +1,17 @@
 1.loader作用，执行顺序是怎样的，说五个常用的loader
     webpack只能理解js,json文件。loader用来处理webpack不理解的文件，对模块的源码进行转换。
-    loader从后往前执行。
+    loader从后往前执行。使用enforce可以来控制更改默认的执行顺序，pre-先执行，post-最后执行。
     ts-loader:将ts转换为js
     less-loader:将less转为css
-    style-loader:将css注入到js中，并在执行js时,注入到页面的head中去。
+    style-loader:与css-loader配合使用，css-loader负责解析css文件，style-loader将解析后的css注入到页面的<style>标签中。
     babel-loader:将最新的es6语法，转换为低版本浏览器兼容的语法
     style-resources-loader:将less文件全局化，避免每个需要用到的地方都引入这些less文件
+    
+    自定义loader:
+    module.exports = function(source) {
+        ....
+        return source;
+    }
 2.plugin作用，说五个常用的plugin
     目的是解决loader无法实现的其他事情。
     webpack.ProgressPlugin: 输出编译进度
@@ -14,6 +20,15 @@
     TerserWebpackPlugin：压缩javascript
     CssMinimizerWebpackPlugin: 压缩css
     BundleAnalyzerPlugin: 分析打包结果的文件
+    
+    自定义plugin:
+    class MyPlugin {
+        apply(compiler) {
+            compiler.hooks.run.tab('MyPlugin', compilation => {
+                console.log('webpack 构建正在启动')
+            })
+        }
+    }
 3.webpack打包优化，说5个具体措施
     1>使用缓存，以空间换时间，cache: {type: 'filesystem'} 提升打包速度
     2>使用TerserWebpackPlugin压缩js,CssMinimizerWebpackPlugin压缩JS 减小打包体积
