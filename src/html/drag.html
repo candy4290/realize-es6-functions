@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>拖拽元素</title>
+    <style>
+        #drag-box {
+            width: 150px;
+            height: 150px;
+            background-color: lightblue;
+            position: absolute;
+            top: 100px;
+            left: 100px;
+            cursor: grab;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="drag-box">拖拽我</div>
+
+    <script>
+        const dragBox = document.getElementById("drag-box");
+
+        let offsetX = 0, offsetY = 0;
+        let isDragging = false;
+
+        dragBox.addEventListener("mousedown", (e) => {
+            isDragging = true;
+            offsetX = e.clientX - dragBox.offsetLeft;
+            offsetY = e.clientY - dragBox.offsetTop;
+            dragBox.style.cursor = "grabbing";
+        });
+
+        document.addEventListener("mousemove", (e) => {
+            if (!isDragging) return;
+            let x = e.clientX - offsetX;
+            let y = e.clientY - offsetY;
+            dragBox.style.left = `${x}px`;
+            dragBox.style.top = `${y}px`;
+        });
+
+        document.addEventListener("mouseup", () => {
+            isDragging = false;
+            dragBox.style.cursor = "grab";
+        });
+    </script>
+</body>
+</html>

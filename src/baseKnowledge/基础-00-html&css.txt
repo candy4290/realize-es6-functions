@@ -26,7 +26,7 @@
 处理方法4，.b {display: inline-block}
 2>父元素内部元素都是浮动布局，导致父元素高度为0
 处理方法1，将父元素设置为BFC
-处理方法2， clear用于指定一个元素是否必须引动到（清除浮动后）在它之前的浮动元素下面。 &::after {content: '';
+处理方法2，clear用于指定一个元素是否必须移动到（清除浮动后）在它之前的浮动元素下面。 &::after {content: '';
                 display: block;
                 clear: both}
 
