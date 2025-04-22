@@ -75,7 +75,7 @@ mutation: 同步函数
 14.nextTick
 本次DOM更新后执行回调函数
 
-原理：Promise.then,MutationObserver,setImmmediate,setTimeout(fn,0);
+原理：Promise.then -> MutationObserver -> setImmmediate -> setTimeout(fn,0);
 
 
 15.给对象增加属性
@@ -90,7 +90,7 @@ this.$set(x, 'key', 'value')
 1>合并配置
 2>初始化生命周期
 3>初始化事件
-4>初始化渲染
+4>初始化渲染（初始化render函数）
 5>调用beforeCreate钩子函数
 6>init injections and reactivity(
     这个阶段属性都已注入绑定，但是$el还是没有生成，也就是DOM没有生成
@@ -103,3 +103,26 @@ this.$set(x, 'key', 'value')
 v-if，会将DOM元素完全移除
 v-show,相当于display:none,dom仍然会被渲染
 
+19.常用修饰符
+1>.lazy,在chang时间之后进行同步，而不是input时间触发后同步
+2>.number
+3>.trim
+4>.stop
+5>.prevent
+6>.capture
+7>.self
+8>.once,只会调用一次
+9>.passive,
+passive: true 表示事件监听器不会调用 preventDefault()，即不阻止默认事件的执行（例如，滚动、触摸事件等）。
+启用 passive 选项时，浏览器会优化滚动性能，因为它可以假定事件监听器不会阻止默认行为（例如，页面滚动）。
+
+为什么使用 .passive？
+在处理滚动、触摸等高频率事件时，浏览器在事件触发时会等待 preventDefault() 是否被调用，阻塞渲染。
+这种等待会导致性能瓶颈，特别是在滚动过程中。
+如果你确定事件处理函数不会调用 preventDefault()，可以使用 passive: true 来告诉浏览器立即执行默认行为，提高性能。
+
+20.响应式原理
+vue2中使用defineProperty,vue3使用proxy
+vue2中监听到变化后，将渲染函数放入nextTick. vue3放入到Promise中
+
+21.vue2,vue3 diff算法过程。

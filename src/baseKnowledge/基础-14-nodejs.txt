@@ -1,0 +1,19 @@
+1.非阻塞I/O 
+异步IO，不会阻塞。I/O执行完成后，再执行回调函数。
+
+2.事件循环
+1>执行同步代码
+2>执行微任务，process.nextTick,Promise.then
+3>进入事件循环的6个阶段
+    Timers 阶段：执行 setTimeout 和 setInterval 回调。
+    Pending Callbacks 阶段：执行上个循环未完成的 I/O 回调。
+    Idle, Prepare 阶段：Node.js 内部使用，几乎不会涉及。
+    Poll 阶段：
+        执行 I/O 任务（如 fs.readFile、网络请求等）。
+        如果 I/O 任务为空，事件循环可能会阻塞在这里等待任务。
+    Check 阶段：执行 setImmediate 回调。
+    Close Callbacks 阶段：执行 socket.on('close') 等回调
+
+3.process.nextTick
+当我们将一个函数传递给时process.nextTick()，我们指示引擎在当前操作完成后立即调用此函数，然后再进入事件循环的下一个阶段：
+setTimeout(()=>,0)会在nextTick执行结束后，才开始执行。

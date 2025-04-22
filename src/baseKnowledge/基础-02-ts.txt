@@ -115,3 +115,27 @@ type ReturnType<T extends (...args: any) => any>  = T extends (...args: any) => 
 
 14>逆变
 父类型可以赋值给子类型，通常用于函数的参数类型。
+
+9.装饰器
+1>类装饰器（
+可以不返回函数，添加个方法。
+或者可以返回一个函数，替代当前类的构造方法。
+类装饰器也可以返回一个新的类，替代原来所装饰的类。
+）
+    function Greeter(value, context) {
+    if (context.kind === 'class') {
+        value.prototype.greet = function () {
+        console.log('你好');
+        };
+    }
+    }
+
+    @Greeter
+    class User {}
+
+    let u = new User();
+    u.greet(); // "你好"
+2>方法装饰器
+3>属性装饰器
+4>getter、setter装饰器
+5>accessor装饰器

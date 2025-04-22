@@ -90,3 +90,42 @@ for循环用于手动控制循环次数的情况。
 不允许使用arguments作为变量名
 不允许使用with语句
 eval会创建独立的作用域；（eval中声明的变量，在eval外无法使用）
+
+13.js实现继承
+1>原型继承
+SubType.prototype = new SuperType()。
+缺点：SuperType上的引用类型的属性，会在所有SubType实例上共享。
+2>盗用构造函数/构造函数继承
+SuperType.call(this)
+适用于数组、对象等引用类型属性，避免多个实例共享数据
+3>组合继承
+综合了原型链和盗用构造函数，将两者的优点集中起来。基本的思路是使用‘原型链’继承原型上的属性和方法，而通过‘盗用构造函数’继承实例属性。
+缺点：父构造函数会执行两次 --- 一次在创建子类原型，另一次在子类构造函数中。
+4>原型式继承
+Object.create()
+缺点：SuperType上的引用类型的属性，会在所有SubType实例上共享。
+5>寄生式继承
+寄生式继承（Parasitic Inheritance）是在 原型式继承的基础上 增强对象，
+为其添加额外方法或属性，然后返回这个对象。它的思路类似于工厂模式，在创建对象的过程中进行“增强”。
+6>寄生组合继承
+继承的最优方式。
+
+14.es版本差异
+1>es6
+    引入const,let;引入箭头函数；添加了模板字符串；引入了解构、赋值；引入class类；引入promise
+2>es7
+    引入了Array.prototype.includes方法；引入了指数操作符:**
+3>es8
+    引入了async/await；添加了Object.values(),Object.entries()方法；引入了字符串填充方法（padStart,padEnd）
+4>es9
+    引入了异步迭代器；添加了Promise.finally()方法；引入了对象的扩展运算符；
+5>es10
+    引入了Array.prototype.flat()、Array.prototype.flatMap()方法；引入String.prototype.trimStart()、String.prototype.trimEnd()方法；
+    增加了动态导入的功能；
+6>es11
+    添加了可选链操作符(?.)；添加了空值合并操作符（??）;引入了BigInt类型
+
+15.宿主对象、内置对象、原生对象
+宿主对象 👉 浏览器/Node.js 提供的 API
+内置对象 👉 ECMAScript 规定的全局对象
+原生对象 👉 JS 运行时创建的实例

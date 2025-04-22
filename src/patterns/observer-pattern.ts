@@ -1,6 +1,6 @@
 
 /**
- * 手动实现观察者模式
+ * 手动实现发布订阅
  *
  * @export
  * @class ObserverPattern
