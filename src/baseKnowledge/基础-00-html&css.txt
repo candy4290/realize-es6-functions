@@ -40,7 +40,7 @@ border、padding、margin、width、height、position、display、float
 
 3.文本超出显示省略号，单行，多行。
 1>单行, {white-space:nowrap;overflow:hidden;text-overflow: ellipsis}
-2>多行，{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;text-overflow:ellipsis}
+2>多行，{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;}
 
 4.如何隐藏一个元素，有什么区别？
 visibility:hidden,不影响布局，不可点击。可继承。子元素可以通过visibility:visible来让子元素显示出来。
