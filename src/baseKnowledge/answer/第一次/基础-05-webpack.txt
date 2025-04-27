@@ -1,0 +1,88 @@
+1.loader作用，执行顺序是怎样的，说五个常用的loader
+    webpack只能理解js,json文件。loader用来处理webpack不理解的文件，对模块的源码进行转换。
+    loader从后往前执行。使用enforce可以来控制更改默认的执行顺序，pre-先执行，post-最后执行。
+    ts-loader:将ts转换为js
+    less-loader:将less转为css
+    style-loader:与css-loader配合使用，css-loader负责解析css文件，style-loader将解析后的css注入到页面的<style>标签中。
+    babel-loader:将最新的es6语法，转换为低版本浏览器兼容的语法
+    style-resources-loader:将less文件全局化，避免每个需要用到的地方都引入这些less文件
+    
+    自定义loader:
+    module.exports = function(source) {
+        ....
+        return source;
+    }
+2.plugin作用，说五个常用的plugin
+    目的是解决loader无法实现的其他事情。
+    webpack.ProgressPlugin: 输出编译进度
+    webpack.DefinePlugin: 在编译时替换代码中的环境变量，如process.env.xxx
+    MiniCssExtractPlugin: 提取css成单独文件
+    TerserWebpackPlugin：压缩javascript
+    CssMinimizerWebpackPlugin: 压缩css
+    BundleAnalyzerPlugin: 分析打包结果的文件
+    
+    自定义plugin:
+    class MyPlugin {
+        apply(compiler) {
+            compiler.hooks.run.tab('MyPlugin', compilation => {
+                console.log('webpack 构建正在启动')
+            })
+        }
+    }
+3.webpack打包优化，说5个具体措施
+    1>使用缓存，以空间换时间，cache: {type: 'filesystem'} 提升打包速度
+    2>使用TerserWebpackPlugin压缩js,CssMinimizerWebpackPlugin压缩JS 减小打包体积
+    3>优化loader配置，确保loader配置尽可能精确
+    4>分包，配置splitChunks，提取公共的包
+    5>使用Tree Shaking:移除未使用的代码，减小打包体积，提升打包速度
+    6>指定externals，从而将模块排除到打包范围外(使用cdn加载)，减小打包体积，提升打包速度
+4.如果不使用脚手架，如何用webpack构建一个自己的react应用
+    1>配置babel
+    支持语法兼容、支持jsx语法（自动引入jsx函数转换jsx语法）
+    @babel/preset-react、@babel/preset-env
+    2>配置loader
+    less-loader支持less语法
+    style-loader支持将css注入到js代码中去
+    css-loader支持css文件
+    babel-loader支持语法兼容低版本浏览器
+    rules中配置type:asset,来加载图片类型的文件
+    3>配置plugin
+    ReactRefreshWebpackPlugin：热重载
+    DefinePlugin:注入环境变量（编译时替换）
+    HtmlWebpackPlugin: 将入口js注入到html文件中去
+    InterpolateHtmlPlugin: 替换index.html中的变量
+    MiniCssExtractPlugin: 提取css成单独文件
+    4>配置resolve
+    alias路径别名
+    extensions文件后缀自动匹配
+    5>配置devServer
+    快速开发应用
+    配置代理、端口、historyApiFallback（单页应用）
+5.postcss
+    是一个用js来转换css的工具。
+    核心架构：分词器、解析器、处理器、字符串化器
+    autoprefixer用来适应不同浏览器的css前缀。
+    cssnano用来缩减css代码【选择器合并，去除空白等等】。
+    postcss-preset-env:可以让我们使用最新的css语法，自动转为兼容的css语法。
+6.babel
+    作用：是最为常用的javascript编译器。大多数情况下，Babel 被用来转译 ECMAScript 2015+ 至可兼容浏览器的版本。
+    编译过程分为三个阶段：解析（parsing）、转换（transforming）、生成（generationg）
+    @babel/parser负责将代码解析为抽象语法树
+    @babel/traverse自动遍历ast,在进入每个节点时触发enter钩子函数，退出每个节点时触发exit钩子函数。
+    @babel/types是作用于AST的类lodash库，封装了大量的与ast有关的方法。
+    @babel/template能够将字符串代码片段转为ast节点。
+    ast抽象语法树作用：
+        1>常用各类转义、编译的插件中。比如最典型的 ES6 转换为 ES6 工具 、JSX 语法转换为 JavaScript 语法。即 babel 模块。
+        2>代码语法的检查，比如代码规范工具 ESLint 模块。
+        3>各类 JS/CSS/HTML 压缩工具。
+        4>代码的格式化、高亮。
+        5>代码错误提示。
+        6>代码自动补全
+7.说一下webpack详细的打包过程步骤
+    1>初始化参数：解析webpack配置参数，合并shell传入和webpack.config.js文件配置的参数，形成最后的配置结果。
+    2>开始编译：根据上一步得到的参数，初始化compiler对象，注册所有配置的插件，插件监听webpack构建生命周期的事件节点，执行对象的run方法开始执行编译
+    3>确定入口：从配置文件webpack.config.js中指定的entry入口，开始解析文件构建AST语法树，找出依赖，递归下去
+    4>编译模块：递归中根据文件类型和loader配置，调用对应的loader对文件进行转换，再找出该模块依赖的模块，再递归本步骤直到所有入口依赖的文件都经过了本步骤的处理。
+    5>完成模块编译并输出：递归完后，得到每个文件结果，包含每个模块以及他们之间的依赖关系，根据entry配置生成代码块chunk。
+    6>输出完成：输出所有chunk到文件系统
+    注意：在构建生命周期中有一系列插件在合适的时机做合适的事情。

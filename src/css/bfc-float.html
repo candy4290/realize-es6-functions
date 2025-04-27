@@ -13,6 +13,12 @@
                 clear: both;
             }
         }
+        .pc {
+            width: 100px;
+            height: 100px;
+            margin: 10px;
+            background:palegreen;
+        }
         .a,.b {
             float: left;
             width: 100px;
@@ -21,11 +27,28 @@
             background: yellow;
         }
     </style>
+    <style>
+        .float-box {
+          float: left;
+          width: 100px;
+          height: 100px;
+          background: red;
+        }
+      
+        .bfc-box {
+          overflow: hidden; /* 触发 BFC */
+          background: green;
+          height: 100px;
+        }
+      </style>
+      
+      
+      
+      
+      
 </head>
 <body>
-    <div class="p">
-        <div class="a"></div>
-        <div class="b"></div>
-    </div>
+    <div class="float-box">sdf</div>
+      <div class="bfc-box">触发 BFC，避开浮动元素</div>
 </body>
 </html>

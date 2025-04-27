@@ -1,0 +1,45 @@
+1.js typeof及instanceof区别
+
+2.instanceof和isPrototypeOf区别
+
+3.==、===、Object.is();四种相等算法；
+
+4.内存泄漏可能原因及其排查方法
+
+5.数组中哪些方法会改变原有数组，哪些不会
+
+6.for...of,for...in,for循环区别
+
+7.new一个对象的过程中发生了什么
+
+8.Map和Object的区别
+
+9.bind,call,apply区别
+
+10.检测变量a是否是数组，至少5种
+
+11.迭代器，生成器
+
+12.严格模式和非严格模式有什么区别
+
+13.js实现继承
+
+14.es版本差异
+1>es6
+    引入const,let;引入箭头函数；添加了模板字符串；引入了解构、赋值；引入class类；引入promise
+2>es7
+    引入了Array.prototype.includes方法；引入了指数操作符:**
+3>es8
+    引入了async/await；添加了Object.values(),Object.entries()方法；引入了字符串填充方法（padStart,padEnd）
+4>es9
+    引入了异步迭代器；添加了Promise.finally()方法；引入了对象的扩展运算符；
+5>es10
+    引入了Array.prototype.flat()、Array.prototype.flatMap()方法；引入String.prototype.trimStart()、String.prototype.trimEnd()方法；
+    增加了动态导入的功能；
+6>es11
+    添加了可选链操作符(?.)；添加了空值合并操作符（??）;引入了BigInt类型
+
+15.宿主对象、内置对象、原生对象
+宿主对象 👉 浏览器/Node.js 提供的 API, window,....
+内置对象 👉 ECMAScript 规定的全局对象，Function,Array,....
+原生对象 👉 JS 运行时创建的实例

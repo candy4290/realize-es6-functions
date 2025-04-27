@@ -1,0 +1,27 @@
+1.meta标签的几种用法
+
+2.DomContentLoaded与load区别；
+
+3.scritp标签async与defer有什么区别
+
+4.link标签引入外部css是否会阻塞页面解析、渲染；是否会阻塞js下载及执行。
+
+5.从输入URL到页面显示发生了什么【HTTP】
+
+6.回流（重排）与重绘，如何减少回流
+
+7.JSONP跨域原理
+
+8.性能指标
+
+9.字体未加载完时，text文本是否会显示出来
+
+10.如果cookie 没有设置 maxage， 那么这一条 cookie 失效时间改怎么算
+
+11.Attribute与Property区别
+
+12.同源策略
+
+13.XSS
+
+14.XSRF
