@@ -1,0 +1,56 @@
+1.typescript优缺点
+
+2.枚举类型；编译后是什么样子的
+
+3.declare关键字
+
+4.is关键字
+
+5.infer关键字,条件类型及分发条件类型
+
+6.type和interface
+
+7.索引签名
+
+8.操作符
+
+9.工具类型
+1>Partial: 所有T的属性可选
+type Partial<T> = 
+
+2>Required：所有T的属性必选
+type Required<T> =
+
+3>Readonly： 所有T的属性只读
+type Readonly<T> = 
+
+4>Record：创建一个对象类型，key来自于K的每一项，value类型是T
+type Record<K extends keyof any,T> = 
+
+5>Pick: K是一个联合类型。创建一个对象类型，以K中的值为key。
+type Pick<T, K extends keyof T> = 
+
+6>Exclude: 从T中剔除，符合U的类型。
+type Exclude<T, U> =
+
+7>Extract: 从T中选出，符合U的类型。
+type Extract<T, U>= 
+
+8>Omit<T,K>：用于从T中过滤掉K这个联合类型中出现的属性
+type Omit<T, K extends keyof any> = 
+
+9>NonNullable<T>
+
+10>Parameters<T>: 将函数的所有参数类型，转为一个元组类型
+type Parameters<T extends (...args: any) => any> = 
+
+11>ReturnType<T>: 获取函数的返回值类型
+type ReturnType<T extends (...args: any) => any>  = 
+
+12>字面量类型：
+
+13>协变
+
+14>逆变
+
+9.装饰器
