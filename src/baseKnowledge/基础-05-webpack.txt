@@ -13,7 +13,7 @@
         return source;
     }
 2.plugin作用，说五个常用的plugin
-    目的是解决loader无法实现的其他事情。
+    目的是解决loader无法实现的其他事情。可以在webpack构建流程的各个阶段注入自定义行为。
     webpack.ProgressPlugin: 输出编译进度
     webpack.DefinePlugin: 在编译时替换代码中的环境变量，如process.env.xxx
     MiniCssExtractPlugin: 提取css成单独文件

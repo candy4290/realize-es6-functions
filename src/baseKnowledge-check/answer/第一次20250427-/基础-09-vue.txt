@@ -1,39 +1,98 @@
 1.Provide,Inject 是什么，是否响应式，如何让它响应式?
+跨层级传递，非响应式。
 
 2.生命周期
+beforeCreate(不能访问data,method,computed)
+created(不能访问dom)
+beforeMount
+mounted(可以访问dom)
+beforeDestroy
+destroyed
 
 3.父子组件通讯方式
+1>props
+2>this.$emit,@xxx
+3>vuex
+4>provide(),inject:['xxx']
+5>v-model双向绑定
+6>事件总线Event Bus,
+7>使用ref
+8>$parent
 
 4.指令
+drag指令、权限指令
 
 5.过滤器
+千分位
 
 6.混入
+接口可取消，自动取消上一个（竞态问题）
+字典数据配置，dict:[''],自动请求字典数据。(this.$options.xxxx)
 
 7.动态组件
+is,可以缓存组件
 
 8.插件
+添加全局功能。内部会调用MyPlugin.install()
 
 9.解决页面导航过程中，页面向左移动，触发tooltip问题。
+router的beforeEach中禁用，transition的v-on:after-enter="afterEnter"方法中启用。
+router的afterEach中特殊处理。
 
 10.vue性能优化
+1>避免滥用water
+2>合理使用v-if,v-show
+3>路由懒加载
+4>is动态组件
+5>数据扁平化，避免深层次嵌套
 
 11.vuex
+store:全局单例。
+action: 用来提交muation,可以包含异步操作
+mutation: 同步函数
 
 12.异步组件
+components: {
+    TreeItem: () => import('../x.vue')
+}
 
 13.响应式
+Object.defineProperty
 
 14.nextTick
+在dom更新之后执行
+Promise.then,MutationObserver,setImmmediate,setTimeout
 
 15.给对象增加属性
+this.$set(x,'key','value')
 
 16.计算属性，computed
+计算属性适用于模板渲染。侦听属性适用于监听变化，处理业务逻辑。
+具有缓存机制
+不支持异步
 
 17.vue2初始化过程做了哪些事情
+1>合并配置
+2>初始化生命周期
+3>初始化事件
+4>初始化渲染（初始化render函数）
+5>调用beforeCreate钩子函数
+6>init injections and reactivity(
+    这个阶段属性都已注入绑定，但是$el还是没有生成，也就是DOM没有生成
+)
+7>初始化state状态（初始化了data,props,computed,watch）
+8>调用created钩子
+9>在初始化的最后，检测到如果有了el属性，则调用vm.$mount方法挂载vm,挂载的目标就是把模版渲染成最终的DOM
 
 18.v-show,v-if
+v-show相当于display:none,dom还在，不会触发destroy生命周期。
+v-if，dom完全不在了。
 
 19.常用修饰符（至少5个）
+.lazy
+.number
+.trim
+.stop
+.prevent
 
 20.vue2,vue3 diff算法过程。

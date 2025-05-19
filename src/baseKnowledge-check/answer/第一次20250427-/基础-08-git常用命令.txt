@@ -1,22 +1,42 @@
 git常用命令
 1>初始化仓库并推送到远程仓库：
+git init,git commit -m "",git remote add origin xxxx,git push -u origin main
 
 2>切换到分支xxx
+git checkout xxx
 
 3>创建xxx分支，并切换到xxx分支
+git checkout -b xxx
 
 4>版本回滚到“版本号”
+git reset --hard xxxxx
 
 5>将xxx分支合并到当前分支。
+git merge xxx
 
 6>回退到上一个版本
+git reset --hard HEAD~1
 
 7>让提交记录干净整洁；还可以合并前几次commit；还可以删除某一次提交内容
+git rebase -i
 
 8>合并某一次commit
+git cherry-pick asdf
 
 9>将更改合并到最后一次提交中去
+git commit --amend
 
 10>git commit后，如何撤销：
+git reset --sort
+--mixed
+--hard
+
+11>删除分支
+ git branch -d xx
+ git push origin --delete xx
 
 11>开源贡献步骤
+.fork到自己仓库，clone下来
+git remote add upstream xxx
+git fetch upstream
+git rebase upstream/master

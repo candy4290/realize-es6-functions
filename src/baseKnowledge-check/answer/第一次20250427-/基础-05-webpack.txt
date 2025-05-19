@@ -1,13 +1,56 @@
 1.loader作用，执行顺序是怎样的，说五个常用的loader
+将非js,json文件转为webpack能处理的文件。
+顺序：从后往前。通过设置enforce来更改默认的执行顺序。pre-先执行，post-后执行
+css-loader：将css字符串转为js中可导入模块
+style-loader：将js中的css,注入页面中style标签中去。
+ts-loader
+babel-loader
+style-resources-loader
 
 2.plugin作用，说五个常用的plugin
+MiniCssExtractPlugin: 提取css成单独文件
+TerserWebpackPlugin：压缩javascript
+CssMinimizerWebpackPlugin：压缩css
+BundleAnalyzerPlugin：分析打包结果
+webpack.ProgressPlugin
+webpack.DefinePlugin
+HtmlWebpackPlugin
 
 3.webpack打包优化，说5个具体措施
+1>使用缓存，以空间换时间，cache: {type: 'filesystem'}
+2>使用压缩插件
+3>优化loader配置，尽量精确匹配范围。test,exclude
+4>分包，配置splitChunks，提取公共的包
+5>指定externals
 
 4.如果不使用脚手架，如何用webpack构建一个自己的react应用
+1>配置babel
+@babel/preset-react,@babel/preset-env
+2>配置loader
+3>配置plugin
+ReactRefreshWebpackPlugin：热重载
+DefinePlugin
+HtmlWebpackPlugin
+InterpolateHtmlPlugin
+MiniCssExtractPlugin
+4>配置resolve
+5>配置devServer
 
 5.postcss
+用js来转化css的工具。
+插件：autoprefix,cssnano,postcss-preset-env
+工作流程：CSS 文件 → 解析成 AST (抽象语法树) → 插件处理 AST → 生成新 CSS
 
 6.babel
+是一个js编译器。将es6+转为兼容的语法。
+解析、转换、生成
+ast抽象语法树作用：
+语法检查、代码压缩、高亮、错误提示、自动补齐、语法兼容
 
 7.说一下webpack详细的打包过程步骤
+1>初始化参数：解析webpack配置参数，合并shell传入和webpack.config.js文件配置的参数，形成最后的配置结果。
+2>开始编译：根据上一步得到的参数，初始化compiler对象，注册所有配置的插件，插件监听webpack构建生命周期的事件节点，执行对象的run方法开始执行编译
+3>确定入口：从配置文件webpack.config.js中指定的entry入口，开始解析文件构建AST语法树，找出依赖，递归下去。
+4>编译模块：递归中根据文件类型和loader配置，调用对应的loader对文件进行转换，再找出该模块依赖的模块，再递归本步骤直到所有入口依赖的文件都经过了本步骤的处理。
+5>完成模块编译并输出：递归完后，得到每个文件结果，包含每个模块以及他们之间的依赖关系，根据entry配置生成代码块chunk。
+6>输出完成：输出所有chunk到文件系统

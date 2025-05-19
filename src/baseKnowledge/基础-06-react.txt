@@ -72,7 +72,7 @@ jsx节点一般这几种情况：单节点、多节点（是相对于jsx的同�
 是否可复用：key相同且type相同
 对于单节点：遍历对应的current fiber及其兄弟节点。
            判断current fiber上是否有可复用的节点，有的话，打上更新的标记。
-           不可复用的话，有两种情况：1>key不一致，将改fiber标记为删除 2>key一致type不一致，将该fiber及剩余的兄弟fiber都标记为删除
+           不可复用的话，有两种情况：1>key不一致，将该fiber标记为删除 2>key一致type不一致，将该fiber及剩余的兄弟fiber都标记为删除
 对于多节点：同时遍历jsx及current fiber。
            第一轮遍历处理更新的情况，因为大多数情况都是更新。
            第一轮遍历规则：如果key和type一致就继续遍历，否则跳出。

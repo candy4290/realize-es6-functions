@@ -1,16 +1,26 @@
 1.单例服务有哪几种方式
-
+1>providedIn:root
+2>在某个模块中providers: [xx]，同时改模块只允许在根模块中引入。
+@Optional() @SkipSelf()
 2.angular如何启动HMR
+ng serve --hmr=true
 
-3.rxjs取消订阅的几种方式（内存泄漏
-）
+3.rxjs取消订阅的几种方式（内存泄漏）
+1>每个单独unsubscribe
+2>收集到一个统一的Subscription实例中去，统一unsubscribe、
+3>使用takeutil。
+
 4.Service可以实现OnDestory,何时执行。
+非懒加载模块，在此模块页面都销毁后执行。如果在组件中提供，则组件销毁时执行。
 
 5.多级注入器;依赖注入
 
 6.rxjs常用操作符
 
 7.Observable与Promise区别
+1>是否立即执行
+2>是否可以发出多个值
+3>是否可取消
 
 8.JIT与AOT
 
@@ -20,6 +30,10 @@
 
 11.zone变更检测
 
-12.冷、热流;多播
+12.冷/单播、热流/多播
+1>数据是否共享；
+2>何时开始产生数据
+
+Suject\BehaviorSubject都是多播。区别在于BehaviorSubject需要初始值，在订阅时会发生其当前值。
 
 13.增量DOM

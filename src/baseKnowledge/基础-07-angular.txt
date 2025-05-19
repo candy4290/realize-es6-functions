@@ -29,7 +29,7 @@
   of-单一值转为流,
   from-数组转为流,
   concat-串联,
-  merge-并联,
+  mergeWitd-并联,
   map-转换,
   mergeMap-并联+转换,
   zip-拉链,

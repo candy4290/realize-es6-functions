@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>高级 Canvas 画板</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f0f0f0;
+      text-align: center;
+    }
+    canvas {
+      background: white;
+      border: 1px solid #ccc;
+      margin-top: 1rem;
+      touch-action: none;
+    }
+    .controls {
+      margin-top: 1rem;
+    }
+    .controls label {
+      margin: 0 10px;
+    }
+  </style>
+</head>
+<body>
+  <h2>高清 Canvas 画板 ✏️</h2>
+
+  <div class="controls">
+    <label>
+      🎨 颜色：
+      <input type="color" id="color" value="#000000" />
+    </label>
+
+    <label>
+      ✏️ 粗细：
+      <input type="range" id="size" min="1" max="20" value="2" />
+    </label>
+
+    <label>
+      🧽 橡皮擦：
+      <input type="checkbox" id="eraser" />
+    </label>
+
+    <button id="clear">清空</button>
+    <button id="save">保存为图片</button>
+  </div>
+
+  <canvas id="canvas" style="width: 800px; height: 500px;"></canvas>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = setupCanvas(canvas);
+
+    const colorInput = document.getElementById('color');
+    const sizeInput = document.getElementById('size');
+    const eraserCheckbox = document.getElementById('eraser');
+    const clearBtn = document.getElementById('clear');
+    const saveBtn = document.getElementById('save');
+
+    let isDrawing = false;
+    let lastX = 0, lastY = 0;
+
+    function getLineColor() {
+      return eraserCheckbox.checked ? '#ffffff' : colorInput.value;
+    }
+
+    function getEventPos(e) {
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: (e.clientX - rect.left),
+        y: (e.clientY - rect.top)
+      };
+    }
+
+    function drawLine(x1, y1, x2, y2) {
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.strokeStyle = getLineColor();
+      ctx.lineWidth = sizeInput.value;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+    }
+
+    canvas.addEventListener('mousedown', (e) => {
+      isDrawing = true;
+      const { x, y } = getEventPos(e);
+      [lastX, lastY] = [x, y];
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+      if (!isDrawing) return;
+      const { x, y } = getEventPos(e);
+      drawLine(lastX, lastY, x, y);
+      [lastX, lastY] = [x, y];
+    });
+
+    canvas.addEventListener('mouseup', () => isDrawing = false);
+    canvas.addEventListener('mouseleave', () => isDrawing = false);
+
+    // 触摸支持
+    canvas.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      const { x, y } = getEventPos(e.touches[0]);
+      isDrawing = true;
+      [lastX, lastY] = [x, y];
+    });
+
+    canvas.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      const { x, y } = getEventPos(e.touches[0]);
+      drawLine(lastX, lastY, x, y);
+      [lastX, lastY] = [x, y];
+    });
+
+    canvas.addEventListener('touchend', () => isDrawing = false);
+    canvas.addEventListener('touchcancel', () => isDrawing = false);
+
+    clearBtn.addEventListener('click', () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    });
+
+    saveBtn.addEventListener('click', () => {
+      const link = document.createElement('a');
+      link.download = 'drawing.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+
+    function setupCanvas(canvas) {
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+      // 初始填白背景（便于橡皮擦和导出）
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      return ctx;
+    }
+  </script>
+</body>
+</html>

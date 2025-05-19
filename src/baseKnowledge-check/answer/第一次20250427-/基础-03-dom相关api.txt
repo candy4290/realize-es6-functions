@@ -1,21 +1,35 @@
 1>Element.getBoundingClientRect()
+返回DomRect对象，相对于视口左上角位置。top/y,left/x,bottom,right
+width,height包含了content+padding+border+滚动条
 
 2>Element.offsetWidth/offsetHeight
+和上一个获取到的width,height唯一区别是，这里的经过了四舍五入。
 
 3>Element.clientWidth/clientHeight
+content+padding
 
 4>Element.offsetTop/offsetLeft
+定位元素：position属性值为relative,absolute,sticky,fixed;
+offsetParent:层级上距离最近的定位元素或者body,th,td,table元素。
 
 5>Element.clientTop/clientLeft
+边框大小
 
 6>Element.scrollWidth/scrollHeight
+元素在不使用滚动条的情况下，所需要的最小宽度、高度。
+如果没有出现滚动条，则和clientWidth大小一致。
 
 7>Element.scrollTop/scrollLeft
+元素内部滚动距离
 
 8>MouseEvent.pageX/pageY
+返回相对于文档左上角的距离，包含了滚动距离。
 
 9>MouseEvent.clientX/clientY
+相对于视口左上角的距离
 
 10>MouseEvent.screenX/screenY
+鼠标到屏幕左上角的距离
 
 11>window.screenLeft/screenTop
+获取浏览器左上角->屏幕左上角的距离

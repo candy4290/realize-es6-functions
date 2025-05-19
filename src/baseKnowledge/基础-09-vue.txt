@@ -45,13 +45,15 @@ destroyed
 逻辑复用。【字典值获取】
 this.$options.xxx (自定义选项)。
 
-7.动态组件：按需渲染，而不是一次性全部加载。使用:is="xxx"
+7.动态组件：按需渲染，而不是一次性全部加载。使用:is="xxx"。与v-if区别是，动态组件可以缓存起来。
 
 8.插件
 插件通常用来为 Vue 添加全局功能。
 使用插件：Vue.use(MyPlugin)，内部会调用MyPlugin.install()
 
-9.beforeEach禁用鼠标事件，afterEnter后再放开【针对直接原页面刷新，根据from路径，来在afterEach中放开】
+9.解决页面导航过程中，页面向左移动，触发tooltip问题。
+router的beforeEach中禁用，transition的v-on:after-enter="afterEnter"方法中启用。
+router的afterEach中特殊处理。
 beforeEach->afterEach->beforeEnter->afterEnter
 
 10.vue性能优化

@@ -1,56 +1,106 @@
 1.typescript优缺点
+优点：1>类型提示 2>提升开发效率 3>编译期提前发现潜在问题
+缺点：1>成本：学习成本，多了一个编译步骤上的时间成本 2>容易写成anyscript
 
 2.枚举类型；编译后是什么样子的
+enum AAA{B};
+var AAA;
+(function (AAA) {
+    AAA[AAA['B']=0]='B'
+}(AAA||AAA={}))
 
 3.declare关键字
+作用：告诉编译器某个变量或者模块是存在的
+1>ts中使用js库，会报错xx module不存在，解决方案：declare module xx;
+2>ts中需要使用某个全局变量，declare const x: any;
 
 4.is关键字
+用来创建类型保护。
+function a(p: any): p is string {
+
+}
 
 5.infer关键字,条件类型及分发条件类型
+用来在条件类型中提取类型，并赋值给一个变量，在true分支中可以使用这个变量。
+条件类型使用extends来申明，分发条件类型发生在，在条件类型中使用联合类型，此时适用于分配律
+
+type Exclude<T,U> = T extends U ? never : T;
+
+type MyUnion = 'a' | 'b' | 'c';
+type ExcludedType = Exclude<MyUnion, 'b'>;
+
+// ExcludedType: 'a' | 'c'
 
 6.type和interface
+同：1>都可以用来表示函数、对象的类型 2>都可以扩展
+异：1>type使用&来扩展，interface使用extends 
+2>type扩展时可以重写属性，interface不行 
+3>type不可以重名，interface可以重名 
+4>type可以申明基础类型别名、元组类型、联合类型而interface不行
 
 7.索引签名
+type A = {
+    [a: string]:string
+}
 
 8.操作符
+keyof: 反正类型所有key组成的联合类型。如果对索引签名使用，且索引签名中key类型是string,返回 string | number
+typeof:返回变量或者变量属性的类型。
+与js中typeof区别：1>js可以对‘fn()’使用，ts不行 2>js返回string，ts返回更为具体的类型。
 
 9.工具类型
 1>Partial: 所有T的属性可选
-type Partial<T> = 
+type Partial<T> = {
+    [P in keyof T]?: T[P]
+}
 
 2>Required：所有T的属性必选
-type Required<T> =
+type Required<T> = {
+    [P in keyof T]-?: T[P]
+}
 
 3>Readonly： 所有T的属性只读
-type Readonly<T> = 
+type Readonly<T> = {
+    readonly [P in keyof T]: T[P]
+}
 
 4>Record：创建一个对象类型，key来自于K的每一项，value类型是T
-type Record<K extends keyof any,T> = 
+type Record<K extends keyof any,T> = {
+    [P in K]:T
+}
 
 5>Pick: K是一个联合类型。创建一个对象类型，以K中的值为key。
-type Pick<T, K extends keyof T> = 
+type Pick<T, K extends keyof T> = {
+    [P in K] = T[P]
+}
 
 6>Exclude: 从T中剔除，符合U的类型。
-type Exclude<T, U> =
+type Exclude<T, U> = T extends U ? never : T;
 
 7>Extract: 从T中选出，符合U的类型。
-type Extract<T, U>= 
+type Extract<T, U>= T extends U ? T : never;
 
 8>Omit<T,K>：用于从T中过滤掉K这个联合类型中出现的属性
-type Omit<T, K extends keyof any> = 
+type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>
 
-9>NonNullable<T>
+9>NonNullable<T> = T & {}
 
 10>Parameters<T>: 将函数的所有参数类型，转为一个元组类型
-type Parameters<T extends (...args: any) => any> = 
+type Parameters<T extends (...args: any) => any> = T extends (...args: infer P) => any ? P : never
 
 11>ReturnType<T>: 获取函数的返回值类型
-type ReturnType<T extends (...args: any) => any>  = 
+type ReturnType<T extends (...args: any) => any>  = T extends (...args: any) => infer R ? R : never;
 
-12>字面量类型：
+12>字面量类型：'a' | 'b'
 
 13>协变
+子类型可以赋值给父类型，函数返回值
 
 14>逆变
+父类型可以赋值给子类型，通常用于函数的参数类型。
 
 9.装饰器
+1>类装饰器
+2>方法装饰器
+3>属性装饰器
+4>getter、setter装饰器

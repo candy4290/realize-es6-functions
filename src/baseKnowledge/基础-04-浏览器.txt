@@ -20,6 +20,9 @@
     如果link标签后没有script标签，则立即触发DomContentLoaded事件。否则，会阻塞js脚本，也就阻塞了DomContentLoaded事件。
     如果加上media="print",<link rel="stylesheet" href="xxx" media="print" />是非阻塞渲染的。
 
+    优化方案：<link rel="preload" href="style.css" as="style" onload="this.rel='stylesheet'">
+
+
 5.从输入URL到页面显示发生了什么【HTTP】
     1>DNS解析
     2>TCP握手，建立连接
@@ -100,10 +103,10 @@
 
 12.同源策略
 是浏览器的策略。
-至于浏览器是否收到了真正的请求，并进行了逻辑处理，分为以下两种情况：
+至于服务端是否收到了真正的请求，并进行了逻辑处理，分为以下两种情况：
 
 1>简单请求：一口气发→服务端收→脚本拿不到响应（若无 CORS 头）。
-2>复杂请求：先预检→服务端收预检→若允许再发正式请求→服务端收正式请求→脚本拿不到响应（若无 CORS 头）。
+2>复杂请求：先预检→服务端收预检→若允许再发正式请求→服务端收正式请求。
 
 会触发预检请求的情况：
 首先必须是跨域请求。
@@ -123,6 +126,7 @@ DOM 型 XSS | 发生在前端 JS 操作 DOM 时，没有做安全处理，例如
 防御措施：
 1>特殊字符转义
 2>cookie设置为HttpOnly
+3>设置CSP，限制可执行脚本的来源
 
 14.XSRF(Cross-Site Request Forgery，跨站请求伪造)
 含义：攻击者诱导用户在登录状态下，向目标网站发起非本意的请求，从而达到非法操作目的（本质就是在目标网页登录状态下，在伪造网页向目标网页发起请求,利用已登录的cookie）。
@@ -130,3 +134,5 @@ DOM 型 XSS | 发生在前端 JS 操作 DOM 时，没有做安全处理，例如
 1>使用CSRF Token
 2>Cookie设置SameSite=Strict
 3>后端检查header头中的Referer、Origin
+origin---请求来自于那个站点
+referer---请求来自于哪个具体的页面

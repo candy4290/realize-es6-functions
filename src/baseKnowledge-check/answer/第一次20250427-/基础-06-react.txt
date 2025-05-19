@@ -1,21 +1,92 @@
 1.useLayoutEffect和useEffect区别
+dom更新后，浏览器绘制前执行，同步执行，阻塞浏览器绘制。
+浏览器绘制后，异步执行
 
 2.react生命周期
+1>初次挂载
+constructor->getDerivedStateFromProps->render->componentDidMount
+2>更新
+getDerivedStateFromProps->shouldComponentUpdate->render->getSnapShotBeforeUpdate->componentDidUpdate
+3>卸载
+componentWillUnmount
+4>发生错误
+getDerivedStateFromError->componentDidCatch
 
 3.react17/18新特性
+17无新特性（使用方式上没有差异）
+1>新的jsx编译，原本是React.createElement，所以需要手动引入React。现在是@babel/plugin-transform-react-jsx中自动引入react/jsx-runtime的jsx函数进行转换。
+2>事件由原来的委托到document，改为委托到rootElemnt。
+原本是w形：原生事件捕获+冒泡->合成事件捕获+冒泡
+现在是V形：原生事件捕获->合成事件捕获->合成事件冒泡->原生事件冒泡
+3>取消事件池【现在js引擎优化，创建销毁对象开销可忽略。解决之前setTimeout中访问事件对象，为空的问题，因为事件对象已经被回收了。react16中可以通过调用event.persist()来阻止合成时间对象被回收】
+4>useEffect的清理函数，由原先的同步执行改为异步执行。
+5>forwardRef和memo包裹的组件返回undefined不会报错，现在也改为会报错。不允许返回undefined。防止用户忘记写return
+18
+1>并发特性
+自动批处理；几个新的api:useDeferredValue,useTransition.
+2>新的严格模式；开发环境会自动卸载又重新挂载组件（第二次挂载时复用之前的状态）以提前发现可能存在的问题
+3>允许组件渲染undefined
 
 4.react组件性能优化
+1>使用useDeferredValue\useTransition来延迟更新，避免页面卡顿。
+2>memo来避免重复渲染
+3>useMemo,useCallback
+4>减少不必要的useStatus,useEffect的使用。
+5>使用React.lazy来按需加载
 
 5.redux与mobx区别
+1>单一数据源
+2>数据是否可变
+3>redux不支持异步操作，需要借助于中间件。
 
 6.父子组件通信方式
+1>props或者render props(子组件数据网上抛)
+2>context
+3>ref+forwardRef+useImperativeHandle。最新的react19已经不需要forwardRef包裹了
+4>redux等状态管理库
 
 7.fiber架构
+1>出现的目的是解决组件树庞大，渲染不可中断的问题。（双缓冲）
+2>本质上是虚拟dom的一种具体实现，是链表树，具有child,sibling,return等属性。深度优先
+3>参与协调及渲染阶段。
 
 8.react渲染原理及架构
+三层：调度器、协调器、渲染器
+调度器：实现了requestIdleCallback垫片，用来判断浏览器是否有剩余时间
+协调器：会调用调度器的函数，确实有剩余时间，才会继续执行。主要工作是对比current fiber与jsx来生成workInProgress
+渲染器：根据workInProgress fiber中打的标签，更新现有DOM。将current fiber指向workInProgressFiber
+
+前两层的工作可以中断，可能原因有：没有剩余时间或者是更高优先级的任务进来了。
 
 9.diff算法
+发生在协调器中，用来比较current fiber与jsx，来生成workinprogressFiber。
+1>只对同一层的元素进行比较 2>不同key或者type的元素会产生不同的树。
+是否可复用：key相同且type相同
+单节点：遍历currentFiber及其兄弟元素。
+    判断current fiber上是否有可复用的节点，有的话，打上更新的标记。
+    不可复用的话：1>key不一致，将该fiber标记为删除。 2>key一致type不一致，将该fiber及剩余的兄弟fiber都标记为删除
+多节点：同时遍历jsx和current fiber.
+        第一轮遍历处理更新的情况，因为大多数情况都是更新。
+        第一轮遍历规则：如果key和type一致就继续遍历，否则跳出。
+        第一轮遍历结束后的几种情况：
+            1>同时遍历结束了,不需要第二轮遍历
+            2>jsx遍历结束了。第二轮将剩下的current fiber标记删除。
+            3>current fiber遍历结束了。第二轮将剩下的jsx遍历，并创建。
+            4>都有剩余。
+        
+        都有剩余：
+        1>将current fiber都放到一个obj中去。
+        2>遍历剩余jsx,如果current fiber中也存在。走位置移动流程。否则走创建流程。
+        3>都处理完后，如果current fiber还有剩余，则都标记为删除.
+
+        标记移动算法：【向右移动】
+        1>最后一个可复用的节点在current fiber中的位置索引lastPlaceIndex
+        2>遍历jsx，如果找到对应key的fiber,用oldIndex表示该可复用节点在current fiber中的位置。
+        3>oldIndex>=lastPlaceIndex。则无需移动，lastPlaceIndex=oldIndex
+        4>oldIndex<lastPlaceIndex,向右移动
 
 10.react中setXXX是同步还是异步的
+并发模式下都是异步的，多次setState只触发一次更新
+传统模式下：合成事件、useEffect等react可控的范围内，是异步的。setTimeout、setInterval、promise中是同步的。
 
 11.react19新特性

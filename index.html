@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+
+    <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/crypto-js.min.js"></script>
+    <script>
+
+            const key = CryptoJS.enc.Utf8.parse('uat_@&#1B0108120'); // 32字节 key
+            const iv = CryptoJS.enc.Utf8.parse('1234567890123456'); // 16字节 iv
+
+            function decrypt(cipherText) {
+            const decrypted = CryptoJS.AES.decrypt(cipherText, key, {
+                iv,
+                mode: CryptoJS.mode.CBC,
+                padding: CryptoJS.pad.Pkcs7,
+            });
+            return decrypted.toString(CryptoJS.enc.Utf8);
+            }
+            console.log(decrypt("yG6bklgRGn2qhchRtgkg/rcyMVhtwKciM40GoEZTWDs=")); // 替换为你的密文
+    </script>
+</head>    
+<body>
+    <h1>解密结果</h1>
+</body>
+</html>
+
+  
