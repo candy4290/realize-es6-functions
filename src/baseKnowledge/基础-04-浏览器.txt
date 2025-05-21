@@ -64,6 +64,13 @@
 8.性能指标
   0.1【导航阶段】TTFB（Time to first byte），首字节时间，浏览器收到服务器响应的第一个字节所花费的时间。(发出请求，到收到第一个字节响应的时间)
     TTFB=DNS 查询时间 + TCP 连接时间 + 服务器处理时间 + 响应传输时间
+    window.addEventListener('load', () => {
+        const [navigation] = performance.getEntriesByType('navigation');
+        if (navigation) {
+            const ttfb = navigation.responseStart - navigation.startTime;
+            console.log(`TTFB: ${ttfb.toFixed(2)}ms`);
+        }
+    });
 
   1.1.【渲染阶段】 FP（First Paint），首次渲染时间，浏览器将DOM树和CSSOM树合并，开始绘制页面的时间（首次绘制像素到屏幕上的时间，通常是指页面上的第一个非白色像素点）
     const observer = new PerformanceObserver((entryList) => {
@@ -76,10 +83,31 @@
     observer.observe({ type: 'paint', buffered: true });
 
   1.2.【渲染阶段】 FCP（First Contentful Paint），首次内容绘制时间，页面首次有可见内容被绘制的时间（首次绘制任何有内容的像素到屏幕上的时间）
+    const observer = new PerformanceObserver((entryList) => {
+    for (const entry of entryList.getEntries()) {
+        if (entry.name === 'first-contentful-paint') {
+        console.log('First-contentful-Paint Time:', entry.startTime);
+        }
+    }
+    });
+    observer.observe({ type: 'paint', buffered: true });
+
   1.3.【渲染阶段】 LCP（Largest Contentful Paint），页面上最大内容块绘制到屏幕上的时间（）
+    const lcpObserver = new PerformanceObserver((list) => {
+        const lcp = list.getEntries().pop();
+        console.log('📦 LCP:', lcp.startTime.toFixed(2));
+    });
+    lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
 
   2.1.【交互阶段】 FID，首次输入延迟时间，用户首次与页面进行交互（点击按钮、输入框等）后，页面响应交互的时间
+    new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+            console.log(`FID: ${entry.processingStart - entry.startTime}ms`);
+        }
+    }).observe({ type: 'first-input', buffered: true });
+
   2.2.【交互阶段】 TTI（Time to Interactive），首次可交互时间，页面变得完全可交互（用户可以进行大部分常规操作）所花费的时间
+  通过web-vitals获取
 
 9.字体未加载完时，text文本是否会显示出来
     font-display:block 渲染文本不可见知道字体文件加载完成。
