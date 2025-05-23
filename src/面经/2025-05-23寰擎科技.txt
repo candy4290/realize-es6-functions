@@ -1,0 +1,79 @@
+2025-05-23 一面(电话) 30min【不要说话重复，如果不会，不用过多解释】
+1.自我介绍。
+2.instanceof原理
+3.for of作用，能遍历对象吗，想遍历对象怎么办
+Object.defineProperty(obj, Symbol.iterator, {
+    enumerable: false, // 是否可在for...in...和Object.keys()中被枚举
+    writable: false,
+    configurable: true, // 属性可否被删除，以及除value和writable特性外的其他特性是否可被修改
+    value: function() {
+        var o = this;
+        var idx = 0;
+        var ks = Object.keys(o);
+        return {
+            next: function() {
+                return {
+                    value: o[ks[idx++]],
+                    done: (idx > ks.length)
+                }
+            }
+        }
+    }
+})
+4.Promise使用场景，想中断promise怎么办(如何中断promise)。
+function wrapCacelPromise(promise) {
+    let hasCanceled = false;
+    const newPromise = new Promise((r,rj) => {
+        promise.then(
+            (val) => (hasCanceled ? reject(new Error('Cancelled')) : resolve(val)),
+            (error) => (hasCanceled ? reject(new Error('Cancelled')) : reject(error))
+        )
+    })
+    return {
+        promise: newPromise,
+        cancel: () => hasCanceled = true;
+    }
+}
+5.平时项目怎么防止重复请求的？
+cancelToken,signal:AbortController
+6.怎么看待闭包会造成内存泄漏？
+7.项目中有出现过内存泄露吗？
+8.setTimeout定时为何会不准？极端情况下设定的3秒，实际4秒才执行，可能原因是什么？
+解决方案，使用requestAnimationFrame，与帧率同步。
+9.实现一个ts的类型，字符串数组，请其中每一项都必须以'a'开头。模板字面量类型
+type ABCString = `${'a' | 'b' | 'c'}${string}`;
+type ABCStringArray = ABCString[];
+const arr: ABCStringArray = ['apple', 'banana', 'cat']; // ✅
+10.interface和type区别。interface同名会发生什么？
+11.react16.8和react18有什么区别。
+12.useState初始化是A，后续变为B。别的状态也发生变化，为何state能保持为B？
+13.useEffect怎么理解它的副作用。
+useEffect就是被设计来处理副作用的。
+在函数式编程中，副作用 指的是一个函数除了返回结果之外，还对外部产生了其他可观察的影响，比如：
+    改变 DOM（比如操作元素样式、插入节点等）
+    发起网络请求（fetch / axios）
+    设置定时器（setTimeout / setInterval）
+    访问浏览器 API（比如 localStorage、window 对象等）
+    订阅事件或清理资源（如 WebSocket、监听滚动等）
+    这些行为 不是由组件渲染本身直接控制的，所以称为“副作用”。
+14.useLayoutEffect和useEffect区别，实际项目中有用过吗
+15.怎么避免重复渲染？有试过用useMemo,useCallback对性能有多大提升吗？
+能不能都用useMemo,useCallback,memo包裹？
+16.useCallback返回一个函数，还有依赖项。自己写一个hook,功能和useCallback一样，但是不提供依赖项，怎么做？
+
+17.useRef(（） => Math.random()),其他状态变化时，useRef的返回值会变吗？
+可能我理解错了，useRef(Math.random()),其他状态变化时，useRef返回值不会变。
+只在初始时执行了一次。
+
+18.源码中时间切片有了解过吗？requestIdleCallback怎么实现的？
+
+19.ws怎么实现心跳和超时重连的？ws推送特别快会影响页面渲染性能怎么处理？
+同时打开两个页面，会存在几个ws链接。怎么处理只存在一个链接(是否支持多开)？
+心跳检测：与后端约定，定时发送特定值，回一个特定值。
+超时重连：1>如果心跳监测超过多久没收到回复，认定为超时，主动断开并重连。
+推送很快：1>前端使用useRef存储需要更新的数据，然后定时去更新，比如500毫秒更新state一次。
+不支持多开，前端如何处理：
+
+20.实际项目中可量化的性能，有做过哪些。挑个一个说一下？
+
+21.webwork使用需要注意什么，有什么缺点？

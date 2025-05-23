@@ -1,3 +1,7 @@
+0.模板字面量类型
+type StartsWithA = `a${string}`;
+type AStringArray = StartsWithA[];
+
 1.typescript优缺点
 优点：1>编译过程中可以提前发现BUG 2>类型提示+插件支持，极大提升了开发效率
 缺点：1>不是真正的静态类型，可以用any类型，最终变为AnyScript 2>学习成本 3>多了一个编译为js的过程

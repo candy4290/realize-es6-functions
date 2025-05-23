@@ -8,3 +8,8 @@ enum T {
         ...
     })(TT||(TT={}))
 */
+
+type ABCString = `${'a' | 'b' | 'c'}${string}`;
+type ABCStringArray = ABCString[];
+
+const arr: ABCStringArray = ['apple', 'banana', 'cat']; // ✅

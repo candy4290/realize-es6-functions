@@ -27,3 +27,26 @@ function deepClone(obj) {
 
 enum Color {Red = 1, Green, Blue = 4}
 const a: Color = Color.Red
+
+// 函数签名（重载定义）
+function fn(x: number): number;
+function fn(x: string): string;
+
+// 函数实现（必须兼容所有签名）
+function fn(x: number | string): number | string {
+  if (typeof x === 'number') {
+    return x * 2;
+  } else {
+    return x + '!';
+  }
+}
+
+
+function identity<T>(value: T): T {
+    return value;
+  }
+
+  identity<string>('hello');
+  identity<number>(123);
+  identity<boolean>(true);
+// 也可以使用类型参数推断
