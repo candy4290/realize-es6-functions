@@ -1,9 +1,7 @@
 1.Provide,Inject 是什么，是否响应式，如何让它响应式?
 跨层级传递，不是响应式的。
 1>需要绑定data中的数据，且必须是对象。不能改变对象的引用，否则子组件感受不到。
-2>provide() {return {b: () => this.a}},然后子组件中调用b();
-
-但是data中的某个对象，必须要改变引用，页面才能感知到变化
+2>data() {return {shared: userInfo:null}}},provide() {return {shared: this.shared}},然后在异步函数中获取到数据后this.shared.userInfo = xxx;
 
 2.生命周期
 beforeCreate（不能访问data,methods,computed）->
@@ -41,7 +39,7 @@ destroyed
 文本转换（千分位及日期格式转换器）
 
 6.混入
-路由跳转时候，禁用tooltip。
+取消上一个请求。$fetchData(fn,data,options) -> 注入cancelToken
 逻辑复用。【字典值获取】
 this.$options.xxx (自定义选项)。
 
@@ -69,7 +67,11 @@ action: 用来提交muation,可以包含异步操作
 mutation: 同步函数
 
 12.异步组件
+components: {
+    MyAsyncComponent: () => import('./MyComponent.vue'),
+},
 本质上都是两次渲染，第一次渲染生成一个注释节点，当异步获取组件成功后，再通过 forceRender 强制重新渲染，这样就能正确渲染出我们异步加载的组件了。
+
 
 13.响应式
 通过defineProperty来设置getter,setter. 用来收集依赖、派发更新【观察者模式】
@@ -81,7 +83,7 @@ mutation: 同步函数
 
 
 15.给对象增加属性
-this.$set(x, 'key', 'value')
+this.$set(x, 'key', 'value')，【修改数组，第二个参数改为索引位置】
 
 16.计算属性，computed
 计算属性适用于模板渲染。侦听属性适用于监听变化，处理业务逻辑。
@@ -106,7 +108,7 @@ v-if，会将DOM元素完全移除
 v-show,相当于display:none,dom仍然会被渲染
 
 19.常用修饰符
-1>.lazy,在chang时间之后进行同步，而不是input时间触发后同步
+1>.lazy,失去焦点或者按回车后才触发
 2>.number
 3>.trim
 4>.stop

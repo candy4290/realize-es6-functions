@@ -27,9 +27,9 @@ git cherry-pick asdf
 git commit --amend
 
 10>git commit后，如何撤销：
-git reset --sort
---mixed
---hard
+git reset --sort commitId，回退到某个提交，保留工作区和暂存区修改
+--mixed commitId，回退到某个提交，保留工作区修改，清除暂存区
+--hard commitId，彻底回退到指定提交，工作区和暂存区都会被重置，小心使用
 
 11>删除分支
  git branch -d xx

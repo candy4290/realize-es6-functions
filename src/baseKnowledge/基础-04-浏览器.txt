@@ -99,12 +99,13 @@
     });
     lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
 
-  2.1.【交互阶段】 FID，首次输入延迟时间，用户首次与页面进行交互（点击按钮、输入框等）后，页面响应交互的时间
-    new PerformanceObserver((list) => {
+  2.1.【交互阶段】 FID（First Input Delay），首次输入延迟时间，用户首次与页面进行交互（点击按钮、输入框等）后，页面响应交互的时间
+    const fidObserver = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
             console.log(`FID: ${entry.processingStart - entry.startTime}ms`);
         }
-    }).observe({ type: 'first-input', buffered: true });
+    })
+    fidObserver.observe({ type: 'first-input', buffered: true });
 
   2.2.【交互阶段】 TTI（Time to Interactive），首次可交互时间，页面变得完全可交互（用户可以进行大部分常规操作）所花费的时间
   通过web-vitals获取

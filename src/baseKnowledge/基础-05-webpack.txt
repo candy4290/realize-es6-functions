@@ -72,7 +72,7 @@
     @babel/types是作用于AST的类lodash库，封装了大量的与ast有关的方法。
     @babel/template能够将字符串代码片段转为ast节点。
     ast抽象语法树作用：
-        1>常用各类转义、编译的插件中。比如最典型的 ES6 转换为 ES6 工具 、JSX 语法转换为 JavaScript 语法。即 babel 模块。
+        1>常用各类转义、编译的插件中。比如最典型的 ES6 转换为 ES5 工具 、JSX 语法转换为 JavaScript 语法。即 babel 模块。
         2>代码语法的检查，比如代码规范工具 ESLint 模块。
         3>各类 JS/CSS/HTML 压缩工具。
         4>代码的格式化、高亮。
