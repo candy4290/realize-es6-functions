@@ -1,0 +1,77 @@
+2025-05-26 一面 60min
+1.实现Array.prototype.distinct方法，效果如下
+console.log(["a", "b", "c", "d", "b"].distinct()); // ["a", "b", "c", "d"]
+console.log(["1", "2", "a", "b"].distinct()); // ["1", "2", "3"]
+
+2.实现一个函数，达到数组展平的效果
+
+3.实现一个sleep函数，达到过几秒再继续往下执行的效果
+function sleep(timer) {
+    return new Promise((r) => {
+        setTimeout(() => {
+            r();
+        }, timer);
+    })
+}
+(async () => {
+    await sleep(3000)
+    console.log('end');   
+})()
+
+4.谈一下React fiber？追问：中断可恢复怎么实现的？
+追问2：怎么实现diff中断，怎么通知diff继续往下执行？
+
+react fiber出现的背景，是为了解决渲染不可中断，大的组件树渲染可能造成阻塞主线程，卡顿的问题。
+是一种虚拟dom的具体实现，链表结构。特点是：渲染可中断。
+
+怎么实现中断：时间切片(requestIdleCallback)、任务调度(MessageChannel)。
+
+浏览器每秒尝试绘制大约 60 帧（即每帧 ≈ 16.67 毫秒）。
+在每一帧中，浏览器要完成以下任务：处理用户输入、执行js、样式计算、布局、绘制、合成。如果这些任务没占满16.67毫秒，剩下的就是”空闲时间“
+
+5.react中错误怎么去捕获的？ErroyBundy能捕获js错误吗？
+ErroyBoundary,类组件，自己实现，getDerivedStateFromError、componentDidCatch。
+只能捕获渲染过程的报错。无法捕获js的报错(事件处理函数抛出的异常、异步代码)，使用window.onerror来捕获。
+
+6.react中hook出现的背景，有什么用，为啥要这个hook。
+我通过工具方法，也能够抽象公共逻辑，为何需要hook?
+有了类组件，为何需要hook?
+
+hook出现背景：Hooks 是为了让函数组件拥有状态和生命周期能力，同时解决 class 组件中的逻辑复用难题。
+我通过工具方法，也能够抽象公共逻辑，为何需要hook：对于需要生命周期，或者副作用处理的函数，就无法用工具函数了。
+有了类组件，为何需要hook：类组件逻辑复用困难，hoc太麻烦
+
+7.react中怎么做到和vue中keep-alive一样的效果。
+vue中keep-alive用来干什么的？
+react想要实现同样的效果，需要怎么处理？
+
+vue中keep-alive用来干什么的：用来实现组件复用及状态保存。
+react中：visibility:hidden或者display:none；或者在状态库中存储组件状态。
+
+8.vue2中数组的变化方法push，pop能监听到吗？哪些监听不到？
+为何push能监听到？
+我需要通过索引去设置数组项，怎么办？
+还有哪些改动，也是监听不到的？
+
+vue3为何用Proxy不用defineProperty？
+Proxy能监听到，defineProperty监听不到的，有哪些？
+
+能。因为vue2重写了数组的push、pop、shift、unshift、splice、sort、reverse。
+哪些监听不到：1>给对象新增属性（用this.$set） 2>删除对象的属性(应该用this.$delete) 
+3>通过索引直接赋值（应该用this.$set） 4>修改数组的length属性
+
+9.webpack用哪些功能？
+缓存用了哪些东西？缓存的是什么东西？
+打包的时候，进行了什么操作？（压缩文件，替换环境变量...）
+DefinePlugin,如果不用这个插件，有更简单的方法吗？（不理解）
+
+cache: {type: 'filesystem'},缓存的loader处理后的结果。
+
+10.宏任务、微任务处理流程？页面渲染在哪块？
+同步任务->所有微任务->渲染任务->队首的宏任务->所有微任务->....
+
+11.flex布局中space-between,与space-around区别
+around两端也有空白间距，间距是其他两两元素间距的一半。
+
+12.rem布局说一下
+相对单位，相对于根元素的大小。通过监听resize方法，动态改变根元素font-size的大小。
