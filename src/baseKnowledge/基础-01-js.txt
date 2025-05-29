@@ -92,23 +92,44 @@ for循环用于手动控制循环次数的情况。
 eval会创建独立的作用域；（eval中声明的变量，在eval外无法使用）
 
 13.js实现继承
-1>原型继承
-SubType.prototype = new SuperType()。
-缺点：SuperType上的引用类型的属性，会在所有SubType实例上共享。
-2>盗用构造函数/构造函数继承
-SuperType.call(this)
-适用于数组、对象等引用类型属性，避免多个实例共享数据
-3>组合继承
-综合了原型链和盗用构造函数，将两者的优点集中起来。基本的思路是使用‘原型链’继承原型上的属性和方法，而通过‘盗用构造函数’继承实例属性。
-缺点：父构造函数会执行两次 --- 一次在创建子类原型，另一次在子类构造函数中。
-4>原型式继承
-Object.create()
-缺点：SuperType上的引用类型的属性，会在所有SubType实例上共享。
-5>寄生式继承
-寄生式继承（Parasitic Inheritance）是在 原型式继承的基础上 增强对象，
-为其添加额外方法或属性，然后返回这个对象。它的思路类似于工厂模式，在创建对象的过程中进行“增强”。
-6>寄生组合继承
-继承的最优方式。
+1.原型继承
+Child.prototype = new Parent();
+缺点Parent上的所有引用类型都在Child的所有实例上共享。
+2.盗用构造函数
+function Parent() {
+    this.colors = ['red']
+}
+function Child() {
+    Parent.call(this)
+}
+能够避免多个实例共享一份相同的引用。
+缺点无法继承原型上的方法。
+3.组合继承
+functon Parent(name) {
+    this.name = name;
+    this.colors = ['red']
+}
+Parent.prototype.sayHi = function() {console.log(`hello,${this.name}`)}
+function Child(name, age) {
+  Parent.call(this, name); // 构造函数继承属性
+  this.age = age;
+}
+Child.prototype = new Parent(); // 原型继承方法
+const child = new Child('Tom', 10);
+child.sayHi(); // Hi Tom
+缺点：父构造函数执行了两次。
+4.寄生组合继承
+function Parent(name) {
+  this.name = name;
+}
+Parent.prototype.sayHi = function () {
+  console.log('Hi from Parent');
+};
+function Child(name, age) {
+  Parent.call(this, name);
+  this.age = age;
+}
+Child.prototype = Object.create(Parent.prototype);
 
 14.es版本差异
 1>es6

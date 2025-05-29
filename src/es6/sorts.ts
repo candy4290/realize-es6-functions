@@ -123,3 +123,18 @@ console.log(arr2);
 export function isObject(value: any): value is Object {
     return value !== null && typeof value === "object"
 }
+
+function quickSort1(arr: number[]) {
+    if (arr.length <=1) return arr;
+    let pivot = arr[0];
+    const leftA = [];
+    const rightA = [];
+    arr.forEach(i => {
+        if (i<=pivot) {
+            leftA.push(i)
+        } else {
+            rightA.push(i)
+        }
+    })
+    return [...quickSort1(leftA), arr[pivot], ...quickSort1(rightA)];
+}

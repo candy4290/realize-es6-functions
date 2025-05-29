@@ -1,6 +1,7 @@
 0.模板字面量类型
 type StartsWithA = `a${string}`;
 type AStringArray = StartsWithA[];
+type ABCPrefix = `${'a' | 'b' | 'c'}${string}`;
 
 1.typescript优缺点
 优点：1>编译过程中可以提前发现BUG 2>类型提示+插件支持，极大提升了开发效率
@@ -13,7 +14,7 @@ var AAA;
     AAA[AAA['B']=0]='B'
 })(AAA||AAA={})
 3.declare关键字
-declare告诉编译器，某个类型或者变量是存在的。
+告诉编译器某个模块或者变量【或者类、或者函数】是存在的。
 使用场景，用于在ts项目中使用js库
 1>import X from 'x'会报错，X这个module不存在，这时候可以在.d.ts文件中declare module 'X';
 2>使用某个全局变量，直接使用会报错。通过declare const a: any;这样就可以使用全局变量a了。

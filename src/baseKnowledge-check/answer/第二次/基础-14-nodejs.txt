@@ -1,0 +1,5 @@
+1.非阻塞I/O 
+
+2.事件循环
+
+3.process.nextTick

@@ -1,0 +1,112 @@
+1.typescript优缺点
+优化：1>提示友好【提升开发效率】 2>编译期提前发现可能存在的错误。
+缺点：1>多了一个步骤，性能 2>anyscript 3>学习成本
+
+2.枚举类型；编译后是什么样子的
+【
+enum AAA {A}
+(function(AAA) {
+ AAA[AAA['A'] = 0]='A';
+})(AAA||AAA = {})
+】
+
+3.declare关键字
+告诉编译器某个模块或者变量【或者类、或者函数】是存在的。
+【 // 扩展全局对象
+declare global {
+  interface Window {
+    myGlobalVar: number;
+  }
+}
+】
+场景：1>ts中引入js包，import X from 'x';会报错模块X不存在，.d.ts中declare module X;
+2>script引入第三方包，注入的全局变量。直接使用报错。declare const jquery: any;
+
+4.is关键字
+创建类型保护，在true分支中，可以使用类型下的方法。
+
+5.infer关键字,条件类型及分发条件类型
+用来在条件类型中提取类型，赋值给变量，并在true分支中使用该变量。
+条件类型使用extends来申明，分发条件类型发生在，在条件类型中使用联合类型，此时适用于分配律。
+type Exclude<T,U> = T extends U ? never : T;
+type Parameters<T extends (...args: any) => any> = T extends ((...args: infer P) => any) ? P : never;
+
+6.type和interface
+都可以用来描述对象、函数的类型。都可以扩展
+扩展方式不同，&，extends
+&可以重写属性，extends不可以重写属性
+type不可以重命，interface可以重命，会自动合并。
+【type可以用来申明基础类型别名、元组类型、联合类型而interface不行】
+
+7.索引签名
+type A = {
+    [key: string]: string
+}
+
+8.操作符
+1>typeof；
+2>keyof,返回对象key值组成的联合类型。【如果对象有个string类型的索引签名，返回string|number;】
+
+9.工具类型
+1>Partial: 所有T的属性可选
+type Partial<T> = {
+    [k in keyof T]?: T[k] 
+}
+
+2>Required：所有T的属性必选
+type Required<T> = {
+    [k in keyof T]【-?】: T[k] 
+}
+
+
+3>Readonly： 所有T的属性只读
+type Readonly<T> = {
+    readonly [k in keyof T]: T[k] 
+}
+
+4>Record：创建一个对象类型，key来自于K的每一项，value类型是T
+type Record<K extends keyof any,T> = {
+    [key in K]: T
+}
+
+5>Pick: K是一个联合类型。创建一个对象类型，以K中的值为key。
+type Pick<T, K extends keyof T> = {
+    [key in K]: T[key]
+}
+
+6>Exclude: 从T中剔除，符合U的类型。
+type Exclude<T, U> = T extends U ? never : T
+
+7>Extract: 从T中选出，符合U的类型。
+type Extract<T, U>= T extends U ? T : never;
+
+8>Omit<T,K>：用于从T中过滤掉K这个联合类型中出现的属性
+type Omit<T, K extends keyof any> = Pick<T,Exclude<keyof T, K>>
+
+9>NonNullable<T> = T&{}
+
+10>Parameters<T>: 将函数的所有参数类型，转为一个元组类型
+type Parameters<T extends (...args: any) => any> = T extends (...args: infer P) => any ? P : never;
+
+11>ReturnType<T>: 获取函数的返回值类型
+type ReturnType<T extends (...args: any) => any>  = T extends (...args: any) => infer R ? R : never
+
+12>字面量类型：
+'a' | 'b' | 'c'
+【
+（模板字面量类型）
+type ABCPrefix = `${'a' | 'b' | 'c'}${string}`;
+】
+
+13>协变
+子类型可以赋值给父类型。【常用于函数的返回，数组】
+
+14>逆变
+父类型可以赋值给子类型。【常用于函数的参数】
+
+9.装饰器
+类装饰器
+属性装饰器
+getter,setter装饰器
+【方法装饰器，accessor装饰器】
+装饰器本质是一个函数。

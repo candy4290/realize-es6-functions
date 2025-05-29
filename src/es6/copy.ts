@@ -50,3 +50,27 @@ function identity<T>(value: T): T {
   identity<number>(123);
   identity<boolean>(true);
 // 也可以使用类型参数推断
+// type ABCPrefix = `${'a' | 'b' | 'c'}${string}`;
+
+// const a1:ABCPrefix = 'b123'
+
+
+type Animal = { name: string };
+type Dog = { name: string; breed: string };
+
+let a1: Animal = { name: 'A' };
+let d: Dog = { name: 'D', breed: 'Labrador' };
+
+a1 = d; // ✅ OK（Dog → Animal 协变）
+
+let animals: Animal[] = [];
+// let dogs: Dog[] = [];
+
+// animals = dogs; // ✅ 协变：Dog[] 是 Animal[] 的子类型
+
+// let animals: Animal[] = [];
+let dogs: Dog[] = [];
+
+animals = dogs; // ✅ 协变：Dog[] 是 Animal[] 的子类型
+
+

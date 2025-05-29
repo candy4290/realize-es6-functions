@@ -1,0 +1,159 @@
+1.js typeof及instanceof区别
+typeof 返回string类型 string,number,boolean,symbol,object,undefine,function,bigint。根据二进制的前三位进行判断
+instanceof 用来判断构造函数的prototype属性是否出现在实例对象的原型链上。返回boolean类型。
+
+2.instanceof和isPrototypeOf区别
+instanceof 用来判断构造函数的prototype属性是否出现在实例对象的原型链上。
+isPrototypeOf用来判断一个对象是否在另一个对象的原型链上。
+
+3.==、===、Object.is();四种相等算法；
+==隐式转换：
+一边有boolean时，需要转为数字。 true-1,false-0,
+数字和字符串比较时，字符串转为数字''被转为0
+一边有对象时，先调用valueOf转为基础类型值，不行的话再调用toString
+
+Object.js 同值相等。和===唯一区别是，Object.is(NaN,NaN)返回true
+零值相等：和Object.is唯一区别是，Object.is(0,-0)返回false,而零值相等会返回true。
+
+4.内存泄漏可能原因及其排查方法
+1.定时器没销毁
+2.监听器不使用后没有取消监听
+3.不合理闭包的使用。
+【4.console.log没有在生产环境禁用，会一直持有引用】
+【5.全局变量滥用，且未清理】
+
+排查方法：f12,内存或者性能tab查看比较。
+【performance.memory.usedJSHeapSize看是不是持续变大】
+
+5.数组中哪些方法会改变原有数组，哪些不会
+会：pop,push,sort,shift,unshift,splice【reverse】
+不会：forEach,map,slice,【filter,concat】
+
+6.for...of,for...in,for循环区别
+for...of遍历可迭代对象(实现了可迭代协议的对象Symbol.iterator， function() {
+    return {
+        next: () => {
+            return {
+                value: xxx,
+                done: boolean,
+            }
+        },
+    }
+})
+for...in遍历对象的可枚举属性，包含原型链上继承的属性。
+for循环可以自定义步长，开始结束位置，更灵活。
+
+7.new一个对象的过程中发生了什么
+1>.创建一个空对象
+2>将空对象的__proto__属性链接到构造函数的prototype属性上
+3>将空对象作为this的上下文
+4>继续执行构造函数逻辑，如：给对象赋值属性
+5>如果没有显示返回任何东西，则返回第一步创建的对象
+
+8.Map和Object的区别
+1>Object原型链上具有隐性key
+2>Object key只能是string,symbol类型
+3>Map的key有序
+4>Map可迭代
+5>Map不支持序列化、反序列化
+
+9.bind,call,apply区别
+都可以改变this指向。
+call,apply立即执行。bind返回一个函数。
+call,bind按照逗号分隔的方式传参，apply按数组方式传参
+
+10.检测变量a是否是数组，至少5种
+1>a instanceof Array
+2>Array.isArray(a)
+3>Array.prototype.isPrototypeOf(a)
+4>a.__proto__ === Array.prototype 【或者写成a.constructor === Array】
+5>Object.prototpye.toString.call(a) === "[object Array]"
+
+11.迭代器，生成器
+[Symbol.iterator],function() {
+    return {
+        next: function() {
+            return {
+                value: xx,
+                done: xxx
+            }
+        }
+    }
+}
+
+生成器是基于迭代器的【特殊函数】function * xx() {
+    yield 1;
+    yield 2;
+    yield 3;
+}
+
+12.严格模式和非严格模式有什么区别
+严格模式怎么实现："strict"
+严格模式消除了不少不规范带来的问题；
+1>严格模式不允许函数的参数同名
+2>不允许使用arguements,eval作为变量名
+3>不可以删除函数或者变量。
+4>不可以给不允许修改的属性赋值。
+5>【严格模式的function中this是undefined,非严格模式是window】
+
+13.js实现继承
+【
+1.原型继承
+Child.prototype = new Parent();
+缺点Parent上的所有引用类型都在Child的所有实例上共享。
+2.盗用构造函数
+function Parent() {
+    this.colors = ['red']
+}
+function Child() {
+    Parent.call(this)
+}
+能够避免多个实例共享一份相同的引用。
+缺点无法继承原型上的方法。
+3.组合继承
+functon Parent(name) {
+    this.name = name;
+    this.colors = ['red']
+}
+Parent.prototype.sayHi = function() {console.log(`hello,${this.name}`)}
+function Child(name, age) {
+  Parent.call(this, name); // 构造函数继承属性
+  this.age = age;
+}
+Child.prototype = new Parent(); // 原型继承方法
+const child = new Child('Tom', 10);
+child.sayHi(); // Hi Tom
+缺点：父构造函数执行了两次。
+4.寄生组合继承
+function Parent(name) {
+  this.name = name;
+}
+Parent.prototype.sayHi = function () {
+  console.log('Hi from Parent');
+};
+function Child(name, age) {
+  Parent.call(this, name);
+  this.age = age;
+}
+Child.prototype = Object.create(Parent.prototype);
+】
+
+14.es版本差异
+1>es6
+    引入const,let;引入箭头函数；添加了模板字符串；引入了解构、赋值；引入class类；引入promise
+2>es7
+    引入了Array.prototype.includes方法；引入了指数操作符:**
+3>es8
+    引入了async/await；添加了Object.values(),Object.entries()方法；引入了字符串填充方法（padStart,padEnd）
+4>es9
+    引入了异步迭代器；添加了Promise.finally()方法；引入了对象的扩展运算符；
+5>es10
+    引入了Array.prototype.flat()、Array.prototype.flatMap()方法；引入String.prototype.trimStart()、String.prototype.trimEnd()方法；
+    增加了动态导入的功能；
+6>es11
+    添加了可选链操作符(?.)；添加了空值合并操作符（??）;引入了BigInt类型
+
+15.宿主对象、内置对象、原生对象
+宿主对象 👉 浏览器/Node.js 提供的 API, window,....
+内置对象 👉 ECMAScript 规定的全局对象，Function,Array,....
+原生对象 👉 JS 运行时创建的实例
