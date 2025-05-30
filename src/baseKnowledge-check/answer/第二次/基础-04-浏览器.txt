@@ -1,27 +1,79 @@
 1.meta标签的几种用法
+元数据，【表示文档的描述信息】
+提供了name就是文档级元数据，<meta name="viewport" content="initial-scale: 1" />
+提供了http-equiv，【则是编译指令】作用和http头部一样 <meta http-equiv="cache-control" content="no-cache" />
+提供了charset,则申明了使用哪种字符编码，<meta charset="utf-8" />
 
 2.DomContentLoaded与load区别；
+DomContentLoaded在dom完全解析后，所有延迟脚本执行后触发。
+loader需要等到所有资源文件下载结束才触发。
 
 3.scritp标签async与defer有什么区别
+异步脚本、延迟脚本
+加载时都不会阻塞解析。
+执行时机：异步脚本加载完立即执行，无序，阻塞解析；defer会在dom解析后，按照页面中出现顺序，依次执行。
 
 4.link标签引入外部css是否会阻塞页面解析、渲染；是否会阻塞js下载及执行。
+不会阻塞解析，会阻塞渲染。
+解决办法<link rel="stylesheet" href="" />改为<link rel="preload" href="" onload="this.rel = stylesheet" />
+不会阻塞js下载，会阻塞js执行。
 
 5.从输入URL到页面显示发生了什么【HTTP】
+1>dns解析
+2>三次握手
+3>建立连接
+4>返回结果，浏览器开始解析。
+逐行解析，分解为一系列token，根据嵌套关系，构成一个属性结构。形成dom树
+遇到css,js交给对应的解析器、执行器来解析或执行。形成cssom树
+结合生成渲染树
+5>渲染【布局、绘制】
+【关键渲染路径：DOM树、CSSOM树、渲染树、布局、绘制】
 
 6.回流（重排）与重绘，如何减少回流
+回流必重绘，反之未必。
+回流（位置变化），重绘（颜色变化）
+减少回流：动画使用transform、csstext、直接替换元素的class、让元素脱离文档流
 
 7.JSONP跨域原理
+script标签可以加载跨域资源。返回一个js的a(),并提前定义好这个全局函数。
 
 8.性能指标
+[导航阶段]TTFB首字节时间
+[渲染阶段]FP，首次渲染
+[渲染阶段]FCP【首次内容绘制时间】
+[渲染阶段]LCP【最大内容绘制时间】
+[交互阶段]【FID，首次输入延迟时间】
+[交互阶段]【TTI，首次可交互时间】
+
+web-vitals
+performance
+performanceObservablel
 
 9.字体未加载完时，text文本是否会显示出来
+font-display:block/swap;
 
 10.如果cookie 没有设置 maxage， 那么这一条 cookie 失效时间改怎么算
+关闭浏览器后失效。【会话cookie】
 
 11.Attribute与Property区别
 
 12.同源策略
+协议、ip、端口一致。
+否则cors跨域。
+
+跨域请求是否到达后端：
+简单请求到达了，不会浏览器拦截掉了。
+非简单请求，会触发预检请求。
+预检请求先发送，发现后端接口不支持cors，返回。不需要发送真正的请求。
 
 13.XSS
+跨站脚本攻击
+存储型
+反射型
+dom型
+
+方式：字符转义。httponly【设置csp限制可执行脚本来源】
 
 14.XSRF
+跨站请求伪造，利用用户已登录的状态
+解决方案：samesite\xsrf token\不使用cookie\接口校验referer\origin
