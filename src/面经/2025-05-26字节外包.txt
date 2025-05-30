@@ -24,7 +24,7 @@ function sleep(timer) {
 react fiber出现的背景，是为了解决渲染不可中断，大的组件树渲染可能造成阻塞主线程，卡顿的问题。
 是一种虚拟dom的具体实现，链表结构。特点是：渲染可中断。
 
-怎么实现中断：时间切片(requestIdleCallback)、任务调度(MessageChannel)。
+怎么实现中断：时间切片(getCurrentTime() >= deadline,performance.now(),deadline在开始前设置，5ms)、任务调度(setImmediate、MessageChannel、setTimeout)。
 
 浏览器每秒尝试绘制大约 60 帧（即每帧 ≈ 16.67 毫秒）。
 在每一帧中，浏览器要完成以下任务：处理用户输入、执行js、样式计算、布局、绘制、合成。如果这些任务没占满16.67毫秒，剩下的就是”空闲时间“
