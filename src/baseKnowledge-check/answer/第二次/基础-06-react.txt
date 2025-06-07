@@ -1,18 +1,47 @@
 1.useLayoutEffect和useEffect区别
+dom更新后，浏览器渲染前同步执行，避免闪烁。
+浏览器渲染后异步执行。
 
 2.react生命周期
+挂载：【constructor->getDerivedStateFromProps->render->componentDidMount】
+更新：【getDerivedStateFromProps->shouldComponentUpdate->render->getSnapShotBeforeUpdate->componentDidUpdate】
+卸载：【componentWillUnmount】
+报错：【getDerivedStateFromError->componentDidCatch】
 
 3.react17/18新特性
+react17:
+1>取消事件池
+2>事件由原来的委托到document，改为委托到rootElemnt
+3>新的jsx编译，无需收到引入React了
+
+react18:
+1>新的严格模式，挂载两次
+2>并发模式，新的hook,useDeferredValue,useTransition
 
 4.react组件性能优化
+1>提供key
+2>useMemo,useCallback
+3>useDeferredValue,useTransition
 
 5.redux与mobx区别
+是否单一数据源。
+数据是否可变。
+【是否自身支持异步操作】
 
 6.父子组件通信方式
+1>props传递
+2>redux
+3>context
+4>ref+forwardRef+useImpreativeHandler
 
 7.fiber架构
+1>背景：渲染不可中断，大的组件树，渲染时，页面不响应用户输入，掉帧，卡顿。
+2>【本质上是一种虚拟dom的实现】链表树，sibing,child,parent。
 
 8.react渲染原理及架构
+调度器：【时间切片+优先级调度】
+协调器：【diff算法】
+渲染器【执行dom更新】
 
 9.diff算法
 

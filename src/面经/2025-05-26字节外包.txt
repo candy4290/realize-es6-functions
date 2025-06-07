@@ -1,4 +1,4 @@
-2025-05-26 一面 60min
+2025-05-26 一面 60min【已通过】
 1.实现Array.prototype.distinct方法，效果如下
 console.log(["a", "b", "c", "d", "b"].distinct()); // ["a", "b", "c", "d"]
 console.log(["1", "2", "a", "b"].distinct()); // ["1", "2", "3"]
@@ -75,3 +75,21 @@ around两端也有空白间距，间距是其他两两元素间距的一半。
 
 12.rem布局说一下
 相对单位，相对于根元素的大小。通过监听resize方法，动态改变根元素font-size的大小。
+
+2025-06-04 二面 50min
+1.请实现一个观察者模式，拥有四个方法 on,off,once 和 trigger
+2.实现一个react的hook,useThrottle
+3.
+// 函数科里化：实现如下函数add,使如下执行都等于9add(2,3,4)=9
+// add(2)(3,4)=9
+// add(2)(3)(4)=9
+// add(2,3)(4)=9
+4.http有哪些方法，post和put有啥区别
+put是幂等的。post非幂等。
+5.options请求作用是什么？何时会触发预检请求？跨域有哪些处理方式？
+jsonp请求报错了，如何处理异常。（onerror）
+使用promise进行封装，处理onerror错误，以及超时处理。
+6.强缓存、协商缓存，http相关的头有哪些。
+if-no-match && etag
+if-modified-since && last-modified
+7.页面部署后，有缓存，怎么办？

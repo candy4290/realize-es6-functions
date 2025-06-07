@@ -1,13 +1,45 @@
 1.loader作用，执行顺序是怎样的，说五个常用的loader
+从右到左，下到上。
+babel-loader, 兼容js
+less-loader 处理less文件
+style-loader,【将解析后的css注入到页面的style中去。】
+【ts-loader】
+【style-resources-loader,将less全局化，不用到处去手动引入】
+
 
 2.plugin作用，说五个常用的plugin
+MiniCssExtractPlugin 提取css成单独文件
+CssMinimizerWebpackPlugin 压缩css
+DefinePlugin 编译时替换代码中的process.env.xxx
+【TerserWebpackPlugin,压缩js】
+【BundleAnalyzerPlugin分析打包结果的文件】
 
 3.webpack打包优化，说5个具体措施
+1.缓存{type:cache}
+2.分包，配置splitChunks，提取公共的包
+3.loader范围缩小，减低匹配范围，时间。
+4.配置【externals】,来用cdn加载
+5.摇树优先
+【配置plugin来压缩体积】
 
 4.如果不使用脚手架，如何用webpack构建一个自己的react应用
+1.npm init,按照React，babel
+2.配置babel
+3.配置webpack,插件，loader
+4.配置devserver
 
 5.postcss
+一个用js来处理css的工具。
+包含许多插件，【cssnano】-压缩css,【autoprefix】-兼容不同浏览器前缀。
+【postcss-preset-env,使用最新版的css语法】
 
 6.babel
+一个js的编译器。兼容js到低版本
 
 7.说一下webpack详细的打包过程步骤
+1>合并shell与配置文件
+2>生成编译对象，执行编译对象的run方法
+3>入口文件，递归。生成抽象语法树【调用对应的loader】
+4>找到所有依赖，生成chunk
+5>将chunk输出到文件系统。
+6>插件在生命周末的各个阶段都可能执行。
