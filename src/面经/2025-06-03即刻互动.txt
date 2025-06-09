@@ -3,18 +3,33 @@
 
 2.最近做的项目中，哪些做的比较有成就感？布局怎么算的？有哪些第三方库能实现这个布局？
 
-3.用的什么状态库？redux数据流转是怎么样的？react-redux怎么实现的，作用【使用层面】？
+3.用的什么状态库？redux数据流转是怎么样的？react-redux怎么实现的，作用【使用层面，
+Provide,组件层面useSelector相当于useContext来获取store并订阅更新，检测到更新，返回一个新的state，组件就能感知到了。
+】？
 redux-tooltip与redux区别？redux设置状态，有没有遇到什么问题？
-状态嵌套层级比较深，怎么办？怎么处理这种问题？
+状态嵌套层级比较深，怎么办？怎么处理这种问题？【immer，利用Proxy+结构共享】
 
 4.react的diff算法，策略是什么？
 
 5.还用过别的状态库吗？了解过哪些状态库？zustand思想是什么？
+create中实现了观察者模式，调用setState时候会通知所有订阅者
+useSeletor中会注册订阅，然后如果触发了订阅，会进行浅比较，如果不一致，返回一个新的state。自然就触发了组件的更新。
 
 6.选择状态库的时候有哪些考量点？新技术->落地，怎么来做（举个例子）
+是否解决痛点？与现有系统适配度？【最好是兼容现有系统】
+学习成本？
+社区活跃度？
+扩展性怎么样？
 
 7.技术架构搭建有什么考量，或者直接说做了哪些事情？
+技术栈选择：react/vue/angular webpack/vite/ ts/js sass/less/tailwind/css in js/
+项目结构规范
+通用能力搭建：状态管理方案、路由、请求层封装（错误处理、取消失效的请求）、
+工程化建设：webpack路径别名、多环境支持；代码规范；自动化测试jest、mock数据；
+CICD：容灾处理，异常监控，页面性能指标监控。
+
 脚手架怎么实现的？用了哪些包？
+
 为何不考虑直接用webpack,vite呢？
 
 怎么保证项目的稳定性、效率、性能？【测试case,自动化测试】
@@ -28,10 +43,21 @@ useRef的用法有哪些？【没回答出来，用来存储一些不会触发�
 9.我的React组件很卡，考虑所有可能存在问题的环节（分别该怎么避免）？
 
 10.如何定量的方式去分析为何卡顿？（从react这块说，react chrome的插件）
+统计fps(stat.js)、观察是否有长任务、获取FID、
+
 
 11.页面性能指标有哪些
+导航阶段：TTFB、
+渲染阶段：FP、FCP、LCP
+交互阶段：FID、TTI
 
 12.nextjs用过哪些东西，ssr渲染的流程是什么样的？
+客户端发起请求
+服务端接受请求，准备数据，创建React元素树
+执行渲染逻辑：const htmlString = ReactDOMServer.renderToString(<App />);
+生成html模版并返回给客户端。
+客户端水合作用，ReactDOM.hydrate(<App />, document.getElementById('root'));【静态页面变得可交互】
+
 
 13.在职状态怎么考虑看机会的？
 

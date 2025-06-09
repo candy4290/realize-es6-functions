@@ -76,7 +76,7 @@ around两端也有空白间距，间距是其他两两元素间距的一半。
 12.rem布局说一下
 相对单位，相对于根元素的大小。通过监听resize方法，动态改变根元素font-size的大小。
 
-2025-06-04 二面 50min
+2025-06-04 二面 50min【挂了】
 1.请实现一个观察者模式，拥有四个方法 on,off,once 和 trigger
 2.实现一个react的hook,useThrottle
 3.
