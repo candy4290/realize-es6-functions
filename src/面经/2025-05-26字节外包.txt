@@ -88,7 +88,7 @@ around两端也有空白间距，间距是其他两两元素间距的一半。
 put是幂等的。post非幂等。
 5.options请求作用是什么？何时会触发预检请求？跨域有哪些处理方式？
 jsonp请求报错了，如何处理异常。（onerror）
-使用promise进行封装，处理onerror错误，以及超时处理。
+使用promise进行封装(动态插入script标签)，处理onerror错误，以及超时处理。
 6.强缓存、协商缓存，http相关的头有哪些。
 if-no-match && etag
 if-modified-since && last-modified

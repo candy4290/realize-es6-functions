@@ -5,3 +5,16 @@ let r = []
     }
     console.log(2)
     console.log(document.getElementById('bx'))
+
+
+    const readline = require('readline');
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout
+    });
+    rl.on('line', line => {
+      rl.close();
+    })
+    rl.on('close', () => {
+
+    })
