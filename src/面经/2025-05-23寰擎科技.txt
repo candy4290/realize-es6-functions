@@ -24,22 +24,23 @@ Object.defineProperty(obj, Symbol.iterator, {
 })
 
 4.Promise使用场景，想中断promise怎么办(如何中断promise)。
-function wrapCacelPromise(promise) {
-    let hasCanceled = false;
-    const newPromise = new Promise((r,rj) => {
-        promise.then(
-            (val) => (hasCanceled ? reject(new Error('Cancelled')) : resolve(val)),
-            (error) => (hasCanceled ? reject(new Error('Cancelled')) : reject(error))
-        )
-    })
-    return {
-        promise: newPromise,
-        cancel: () => hasCanceled = true;
-    }
+function createCancellablePromise(executor) {
+  let cancel;
+  const cancelPromise = new Promise((_, reject) => {
+    cancel = () => reject(new Error('Promise cancelled'));
+  });
+
+  const mainPromise = new Promise(executor);
+
+  const wrapped = Promise.race([mainPromise, cancelPromise]);
+
+  wrapped.cancel = cancel;
+
+  return wrapped;
 }
 
 5.平时项目怎么防止重复请求的？
-cancelToken,signal:AbortController
+loading状态，防抖，节流，cancelToken,signal:AbortController
 
 6.怎么看待闭包会造成内存泄漏？
 
