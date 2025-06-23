@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>背景 + 可拖拽贴图编辑器</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 20px;
+    }
+    canvas {
+      border: 1px solid #ccc;
+      display: block;
+    }
+    input {
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <h2>Fabric.js 可交互图层贴图编辑</h2>
+
+  <label>上传背景图：
+    <input type="file" id="bgUpload" accept="image/*" />
+  </label>
+  <br />
+  <label>上传贴图图层：
+    <input type="file" id="fgUpload" accept="image/*" />
+  </label>
+  <br />
+  <canvas id="canvas" width="800" height="600"></canvas>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+  <script>
+    const canvas = new fabric.Canvas('canvas', {
+      backgroundColor: '#fff',
+      preserveObjectStacking: true // 允许多图层顺序控制
+    });
+
+    // 背景图上传
+    document.getElementById('bgUpload').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        fabric.Image.fromURL(evt.target.result, function(img) {
+          // 缩放适配 canvas 尺寸
+          img.scaleToWidth(canvas.width);
+          img.scaleToHeight(canvas.height);
+          canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas));
+        });
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // 添加前景图层（可缩放、拖拽）
+    document.getElementById('fgUpload').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        fabric.Image.fromURL(evt.target.result, function(img) {
+          img.set({
+            left: 200,
+            top: 200,
+            scaleX: 0.4,
+            scaleY: 0.4,
+            hasRotatingPoint: true,
+            cornerStyle: 'circle'
+          });
+
+          img.setControlsVisibility({
+            mt: true, mb: true, ml: true, mr: true,
+            tl: true, tr: true, bl: true, br: true,
+            mtr: true // 旋转点
+          });
+
+          img.set('selectable', true);
+          canvas.add(img);
+          canvas.setActiveObject(img);
+        });
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // 让 canvas 支持动态更新
+    canvas.on('object:modified', function() {
+      canvas.renderAll();
+    });
+  </script>
+</body>
+</html>

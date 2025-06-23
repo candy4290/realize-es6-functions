@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>原生 Canvas 绘制可移动、旋转、缩放矩形</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 20px;
+    }
+    canvas {
+      border: 1px solid #ccc;
+      display: block;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>矩形操作：拖动、旋转、缩放</h2>
+  <canvas id="canvas" width="800" height="600"></canvas>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d');
+
+    let rect = {
+      x: 200,
+      y: 150,
+      width: 150,
+      height: 100,
+      angle: 0, // 旋转角度
+    };
+
+    let isDragging = false;
+    let isResizing = false;
+    let isRotating = false;
+    let startX, startY;
+
+    // 绘制矩形
+    function drawRect() {
+      context.clearRect(0, 0, canvas.width, canvas.height); // 清除画布
+
+      context.save();
+      context.translate(rect.x + rect.width / 2, rect.y + rect.height / 2); // 平移到矩形中心
+      context.rotate(rect.angle); // 旋转
+
+      context.fillStyle = 'blue';
+      context.fillRect(-rect.width / 2, -rect.height / 2, rect.width, rect.height); // 绘制矩形
+
+      context.restore();
+
+      // 绘制旋转控制点
+      context.fillStyle = 'red';
+      context.beginPath();
+      context.arc(rect.x + rect.width / 2, rect.y + rect.height / 2 + rect.height / 2 + 10, 10, 0, Math.PI * 2);
+      context.fill();
+    }
+
+    // 检查是否点击了旋转控制点
+    function isInsideRotateHandle(x, y) {
+      const handleX = rect.x + rect.width / 2;
+      const handleY = rect.y + rect.height / 2 + rect.height / 2 + 10;
+      const dx = x - handleX;
+      const dy = y - handleY;
+      return Math.sqrt(dx * dx + dy * dy) < 10;
+    }
+
+    // 旋转矩形
+    function rotateRect(dx, dy) {
+      const centerX = rect.x + rect.width / 2;
+      const centerY = rect.y + rect.height / 2;
+      const angle = Math.atan2(dy - centerY, dx - centerX);
+      rect.angle = angle;
+      drawRect();
+    }
+
+    // 处理鼠标按下事件
+    canvas.addEventListener('mousedown', (e) => {
+      const mouseX = e.offsetX;
+      const mouseY = e.offsetY;
+
+      // 判断是否点击了旋转控制点
+      if (isInsideRotateHandle(mouseX, mouseY)) {
+        isRotating = true;
+        startX = mouseX;
+        startY = mouseY;
+      } else {
+        isDragging = true;
+        startX = mouseX - rect.x;
+        startY = mouseY - rect.y;
+      }
+    });
+
+    // 处理鼠标移动事件
+    canvas.addEventListener('mousemove', (e) => {
+      const mouseX = e.offsetX;
+      const mouseY = e.offsetY;
+
+      if (isDragging) {
+        rect.x = mouseX - startX;
+        rect.y = mouseY - startY;
+        drawRect();
+      } else if (isRotating) {
+        const dx = mouseX - startX;
+        const dy = mouseY - startY;
+        rotateRect(mouseX, mouseY);
+        startX = mouseX;
+        startY = mouseY;
+      }
+    });
+
+    // 处理鼠标松开事件
+    canvas.addEventListener('mouseup', () => {
+      isDragging = false;
+      isRotating = false;
+    });
+
+    // 初始化绘制矩形
+    drawRect();
+  </script>
+</body>
+</html>

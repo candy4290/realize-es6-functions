@@ -1,0 +1,49 @@
+1.BFC是什么？特点？触发方式？
+块级格式化上下文，内部元素布局，不影响外部。
+特点：1>不同BFC间外边距不会合并 2>包含所有浮动元素，不会高度坍塌 3>清除外部浮动，不会与外部浮动区域重叠。
+触发方式：1>html根元素 2>绝对定位元素 3>浮动元素float不为none 4>display:inline-block 5>overflow不为clip、visible
+
+2.哪些属性可以继承？哪些不可继承
+可：
+1>字体系列:font-size,font-family,font-weight
+2>文本:text-align,line-height,text-indent,color
+3>visibility,cursor
+
+3.文本超出显示省略号，单行，多行。
+1>white-space:no-wrap;overflow:hidden;text-overflow:ellipsis;
+2>display:webkit-box;webkit-box-orient:vertical;webkit-line-clamp:3;overflow:hidden;
+
+4.如何隐藏一个元素，有什么区别？
+display:none,等同于v-show
+visibility:hidden,不影响布局，子元素可覆盖，无法点击。
+opacility:0;
+absolute,top:-999px;
+
+5.伪类、伪元素。:与::区别。
+伪类，:,:hover,:active,:nth-child,:has(),:not(),
+伪元素，::,::before,::after,::placeholder,::section
+
+6.css选择器有哪些？优先级？权重计算方式？
+0>行内样式
+1>id选择器
+2>类选择器
+3>元素选择器
+
+7.为元素设置background,颜色会填充哪些区域？
+content+padding+border
+
+8.css实现动画步骤
+1>@keyframe
+2>animation: xxxx
+
+9.块级元素、内联元素、置换元素
+块级元素：div,p,
+内联:span
+置换：img,video,iframe
+
+10.语义化标签
+caption,
+
+11.html5中，input元素的type属性有哪些？至少10个
+
+12.sticky 和 fixed 的区别

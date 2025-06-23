@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>OpenLayers 轨迹动画示例</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol/ol.css" />
+  <style>
+    #map {
+      width: 100%;
+      height: 400px;
+    }
+  </style>
+</head>
+<body>
+  <h2>OpenLayers 轨迹动画</h2>
+  <div id="map"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/ol/ol.js"></script>
+  <script>
+    // 轨迹点（示例经纬度坐标，WGS84）
+    const coords = [
+      [116.391, 39.906], // 北京
+      [117.200, 39.133], // 唐山
+      [118.796, 32.060], // 南京
+      [121.473, 31.230], // 上海
+      [121.559, 29.871], // 杭州
+    ].map(coord => ol.proj.fromLonLat(coord));
+
+    // 创建轨迹 LineString
+    const route = new ol.geom.LineString(coords);
+
+    // 创建轨迹线 Feature
+    const routeFeature = new ol.Feature({
+      geometry: route,
+    });
+
+    // 创建运动点 Feature，初始位置在起点
+    const startPoint = new ol.Feature({
+      geometry: new ol.geom.Point(coords[0]),
+    });
+
+    // 轨迹线样式
+    const routeStyle = new ol.style.Style({
+      stroke: new ol.style.Stroke({
+        width: 4,
+        color: '#3399CC',
+      }),
+    });
+
+    // 运动点样式
+    const pointStyle = new ol.style.Style({
+      image: new ol.style.Circle({
+        radius: 7,
+        fill: new ol.style.Fill({ color: 'red' }),
+        stroke: new ol.style.Stroke({ color: '#fff', width: 2 }),
+      }),
+    });
+
+    routeFeature.setStyle(routeStyle);
+    startPoint.setStyle(pointStyle);
+
+    // 创建矢量图层并添加 Feature
+    const vectorSource = new ol.source.Vector({
+      features: [routeFeature, startPoint],
+    });
+    const vectorLayer = new ol.layer.Vector({
+      source: vectorSource,
+    });
+
+    // 创建地图
+    const map = new ol.Map({
+      target: 'map',
+      layers: [
+        new ol.layer.Tile({
+          source: new ol.source.OSM(),
+        }),
+        vectorLayer,
+      ],
+      view: new ol.View({
+        center: coords[0],
+        zoom: 6,
+      }),
+    });
+
+    // 动画参数
+    let currentIndex = 0;
+    let progress = 0; // 0 ~ 1，线段进度
+    const speed = 0.005; // 动画速度（可以调整）
+
+    function animate() {
+      if (currentIndex >= coords.length - 1) {
+        // 到达终点，动画结束
+        return;
+      }
+
+      const start = coords[currentIndex];
+      const end = coords[currentIndex + 1];
+
+      // 计算当前点坐标，线性插值
+      const x = start[0] + (end[0] - start[0]) * progress;
+      const y = start[1] + (end[1] - start[1]) * progress;
+
+      // 更新运动点位置
+      startPoint.getGeometry().setCoordinates([x, y]);
+      vectorSource.changed();
+
+      progress += speed;
+      if (progress >= 1) {
+        progress = 0;
+        currentIndex++;
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+</body>
+</html>

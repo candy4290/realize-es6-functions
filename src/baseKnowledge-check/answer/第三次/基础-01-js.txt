@@ -1,0 +1,110 @@
+1.js typeof及instanceof区别
+1>原理不同，typeof是根据二进制的前三位，instanceof是通过判断构造函数的prototype属性是否出现在实例对象的原型链上去判断。
+2>一元，二元操作符
+3>typeof返回字符串，string,number,boolean,object,undefined,symbol,bigint
+instanceof返回布尔类型。
+
+2.instanceof和isPrototypeOf区别
+isPrototypeOf用来判断一个对象是否在另一个对象的原型链上
+
+3.==、===、Object.is();四种相等算法；
+模糊相等
+严格相等
+同值相等
+零值相等
+
+==两边类型不一致发生类型转换：
+1>存在boolen会转为数字，true-1,false-0.
+2>存在object类型，会尝试调用valueof,再调用tostring。
+3>字符串与数组比较时，字符串被转为数字，空字符串转为0.
+
+4.内存泄漏可能原因及其排查方法
+0>意外的全局变量，使用严格模式。
+1>错误的闭包使用
+2>console打印
+3>定时器，事件监听函数没有及时取消
+4>dom泄漏，一直持有dom的引用。
+排查方法：1>f12 memory分析。 2>performace.memory.xxxx
+
+5.数组中哪些方法会改变原有数组，哪些不会
+会：sort,push,pop,shift,unshift,splice,reverse
+不会：map,forEach,filter,concat
+
+6.for...of,for...in,for循环区别
+遍历可迭代对象(Symbo.iterator,是一个函数，返回一个对象{next: function(){}})
+遍历对象的可枚举属性，包含原型链上的。
+for循环可以自定义循环逻辑。
+
+7.new一个对象的过程中发生了什么
+1>创建一个空对象
+2>将空对象的__proto__属性连接至构造函数的prototype属性
+3>将空对象作为this的上下文
+4>执行剩余操作，赋值等
+5>若显示返回对象，则返回，否则返回第一步创建的对象。
+
+8.Map和Object的区别
+1>key有序
+2>隐式key
+3>obj的key只可以是symbol或者string类型
+4>Map不支持序列化，反序列化
+5>Map可迭代
+
+9.bind,call,apply区别
+bind不会立即执行。call,apply立即执行。
+bind,call，逗号分隔方式传参。
+applay数组形式传参
+
+10.检测变量a是否是数组，至少5种
+1>Array.isArray
+2>Array.prototype.isPrototypeOf()
+3>a.__proto__ === Array.prototype;
+4>a instanceOf Array
+5>Object.prototype.toString.call(a) === '[object Array]'
+
+11.迭代器，生成器
+1>Symbo.iterator
+2>生成器function *a() {
+    yield 1;
+}
+
+12.严格模式和非严格模式有什么区别
+严格模式声明在文件第一行或者函数内部第一行"use strict"
+1>不允许参数同名
+2>不允许使用arguements关键字作为变量名
+3>不允许删除函数或者变量。
+4>函数中this指向，严格模式指向undefined,非严格模式指向window
+5>严格模式不允许使用未声明的变量
+
+13.js实现继承
+0>原型继承 
+Child.prototype = new Parent();
+1>盗用构造函数
+function Parent() {
+    this.colors = ['red']
+}
+function Child() {
+    Parent.call(this)
+}
+2>组合式
+
+3>寄生组合式
+
+14.es版本差异
+1>es6
+    引入const,let;引入箭头函数；添加了模板字符串；引入了解构、赋值；引入class类；引入promise
+2>es7
+    引入了Array.prototype.includes方法；引入了指数操作符:**
+3>es8
+    引入了async/await；添加了Object.values(),Object.entries()方法；引入了字符串填充方法（padStart,padEnd）
+4>es9
+    引入了异步迭代器；添加了Promise.finally()方法；引入了对象的扩展运算符；
+5>es10
+    引入了Array.prototype.flat()、Array.prototype.flatMap()方法；引入String.prototype.trimStart()、String.prototype.trimEnd()方法；
+    增加了动态导入的功能；
+6>es11
+    添加了可选链操作符(?.)；添加了空值合并操作符（??）;引入了BigInt类型
+
+15.宿主对象、内置对象、原生对象
+宿主对象 👉 浏览器/Node.js 提供的 API, window,....
+内置对象 👉 ECMAScript 规定的全局对象，Function,Array,....
+原生对象 👉 JS 运行时创建的实例

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Lottie + Canvas 动画逐帧导出为 ZIP</title>
+  <style>
+    #canvas-container {
+      width: 500px;
+      height: 500px;
+      margin: 50px auto;
+      border: 1px solid #ccc;
+    }
+    #progress-container {
+      width: 500px;
+      margin: 20px auto;
+    }
+    #progress {
+      width: 100%;
+      height: 20px;
+    }
+    #progress-label {
+      text-align: center;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2 style="text-align:center;">🎨 Lottie + Canvas 动画逐帧导出为 ZIP</h2>
+  <div id="canvas-container"></div>
+  <button id="export">导出所有帧为 ZIP</button>
+
+  <!-- Progress Bar -->
+  <div id="progress-container">
+    <progress id="progress" value="0" max="100"></progress>
+    <div id="progress-label">0% 完成</div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.10.2/lottie.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+
+  <script>
+    let anim;
+    let canvas;
+    let currentFrame = 0;
+    let totalFrames;
+    let zip;
+    let exportInProgress = false;
+
+    // 1. 初始化 Lottie 动画
+    anim = lottie.loadAnimation({
+      container: document.getElementById('canvas-container'),
+      renderer: 'canvas',
+      loop: false,
+      autoplay: false,
+      path: 'https://assets8.lottiefiles.com/packages/lf20_myejiggj.json'  // 替换为你自己的动画 JSON
+    });
+
+    anim.addEventListener('DOMLoaded', () => {
+      canvas = document.querySelector('#canvas-container canvas');
+    });
+
+    // 2. 导出每一帧并打包为 ZIP
+    document.getElementById('export').addEventListener('click', async () => {
+      if (exportInProgress) return;
+      exportInProgress = true;
+
+      totalFrames = Math.floor(anim.getDuration(true)); // 获取动画总帧数
+      zip = new JSZip(); // 创建 ZIP 实例
+
+      console.log(`准备导出 ${totalFrames} 帧...`);
+      currentFrame = 0;
+
+      // 启动帧采集
+      requestAnimationFrame(exportFrames);
+    });
+
+    function exportFrames() {
+      // 跳到当前帧
+      anim.goToAndStop(currentFrame, true);
+      
+      // 渲染后采集图像
+      const dataURL = canvas.toDataURL('image/png');
+      const base64 = dataURL.split(',')[1];  // 去除 data:image/png;base64, 部分
+      zip.file(`frame_${String(currentFrame).padStart(3, '0')}.png`, base64, { base64: true });
+
+      console.log(`导出帧 ${currentFrame + 1} / ${totalFrames}`);
+
+      // 更新进度条
+      const progress = (currentFrame / totalFrames) * 100;
+      document.getElementById('progress').value = progress;
+      document.getElementById('progress-label').textContent = `${Math.round(progress)}% 完成`;
+
+      currentFrame++;
+
+      // 如果还有帧未导出，继续调用 requestAnimationFrame
+      if (currentFrame < totalFrames) {
+        requestAnimationFrame(exportFrames);
+      } else {
+        // 完成导出，生成 ZIP 文件并触发下载
+        zip.generateAsync({ type: "blob" }).then(content => {
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(content);
+          a.download = 'lottie_frames.zip';
+          a.click();
+
+          console.log('✅ ZIP 文件已准备好并开始下载');
+          exportInProgress = false; // 导出结束
+        });
+      }
+    }
+  </script>
+
+</body>
+</html>

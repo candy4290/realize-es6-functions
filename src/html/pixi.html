@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pixi.js 交互式动画示例</title>
+  <style>
+    body { margin: 0; padding: 0; overflow: hidden; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.2.4/pixi.min.js"></script>
+<script>
+  // 1. 初始化 Pixi 应用
+  const app = new PIXI.Application({
+    width: window.innerWidth,
+    height: window.innerHeight,
+    backgroundColor: 0x222222,
+    resolution: window.devicePixelRatio, // 关键：提升分辨率
+    autoDensity: true,                  // 自动适配 canvas 大小
+  });
+  document.body.appendChild(app.view);
+
+  // 2. 创建一个小球
+  const ball = new PIXI.Graphics();
+  ball.beginFill(0xffcc00);
+  ball.drawCircle(0, 0, 40);
+  ball.endFill();
+  ball.x = app.screen.width / 2;
+  ball.y = app.screen.height / 2;
+  ball.interactive = true;
+  ball.buttonMode = true;
+  app.stage.addChild(ball);
+
+  let bouncing = false;
+  let velocity = 0;
+  let gravity = 0.5;
+  let dragOffset = { x: 0, y: 0 };
+  let dragging = false;
+
+  // 3. 鼠标点击触发弹跳
+  ball.on('pointertap', () => {
+    if (!dragging) {
+      bouncing = true;
+      velocity = -15;
+    }
+  });
+
+  // 4. 拖动事件
+  ball.on('pointerdown', (event) => {
+    dragging = true;
+    const pos = event.data.getLocalPosition(ball.parent);
+    dragOffset.x = pos.x - ball.x;
+    dragOffset.y = pos.y - ball.y;
+  });
+
+  ball.on('pointerup', () => {
+    dragging = false;
+  });
+  ball.on('pointerupoutside', () => {
+    dragging = false;
+  });
+
+  ball.on('pointermove', (event) => {
+    if (dragging) {
+      const pos = event.data.getLocalPosition(ball.parent);
+      ball.x = pos.x - dragOffset.x;
+      ball.y = pos.y - dragOffset.y;
+      bouncing = false;
+    }
+  });
+
+  // 5. 每帧更新逻辑
+  app.ticker.add(() => {
+    if (bouncing && !dragging) {
+      ball.y += velocity;
+      velocity += gravity;
+
+      if (ball.y > app.screen.height - 40) {
+        ball.y = app.screen.height - 40;
+        velocity *= -0.85;
+
+        // 阻尼小到一定程度就停止
+        if (Math.abs(velocity) < 2) {
+          bouncing = false;
+        }
+      }
+    }
+  });
+
+</script>
+</body>
+</html>
