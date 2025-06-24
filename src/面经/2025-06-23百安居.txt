@@ -9,6 +9,14 @@ create.js flash时代迁移而来的项目
 【fabric.js】图像编辑器
 
 面试准备：
+
+面试官你好，我叫陈小祥，从17年毕业以来，我一直从事web前端开发，有8年经验。
+对于React16-18，框架升级。anglular4-9,vue2都比较熟悉，vue3也有使用过。
+主要做中后台系统的开发，也有许多大屏、h5,uni-app混合移动app的开发经验。
+对于性能优化，浏览器兼容也有一定的处理经验。
+
+平时主要精力在做具体业务的开发，然后也会做一部分跨部门协调沟通，工具的开发、通用能力封装。
+
 css，动画，复杂动画案例，性能，
 1>无规则粒子动画
 2>数据流转动画
@@ -30,5 +38,55 @@ threejs看房管理(思路梳理)：
 docker&jenkin&nginx
 
 为何看机会：
-目前我还在职，公司组织架构调整、业务方向调整频率较高，政策延续性确实不太好，也涉及到我所在的团队方向。
-未来的不确定性很大。出于职业规划的考虑，我开始关注一些更有发展空间的机会。
+目前我还在职，在这边我主要做保险方向的风控产品的开发，还是比较契合我之前的预期的。
+不过近期公司组织架构调整、业务方向调整频率较高，
+政策延续性确实有点不太好，不利于沉淀发展。
+出于这些考虑，我开始关注一些更有发展空间的机会。
+
+1.性能优化
+1>webpack(Bundelanalysis)：代码拆分(code split)、优化loader的匹配路径，更精确，代码压缩、图片压缩、splitChunks提取、拆分公共模块,开启缓存。
+指定externals,使用CDN资源加载。contenthash&缓存；
+2>上线后，启用强缓存、协商缓存。gzip压缩。
+3>利用lighthouse优化页面性能指标,webvitials【
+优化关键渲染路径，不初始加载不需要的js---excel到处。
+延迟加载、异步加载
+长任务优化---webworker
+】
+4>代码层面优化：React并发模式、useMemo等缓存、虚拟滚动，长任务优化(拆分、分片、webworker)、防抖节流、
+【大图拆分已尽快渲染、上CDN加快加载速度以及避免并发限制。】
+css启用gpu加速，减少重排、重绘；
+requestAnimationFrame（visibilitychange监听tab是否激活状态）
+
+2.react从0开始搭建
+cra+@craco/craco+http-proxy-middleware+dotenv-cli+husky、prettier、eslint+jest
++react-router-dom+@loadable/components+axios+redux\react-redux\@reduxjs/toolkit
++antd。
+nodejs错误上报（延迟上报、去重、达到阈值批量上报;浏览器版本；页面url;错误信息；）
+
+后续形成了脚手架，mit-react-cli;
+
+3.小工具
+1>地图区域采集工具(点选+离线地图路径规划+手动调整+导出、导入json)：原本是很多人手工去高德拾取器点击。
+2>nodejs离线瓦片图抓取。（控制并发量、做好错误日志、后续重跑）
+3>前端页面脱敏演示工具；通过nodejs爬取所有接口响应，根据url+入参做md5加密的key，来保存到json中去。
+这样演示的时候，只需要启动一个nodejs服务就行。
+
+4.空闲时
+0>看一定的源码阅读，理解原理；
+1>新技术调研(zustand)，动画gsap、gis(mapbox,ol,cesium)、threejs、开源网站；老项目功能优化升级；
+2>通用能力封装，gis操作封装。
+
+5.开源贡献
+1>文档错误；
+2>布局组件不响应式更新props；
+3>ahooks中动态加载js脚本；
+
+上传体大小   client_max_body_size 20M
+使用crontab定时调用脚本进行日志文件分割；保留最近14天的日志。
+
+一面 2025/06/24
+1.自我介绍下
+2.哪些css可以继承。追问background-size、float、box-sizing是否可以继承。
+3.css选择器，继承的属性，css属性的默认值之间的优先级关系是怎么样的？
+4.为什么需要虚拟DOM，虚拟DOM有什么用。
+5.react native
