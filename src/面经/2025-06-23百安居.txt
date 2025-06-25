@@ -88,5 +88,27 @@ nodejs错误上报（延迟上报、去重、达到阈值批量上报;浏览器�
 1.自我介绍下
 2.哪些css可以继承。追问background-size、float、box-sizing是否可以继承。
 3.css选择器，继承的属性，css属性的默认值之间的优先级关系是怎么样的？
+默认值<继承<(元素选择器<类选择器<id选择器<行内样式<!important)
 4.为什么需要虚拟DOM，虚拟DOM有什么用。
-5.react native
+5.Defineproperty可以同时设置value，get set吗
+不能，get/set 和 value/writable 是互斥的，不能混用！
+6.Vue中响应丢失有哪些情况
+7.Webpack 摇树优先，如何才能生效。结合esmodule.commonjs
+Tree Shaking 的本质利用 ES Module（ESM） 的静态结构，在编译阶段分析哪些导出的变量和函数是“未被使用的”，然后不打包进去。
+1>使用es Module（ESM）
+2>package.json中sideEffects:false;(保留腻子脚本)设置 mode: 'production'
+8.App与h5通信有没有中间库
+react-native-webview
+9.H5页面怎么嵌入的，除了webview还有别的方式吗
+10.如果网络不好，白屏或者h5页面崩了呢？
+renderError={() => <Text>加载失败</Text>}
+onError={(e) => console.warn('加载错误', e.nativeEvent)}
+onHttpError={(e) => console.warn('HTTP错误', e.nativeEvent)}
+startInLoadingState={true}
+onLoadStart={() => setIsLoading(true)}
+onLoadEnd={() => setIsLoading(false)}
+11.H5开发过程中遇到过哪些问题，输入框将页面顶起来/输入框被遮挡。
+聚焦时，自动scrollIntoView,保持输入框可见。
+12.ios安全距离怎么设置的
+viewport-fit=cover + env() 
+13.你觉得你今天面的怎么样

@@ -150,3 +150,8 @@ Child.prototype = Object.create(Parent.prototype);
 宿主对象 👉 浏览器/Node.js 提供的 API
 内置对象 👉 ECMAScript 规定的全局对象
 原生对象 👉 JS 运行时创建的实例
+
+16.esmodule与commonjs
+commonjs同步加载，运行时加载【动态拼接路径】。
+esmodule异步加载，静态分析。编译时加载。
+commonjs导入的是值的拷贝，esmodule导入的是值的引用
