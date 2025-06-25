@@ -12,7 +12,7 @@ content区域+padding区域；不包含滚动条大小！！！
 4>Element.offsetTop/offsetLeft
 定位元素：position属性值为relative,absolute,fixed,sticky中的一个的元素。
 offsetParent:在层级上离元素最近的定位元素，或者是body/td/th/table元素，被称为offsetParent。
-offsetTop/offsetLeft: 元素外边框距离offsetParent边框内测的距离。
+offsetTop/offsetLeft: 元素外边框距离offsetParent边框内侧的距离。
 
 5>Element.clientTop/clientLeft
 clientTop,clientLeft返回上、左边框的距离。如果左边有滚动条的话，也包含了滚动条宽度。

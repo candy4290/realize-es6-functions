@@ -10,10 +10,13 @@ create.js flash时代迁移而来的项目
 
 面试准备：
 
+gsap:fromto,timeline,stagger:一个接一个。
+scrolltrigger,
+
 面试官你好，我叫陈小祥，从17年毕业以来，我一直从事web前端开发，有8年经验。
 对于React16-18，框架升级。anglular4-9,vue2都比较熟悉，vue3也有使用过。
 主要做中后台系统的开发，也有许多大屏、h5,uni-app混合移动app的开发经验。
-对于性能优化，浏览器兼容也有一定的处理经验。
+对于性能优化，浏览器兼容也有一定的处理经验。（chrome72,flex布局中img图片高度被拉升，原因align-self的默认值stretch;）
 
 平时主要精力在做具体业务的开发，然后也会做一部分跨部门协调沟通，工具的开发、通用能力封装。
 
@@ -84,7 +87,7 @@ nodejs错误上报（延迟上报、去重、达到阈值批量上报;浏览器�
 上传体大小   client_max_body_size 20M
 使用crontab定时调用脚本进行日志文件分割；保留最近14天的日志。
 
-一面 2025/06/24
+一面 2025/06/24 30分钟
 1.自我介绍下
 2.哪些css可以继承。追问background-size、float、box-sizing是否可以继承。
 3.css选择器，继承的属性，css属性的默认值之间的优先级关系是怎么样的？
@@ -107,6 +110,7 @@ onHttpError={(e) => console.warn('HTTP错误', e.nativeEvent)}
 startInLoadingState={true}
 onLoadStart={() => setIsLoading(true)}
 onLoadEnd={() => setIsLoading(false)}
+超时重试。  
 11.H5开发过程中遇到过哪些问题，输入框将页面顶起来/输入框被遮挡。
 聚焦时，自动scrollIntoView,保持输入框可见。
 12.ios安全距离怎么设置的

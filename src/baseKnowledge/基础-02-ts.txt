@@ -50,7 +50,7 @@ interface A {
 
 8.操作符
 1>keyof
-对对象使用，返回对象所有key组合起来的联合类型。如果对象有一个string类型的索引签名，返回string|number
+对对象类型使用，返回对象类型所有key组合起来的联合类型。如果对象有一个string类型的索引签名，返回string|number
     
 2>typeof；ts和js的typeof有何区别
 typeof用来返回一个变量，或者变量属性的类型。

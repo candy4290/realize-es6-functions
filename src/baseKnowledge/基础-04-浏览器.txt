@@ -22,9 +22,8 @@
 
     优化方案：<link rel="preload" href="style.css" as="style" onload="this.rel='stylesheet'">
 
-
 5.从输入URL到页面显示发生了什么【HTTP】
-    1>DNS解析
+    1>DNS解析(dns-prefetch\preconnect)
     2>TCP握手，建立连接
     3>返回数据
     4>解析
@@ -155,7 +154,7 @@ DOM 型 XSS | 发生在前端 JS 操作 DOM 时，没有做安全处理，例如
 防御措施：
 1>特殊字符转义
 2>cookie设置为HttpOnly
-3>设置CSP，限制可执行脚本的来源
+3>设置CSP(Content-Security-Policy)，限制可执行脚本的来源
 
 14.XSRF(Cross-Site Request Forgery，跨站请求伪造)
 含义：攻击者诱导用户在登录状态下，向目标网站发起非本意的请求，从而达到非法操作目的（本质就是在目标网页登录状态下，在伪造网页向目标网页发起请求,利用已登录的cookie）。

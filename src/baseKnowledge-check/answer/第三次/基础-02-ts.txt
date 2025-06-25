@@ -1,56 +1,98 @@
 1.typescript优缺点
+优点：1>编译期提前发现问题 2>插件友好，类型提示提升效率
+缺点：1>多了一个编译为js的过程。2>容易写成anyscript 3>学习成本
 
 2.枚举类型；编译后是什么样子的
+enum Direction {Up,Down,Left,Right}
+
+var Direction;
+(function(Direction) {
+    Direction[Direction['Up'] = 0] = 'Up';
+})(Direction || Direction = {})
 
 3.declare关键字
+用来告诉编译器某个变量或者模块是存在的
+1>ts中引入js库，declare module xxx;
+2>script引入了全局变量；用declare const xxx: any;来申明
 
 4.is关键字
+创建类型包含；true分支中可以直接调用对应类型的方法。
 
 5.infer关键字,条件类型及分发条件类型
+用来在条件类型中提取类型，并赋值给一个变量，在true分支中可以使用这个变量。
+条件类型使用extends来申明，分发条件类型发生在，在条件类型中使用联合类型，此时适用于分配律
 
 6.type和interface
+同
+1>都可以用来表示函数、对象的类型
+2>都可以扩展
+异
+1>扩展方式不同，一个用&，一个用extends
+2>&可以重写属性，extents不行
+3>&不可以重名，extents可以，自动合并
+4>type可以声明基础类型的别名，元组类型。
 
 7.索引签名
+interface A {
+    [key: string]: string
+}
 
 8.操作符
+key of
+typeof
 
 9.工具类型
 1>Partial: 所有T的属性可选
-type Partial<T> = 
+type Partial<T> = {
+    [key in keyof T]?: T[key]
+}
 
 2>Required：所有T的属性必选
-type Required<T> =
+type Required<T> = {
+    [key in keyof T]-?: T[key]
+}
 
 3>Readonly： 所有T的属性只读
-type Readonly<T> = 
+type Readonly<T> = {
+    readonly [key in keyof T]: T[key]
+}
 
 4>Record：创建一个对象类型，key来自于K的每一项，value类型是T
-type Record<K extends keyof any,T> = 
+type Record<K extends keyof any,T> = {
+    [key in K]:T
+}
 
 5>Pick: K是一个联合类型。创建一个对象类型，以K中的值为key。
-type Pick<T, K extends keyof T> = 
+type Pick<T, K extends keyof T> = {
+    [key in K]: T[key]
+}
 
 6>Exclude: 从T中剔除，符合U的类型。
-type Exclude<T, U> =
+type Exclude<T, U> = T extends U ? never : T;
 
 7>Extract: 从T中选出，符合U的类型。
-type Extract<T, U>= 
+type Extract<T, U>= T extends U ? T : never;
 
 8>Omit<T,K>：用于从T中过滤掉K这个联合类型中出现的属性
-type Omit<T, K extends keyof any> = 
+type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>
 
-9>NonNullable<T>
+9>NonNullable<T> = T & {}
 
 10>Parameters<T>: 将函数的所有参数类型，转为一个元组类型
-type Parameters<T extends (...args: any) => any> = 
+type Parameters<T extends (...args: any) => any> = T extends (...args: infer P) => any ? P : never
 
 11>ReturnType<T>: 获取函数的返回值类型
-type ReturnType<T extends (...args: any) => any>  = 
+type ReturnType<T extends (...args: any) => any>  = T extends (...args: any) => infer R ? R : never;
 
 12>字面量类型：
+`${'A' | 'B'}${string}`
+'a' | 'b' | 'c'
 
 13>协变
+父类型可以赋值给子类型，通常用于函数的参数类型。
 
 14>逆变
+子类型可以赋值给父类型，函数返回值。
 
 9.装饰器
+属性、类、getter,setter.本质上是一个函数
