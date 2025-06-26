@@ -86,3 +86,13 @@
     5>完成模块编译并输出：递归完后，得到每个文件结果，包含每个模块以及他们之间的依赖关系，根据entry配置生成代码块chunk。
     6>输出完成：输出所有chunk到文件系统
     注意：在构建生命周期中有一系列插件在合适的时机做合适的事情。
+8.路由懒加载是什么样的概念。实现机制是什么样的。怎么判断动态加载的js已经加载完了。
+/* webpackChunkName: "login" */ 可以自定义chunk名称
+目的：提升页面加载性能、用户体验；首次加载的包体积更小。需要的时候才动态加载。有利于缓存优化（没改动hash值不变）
+写法：动态() => import('xxx'),Webpack 遇到 import() 就会自动打成异步 chunk。
+打包后产物：__webpack_require__.e("module-b").then(__webpack_require__.bind(null, "./B.js"));
+__webpack_require__会动态创建script标签，返回一个promise,script onload之后resolve,或者onerror之后reject.
+可以添加超时逻辑，通过Promise.race来处理。
+5.遇到过哪些浏览器兼容问题。
+遇到页面卡顿排查思路是怎么样的？
+性能面板中能看到某个函数的执行时长吗？具体有哪些信息？
