@@ -99,7 +99,8 @@ nodejs错误上报（延迟上报、去重、达到阈值批量上报;浏览器�
 7.Webpack 摇树优先，如何才能生效。结合esmodule.commonjs
 Tree Shaking 的本质利用 ES Module（ESM） 的静态结构，在编译阶段分析哪些导出的变量和函数是“未被使用的”，然后不打包进去。
 1>使用es Module（ESM）
-2>package.json中sideEffects:false;(保留腻子脚本)设置 mode: 'production'
+2>package.json中sideEffects:false;(保留腻子脚本)
+3>设置 mode: 'production'
 8.App与h5通信有没有中间库
 react-native-webview
 9.H5页面怎么嵌入的，除了webview还有别的方式吗

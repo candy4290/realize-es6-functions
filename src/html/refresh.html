@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <title>移动端下拉刷新示例</title>
+  <style>
+    #container {
+      height: 400px;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch; /* iOS 动量滚动 */
+      border: 1px solid #ccc;
+      position: relative;
+      font-family: Arial, sans-serif;
+    }
+
+    .pull-down {
+      height: 0;
+      line-height: 50px;
+      text-align: center;
+      color: #666;
+      font-size: 14px;
+      overflow: hidden;
+      transition: height 0.3s;
+    }
+
+    .pull-down.loading {
+      color: #108ee9;
+      font-weight: bold;
+    }
+
+    ul#list {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    ul#list li {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+      background-color: #fafafa;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <div id="pullDown" class="pull-down">
+      <span id="pullDownText">下拉刷新</span>
+    </div>
+    <ul id="list">
+      <!-- 初始列表内容 -->
+    </ul>
+  </div>
+
+  <script>
+    const container = document.getElementById('container');
+    const pullDown = document.getElementById('pullDown');
+    const pullDownText = document.getElementById('pullDownText');
+    const list = document.getElementById('list');
+
+    let startY = 0;
+    let distance = 0;
+    const threshold = 50; // 触发刷新阈值
+    let isRefreshing = false;
+
+    // 模拟获取数据
+    function fetchData() {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve([
+            '新数据 1',
+            '新数据 2',
+            '新数据 3',
+            '新数据 4',
+            '新数据 5'
+          ]);
+        }, 1500);
+      });
+    }
+
+    // 渲染数据
+    function renderData(items, reset = false) {
+      if (reset) list.innerHTML = '';
+      items.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        list.appendChild(li);
+      });
+    }
+
+    // 初始化渲染一些数据
+    renderData([
+      '初始数据 1',
+      '初始数据 2',
+      '初始数据 3',
+      '初始数据 4',
+      '初始数据 5',
+      '初始数据 6',
+      '初始数据 7',
+      '初始数据 8',
+      '初始数据 9',
+      '初始数据 10'
+    ]);
+
+    container.addEventListener('touchstart', e => {
+      if (container.scrollTop === 0 && !isRefreshing) {
+        startY = e.touches[0].pageY;
+      }
+    });
+
+    container.addEventListener('touchmove', e => {
+      if (container.scrollTop !== 0 || isRefreshing) return;
+
+      distance = e.touches[0].pageY - startY;
+      if (distance > 0) {
+        e.preventDefault(); // 阻止默认滚动
+
+        let height = Math.min(distance, 100);
+        pullDown.style.height = height + 'px';
+
+        if (height > threshold) {
+          pullDownText.textContent = '释放刷新';
+        } else {
+          pullDownText.textContent = '下拉刷新';
+        }
+      }
+    });
+
+    container.addEventListener('touchend', e => {
+      if (isRefreshing) return;
+      if (distance > threshold) {
+        // 触发刷新
+        isRefreshing = true;
+        pullDownText.textContent = '加载中...';
+        pullDown.classList.add('loading');
+        pullDown.style.height = '50px';
+
+        fetchData().then(newItems => {
+          renderData(newItems, true);
+          // 重置
+          pullDown.style.height = '0';
+          pullDown.classList.remove('loading');
+          pullDownText.textContent = '下拉刷新';
+          isRefreshing = false;
+          distance = 0;
+        });
+      } else {
+        // 未达到刷新阈值，回弹隐藏
+        pullDown.style.height = '0';
+        distance = 0;
+      }
+    });
+  </script>
+</body>
+</html>

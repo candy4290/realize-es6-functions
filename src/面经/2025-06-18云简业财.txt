@@ -1,0 +1,37 @@
+一、2025-06-18 线上笔试 一道算法题 已通过 孙女士
+1>60%通过率。
+2>税金，税额；
+
+二、2025-06-26 上午10点 腾讯视频
+准备：h5页面开发注意事项+canvas+RN开发准备+性能优化准备+CICD
+RN项目代码拉出来看看。
+h5,1像素问题。设备像素比
+移动端高清适配方案
+lib-flexible原理。
+canvas手机端绘制模糊问题：原因及解决方案
+RN中的尺寸。上拉刷新、下拉加载
+
+
+fastclick：原本老的手机浏览器点击有300ms延迟，因为要判断是否会双击，
+但是只需要禁止缩放来解决该问题。<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+点击穿透,
+
+1>1px问题
+DPR=物理像素/逻辑像素(css像素)，表示一个css像素由几个物理像素组成。
+1px问题：dpr=2的社保上，一个css像素由两个物理像素组成。
+2>
+iphoneX底部小黑条，刘海屏；viewport-fit=cover,启用全屏；
+默认情况下只占据中间安全区域。
+只有设置了 viewport-fit=cover，才能使用 env()
+3>canvas绘制模糊问题。
+原因：style.width设置的css宽高。绘制的时候按照物理像素来的。
+解决方案：设置画布大小(canvas.width,canvas.height)时，用width*dpr。
+4>图片显示模糊问题
+原因：css设置了宽高，但是图片的实际像素(物理像素)低于显示尺寸，出现拉伸，导致模糊。
+解决方案：srcset、image-set
+5>下拉刷新方案
+首先scrollTop为0，顶部height为0，监听touchStart,touchmove,touchend,计算偏差值。超过阈值刷新。
+
+主题切换方案：
+1>html根元素中属性选择器，指定css变量值。然后动态切换html根元素属性。
