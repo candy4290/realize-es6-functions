@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>输入框自动滚动</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: sans-serif;
+      background-color: #f5f5f5;
+    }
+
+    .container {
+        position: fixed;
+        top:0;
+        left:0;
+        right:0;
+      /* display: flex;
+      flex-direction: column;
+      height: 100vh;
+      justify-content: space-between;
+      padding: 16px;
+      box-sizing: border-box; */
+    }
+
+    .spacer {
+      height: 400px;
+      background: linear-gradient(#dbeafe, #f5f5f5);
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      box-sizing: border-box;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="container">
+    <div class="spacer">
+      <p>请下拉页面到底部后，点击下方输入框</p>
+    </div>
+    <input type="text" placeholder="请输入内容…" id="inputBox" />
+  </div>
+
+  <script>
+    const input = document.getElementById('inputBox');
+    const container = document.getElementById('container');
+
+    input.addEventListener('focus', () => {
+        console.log('----')
+    container.style.position = 'absolute';
+  });
+
+  input.addEventListener('blur', () => {
+    setTimeout(() => {
+      container.style.position = 'fixed';
+    }, 300); // 键盘收起后延迟恢复
+  });
+  </script>
+</body>
+</html>

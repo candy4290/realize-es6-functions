@@ -11,27 +11,43 @@ lib-flexible原理。
 canvas手机端绘制模糊问题：原因及解决方案
 RN中的尺寸。上拉刷新、下拉加载
 
-
-fastclick：原本老的手机浏览器点击有300ms延迟，因为要判断是否会双击，
-但是只需要禁止缩放来解决该问题。<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-
 点击穿透,
 
+一、h5页面场景题
 1>1px问题
 DPR=物理像素/逻辑像素(css像素)，表示一个css像素由几个物理像素组成。
 1px问题：dpr=2的社保上，一个css像素由两个物理像素组成。但你实际只是希望1个物理像素。
+早期的lib-flexible通过判断0.5px是否生效来在根元素上加一个hairline的class。(offsetHeight === 1进行判断)
 2>
 iphoneX底部小黑条，刘海屏；viewport-fit=cover,启用全屏；
 默认情况下只占据中间安全区域。
 只有设置了 viewport-fit=cover，才能使用 env()
 3>canvas绘制模糊问题。
 原因：style.width设置的css宽高。绘制的时候按照物理像素来的。
-解决方案：设置画布大小(canvas.width,canvas.height)时，用width*dpr。
+解决方案：设置画布大小(canvas.width,canvas.height)时，用width*dpr。并且ctx.scale(dpr, dpr);
 4>图片显示模糊问题
 原因：css设置了宽高，但是图片的实际像素(物理像素)低于显示尺寸，出现拉伸，导致模糊。
 解决方案：srcset、image-set
 5>下拉刷新方案
 首先scrollTop为0，顶部height为0，监听touchStart,touchmove,touchend,计算偏差值。超过阈值刷新。
+6>点击穿透：触摸事件结束后，延迟派发的click事件命中了下层暴露出来的元素。
+touch事件立即触发，click事件有延迟导致的；
+方案：
+.蒙版延迟下再消失。（消失动画）；
+.或者preventDefault()，阻止后续的click合成事件;
+.把click也改为touchend
+7>输入框获取焦点后遮挡问题
+解决办法：获取焦点后，滚动到可视区域。后者获取到焦点后，改变position,让其不为fixed.
+
+二、RN场景图
+1>H5页面怎么嵌入的？
+react-native-webview,
+h5向app传递消息：window.ReactNativeWebView.postMessage，
+app调用h5函数webref.injectJavaScript(`onmessage(1,2)`),比如h5页面需要获取经纬度坐标，就由app获取后，回传。
+自行onloadstart时设置定时器，用来标识超时了。然后可以调用webview的onload来重载。
+2>设计稿->rn大小
+(SCREEN_WIDTH / DESIGN_WIDTH) * size
+3>极光推送
 
 主题切换方案：
 1>html根元素中属性选择器，指定css变量值。然后动态切换html根元素属性。
