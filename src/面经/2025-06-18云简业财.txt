@@ -39,6 +39,8 @@ app调用h5函数webref.injectJavaScript(`onmessage(1,2)`),比如h5页面需要�
 1>html根元素中属性选择器，指定css变量值。然后动态切换html根元素属性。
 
 三轮面试CTO+HR准备
+gsap,threejs,nodejs,ae动画导出,webwork,前端页面导出excel等等。
+
 1>你觉得前几轮面的怎么样，
 第一轮线上算法题，考逻辑思维能力，要耐心理解题目意思。
 技术面：react技术栈+h5+rn还是和我比较契合的。包括性能优化方便我这边聊的整体还不错。
