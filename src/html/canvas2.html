@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Offscreen Canvas Layer Demo</title>
+  <style>
+    canvas {
+      border: 1px solid #ccc;
+      display: block;
+      margin: 20px auto;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="main" width="600" height="400"></canvas>
+
+  <script>
+    const width = 600, height = 400;
+    const main = document.getElementById('main');
+    const ctx = main.getContext('2d');
+
+    // 创建 3 个离屏 canvas
+    const bgCanvas = document.createElement('canvas');
+    const pointsCanvas = document.createElement('canvas');
+    const animCanvas = document.createElement('canvas');
+    [bgCanvas, pointsCanvas, animCanvas].forEach(c => {
+      c.width = width;
+      c.height = height;
+    });
+
+    const bgCtx = bgCanvas.getContext('2d');
+    const pointsCtx = pointsCanvas.getContext('2d');
+    const animCtx = animCanvas.getContext('2d');
+
+    // 绘制背景层（一次性）
+    function drawGrid() {
+      bgCtx.strokeStyle = '#eee';
+      for (let x = 0; x < width; x += 50) {
+        bgCtx.beginPath();
+        bgCtx.moveTo(x, 0);
+        bgCtx.lineTo(x, height);
+        bgCtx.stroke();
+      }
+      for (let y = 0; y < height; y += 50) {
+        bgCtx.beginPath();
+        bgCtx.moveTo(0, y);
+        bgCtx.lineTo(width, y);
+        bgCtx.stroke();
+      }
+    }
+
+    // 绘制点层（一次性）
+    function drawPoints() {
+      pointsCtx.fillStyle = '#0077ff';
+      for (let i = 0; i < 30; i++) {
+        const x = Math.random() * width;
+        const y = Math.random() * height;
+        pointsCtx.beginPath();
+        pointsCtx.arc(x, y, 4, 0, Math.PI * 2);
+        pointsCtx.fill();
+      }
+    }
+
+    // 动画变量
+    let ball = { x: 0, y: 200, r: 8 };
+
+    // 动画帧函数
+    function drawFrame() {
+      // 清除动画层
+      animCtx.clearRect(0, 0, width, height);
+
+      // 更新动画数据
+      ball.x += 2;
+      if (ball.x > width + ball.r) ball.x = -ball.r;
+
+      // 绘制动画层内容
+      animCtx.beginPath();
+      animCtx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+      animCtx.fillStyle = 'red';
+      animCtx.fill();
+
+      // 清除主画布
+      ctx.clearRect(0, 0, width, height);
+
+      // 合成图层：先背景 → 点 → 动画
+      ctx.drawImage(bgCanvas, 0, 0);
+      ctx.drawImage(pointsCanvas, 0, 0);
+      ctx.drawImage(animCanvas, 0, 0);
+
+      requestAnimationFrame(drawFrame);
+    }
+
+    // 初始化并启动
+    drawGrid();
+    drawPoints();
+    drawFrame();
+  </script>
+</body>
+</html>

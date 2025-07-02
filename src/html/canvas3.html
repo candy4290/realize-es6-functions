@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Canvas 路径动画 - 每段固定时间（不匀速）</title>
+  <style>
+    canvas { border: 1px solid #ccc; display: block; margin: 20px auto; }
+  </style>
+</head>
+<body>
+
+<canvas id="canvas" width="600" height="400"></canvas>
+
+<script>
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+// 路径点（示例）
+const points = [
+  { x: 50, y: 250 },
+  { x: 500, y: 250 },   // 长线段
+  { x: 510, y: 255 },   // 极短线段
+  { x: 100, y: 250 },   // 长线段
+];
+
+// 计算每段长度
+function distance(p1, p2) {
+  const dx = p2.x - p1.x;
+  const dy = p2.y - p1.y;
+  return Math.sqrt(dx * dx + dy * dy);
+}
+
+const segments = [];
+for (let i = 0; i < points.length - 1; i++) {
+  const len = distance(points[i], points[i + 1]);
+  segments.push({ from: points[i], to: points[i + 1], length: len });
+}
+
+// 每段动画时间固定（毫秒）
+const segmentDuration = 1000;
+
+// 总动画时间
+const totalDuration = segments.length * segmentDuration;
+
+let startTime = null;
+
+function animate(timestamp) {
+  if (!startTime) startTime = timestamp;
+  const elapsed = timestamp - startTime;
+
+  // 计算当前是第几段
+  const currentSegmentIndex = Math.min(Math.floor(elapsed / segmentDuration), segments.length -1);
+  const segmentElapsed = elapsed - currentSegmentIndex * segmentDuration;
+  const segProgress = Math.min(segmentElapsed / segmentDuration, 1);
+
+  const { from, to } = segments[currentSegmentIndex];
+
+  // 线性插值计算点位置
+  const x = from.x + (to.x - from.x) * segProgress;
+  const y = from.y + (to.y - from.y) * segProgress;
+
+  // 清空画布
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // 绘制路径
+  ctx.beginPath();
+  ctx.moveTo(points[0].x, points[0].y);
+  for(let i =1; i < points.length; i++){
+    ctx.lineTo(points[i].x, points[i].y);
+  }
+  ctx.strokeStyle = '#999';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+
+  // 绘制运动点
+  ctx.beginPath();
+  ctx.arc(x, y, 6, 0, Math.PI*2);
+  ctx.fillStyle = 'crimson';
+  ctx.fill();
+
+  // 循环动画
+  if (elapsed < totalDuration) {
+    requestAnimationFrame(animate);
+  }
+}
+
+requestAnimationFrame(animate);
+</script>
+
+</body>
+</html>

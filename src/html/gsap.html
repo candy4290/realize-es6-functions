@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GSAP SVG 路径动画（原生实现）</title>
+  <style>
+    body { margin: 0; background: #fafafa; }
+    svg { width: 100vw; height: 100vh; display: block; }
+  </style>
+</head>
+<body>
+
+<svg viewBox="0 0 500 200">
+  <path id="thePath" d="M10,100 L300,100 L310,105" stroke="#333" fill="none" stroke-width="2" />
+  <circle id="dot" r="6" fill="crimson" />
+</svg>
+
+<!-- 加载 GSAP 和 MotionPath 插件 -->
+<script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+<script src="https://unpkg.com/gsap@3/dist/MotionPathPlugin.min.js"></script>
+
+<script>
+  gsap.registerPlugin(MotionPathPlugin);
+
+  gsap.to("#dot", {
+    duration: 4,          // 动画时间（秒）
+    ease: "none",         // 匀速（不使用默认缓动函数）
+    repeat: 0,            // 不重复
+    motionPath: {
+      path: "#thePath",   // 路径选择器
+      align: "#thePath",  // 让元素在路径上对齐（默认按中心）
+      alignOrigin: [0.5, 0.5],
+      autoRotate: false   // 如果要箭头旋转改成 true
+    }
+  });
+</script>
+
+</body>
+</html>

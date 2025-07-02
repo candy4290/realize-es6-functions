@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SVG 路径动画（匀速）</title>
+  <style>
+    body { margin: 0; background: #f8f8f8; }
+    svg { width: 100vw; height: 100vh; display: block; }
+  </style>
+</head>
+<body>
+
+<svg viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- 路径 -->
+  <path id="motionPath" d="M50,150 C150,50 350,50 450,150" stroke="#333" fill="none" stroke-width="2"/>
+
+  <!-- 移动的圆 -->
+  <circle id="dot" r="6" fill="red" />
+</svg>
+
+<script>
+  const path = document.getElementById('motionPath');
+  const dot = document.getElementById('dot');
+
+  const totalLength = path.getTotalLength(); // 总长度
+  const duration = 4000; // 4 秒完成
+  let startTime = null;
+
+  function animate(timestamp) {
+    if (!startTime) startTime = timestamp;
+    const elapsed = timestamp - startTime;
+
+    const progress = Math.min(elapsed / duration, 1); // 0 ~ 1
+    const distance = totalLength * progress;
+    const point = path.getPointAtLength(distance);
+
+    dot.setAttribute('cx', point.x);
+    dot.setAttribute('cy', point.y);
+
+    if (progress < 1) {
+      requestAnimationFrame(animate);
+    }
+  }
+
+  requestAnimationFrame(animate);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>OpenLayers 7+ ESM + turf 匀速轨迹播放 Demo</title>
+<style>
+  html, body, #map {
+    width: 100%; height: 100%; margin: 0; padding: 0;
+  }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol/ol.css" />
+</head>
+<body>
+<div id="map"></div>
+
+<script type="module">
+  import Map from 'https://cdn.jsdelivr.net/npm/ol@7.3.0/Map.js';
+  import View from 'https://cdn.jsdelivr.net/npm/ol@7.3.0/View.js';
+  import Feature from 'https://cdn.jsdelivr.net/npm/ol@7.3.0/Feature.js';
+  import Point from 'https://cdn.jsdelivr.net/npm/ol@7.3.0/geom/Point.js';
+  import LineString from 'https://cdn.jsdelivr.net/npm/ol@7.3.0/geom/LineString.js';
+  import VectorLayer from 'https://cdn.jsdelivr.net/npm/ol@7.3.0/layer/Vector.js';
+  import VectorSource from 'https://cdn.jsdelivr.net/npm/ol@7.3.0/source/Vector.js';
+  import { Style, Stroke, Fill, Circle } from 'https://cdn.jsdelivr.net/npm/ol@7.3.0/style.js';
+
+  // turf.js 仍然用 CDN 全局变量
+  // 先等待 turf 加载完成再用
+  function waitForTurf() {
+    return new Promise((resolve) => {
+      if (window.turf) resolve(window.turf);
+      else {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/@turf/turf/turf.min.js';
+        script.onload = () => resolve(window.turf);
+        document.head.appendChild(script);
+      }
+    });
+  }
+
+  await waitForTurf();
+
+  // 轨迹点 (lon, lat)
+  const rawCoords = [
+    [-74.006, 40.7128],
+    [-73.99, 40.73],
+    [-73.98, 40.75],
+    [-73.95, 40.76],
+    [-73.92, 40.78],
+    [-73.90, 40.78],
+  ];
+
+  const turfLine = turf.lineString(rawCoords);
+  const totalLength = turf.length(turfLine);
+
+  const map = new Map({
+    target: 'map',
+    view: new View({
+      center: ol.proj.fromLonLat(rawCoords[0]),
+      zoom: 12,
+    }),
+    layers: []
+  });
+
+  const lineFeature = new Feature({
+    geometry: new LineString(rawCoords.map(c => ol.proj.fromLonLat(c)))
+  });
+
+  const lineLayer = new VectorLayer({
+    source: new VectorSource({
+      features: [lineFeature]
+    }),
+    style: new Style({
+      stroke: new Stroke({
+        color: 'blue',
+        width: 3
+      })
+    })
+  });
+
+  map.addLayer(lineLayer);
+
+  const movingFeature = new Feature({
+    geometry: new Point(ol.proj.fromLonLat(rawCoords[0]))
+  });
+
+  const movingLayer = new VectorLayer({
+    source: new VectorSource({
+      features: [movingFeature]
+    }),
+    style: new Style({
+      image: new Circle({
+        radius: 7,
+        fill: new Fill({ color: 'red' }),
+        stroke: new Stroke({ color: 'white', width: 2 }),
+      })
+    })
+  });
+
+  map.addLayer(movingLayer);
+
+  const speed = 50; // 米/秒
+  const startTime = Date.now();
+
+  function animate() {
+    const elapsed = (Date.now() - startTime) / 1000;
+    const distance = (speed * elapsed) / 1000; // km
+
+    if (distance > totalLength) {
+      const endCoord = ol.proj.fromLonLat(rawCoords[rawCoords.length -1]);
+      movingFeature.getGeometry().setCoordinates(endCoord);
+      return;
+    }
+
+    const coord = turf.along(turfLine, distance).geometry.coordinates;
+    const projected = ol.proj.fromLonLat(coord);
+    movingFeature.getGeometry().setCoordinates(projected);
+
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+</script>
+</body>
+</html>
