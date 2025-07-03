@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Canvas 射线法可视化演示</title>
+  <style>
+    body { margin: 0; font-family: sans-serif; }
+    canvas { border: 1px solid #ccc; display: block; margin: 0 auto; }
+    #status {
+      text-align: center;
+      font-size: 20px;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="status">点击添加多边形顶点，Shift+点击添加测试点</div>
+  <canvas id="canvas" width="800" height="600"></canvas>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const statusDiv = document.getElementById('status');
+
+    const polygon = [];
+    let testPoint = null;
+
+    function drawScene() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // 画多边形
+      if (polygon.length > 0) {
+        ctx.beginPath();
+        ctx.moveTo(polygon[0].x, polygon[0].y);
+        for (let i = 1; i < polygon.length; i++) {
+          ctx.lineTo(polygon[i].x, polygon[i].y);
+        }
+        ctx.closePath();
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+
+      // 画顶点
+      for (const p of polygon) {
+        drawPoint(p.x, p.y, 'black');
+      }
+
+      // 画测试点
+      if (testPoint) {
+        drawPoint(testPoint.x, testPoint.y, 'orange', 6);
+
+        // 画水平射线
+        const rayEnd = { x: canvas.width, y: testPoint.y };
+        ctx.beginPath();
+        ctx.moveTo(testPoint.x, testPoint.y);
+        ctx.lineTo(rayEnd.x, rayEnd.y);
+        ctx.strokeStyle = 'gray';
+        ctx.setLineDash([5, 5]);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // 判断并画交点
+        let count = 0;
+        for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+          const pi = polygon[i];
+          const pj = polygon[j];
+
+          if ((pi.y > testPoint.y) !== (pj.y > testPoint.y)) {
+            const xInt = (pj.x - pi.x) * (testPoint.y - pi.y) / (pj.y - pi.y + 0.00001) + pi.x;
+            if (testPoint.x < xInt) {
+              count++;
+
+              // 画相交边
+              ctx.beginPath();
+              ctx.moveTo(pi.x, pi.y);
+              ctx.lineTo(pj.x, pj.y);
+              ctx.strokeStyle = 'red';
+              ctx.lineWidth = 2;
+              ctx.stroke();
+            }
+          }
+        }
+
+        const inside = count % 2 === 1;
+        statusDiv.textContent = inside
+          ? '🟢 点在多边形内部（交点数：' + count + '）'
+          : '🔴 点在多边形外部（交点数：' + count + '）';
+      } else {
+        statusDiv.textContent = '点击添加多边形顶点，Shift+点击添加测试点';
+      }
+    }
+
+    function drawPoint(x, y, color = 'blue', r = 4) {
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fillStyle = color;
+      ctx.fill();
+    }
+
+    canvas.addEventListener('click', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      if (e.shiftKey) {
+        testPoint = { x, y };
+      } else {
+        polygon.push({ x, y });
+        testPoint = null;
+      }
+
+      drawScene();
+    });
+
+    drawScene();
+  </script>
+</body>
+</html>

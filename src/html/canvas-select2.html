@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Canvas 多边形圈选点</title>
+  <style>
+    canvas {
+      border: 1px solid #ccc;
+      cursor: crosshair;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" width="800" height="600"></canvas>
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    const points = [];
+    const POINT_COUNT = 1000;
+    const polygon = [];
+
+    // 初始化随机点
+    function drawPoints() {
+      for (let i = 0; i < POINT_COUNT; i++) {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height;
+        points.push({ x, y });
+      }
+    }
+
+    function drawAll(redPoints = []) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // 画点
+      for (const p of points) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+        ctx.fillStyle = redPoints.includes(p) ? 'red' : 'blue';
+        ctx.fill();
+      }
+
+      // 画多边形线
+      if (polygon.length > 0) {
+        ctx.beginPath();
+        ctx.moveTo(polygon[0].x, polygon[0].y);
+        for (let i = 1; i < polygon.length; i++) {
+          ctx.lineTo(polygon[i].x, polygon[i].y);
+        }
+        ctx.strokeStyle = 'black';
+        ctx.stroke();
+      }
+    }
+
+    function pointInPolygon(point, polygon) {
+      let inside = false;
+      const { x, y } = point;
+      for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+        const xi = polygon[i].x, yi = polygon[i].y;
+        const xj = polygon[j].x, yj = polygon[j].y;
+
+        const intersect = ((yi > y) !== (yj > y)) &&
+                          (x < ((xj - xi) * (y - yi)) / (yj - yi + 0.00001) + xi);
+        if (intersect) inside = !inside;
+      }
+      return inside;
+    }
+
+    // 初始化
+    drawPoints();
+    drawAll();
+
+    // 添加点构成 polygon
+    canvas.addEventListener('click', (e) => {
+      polygon.push({ x: e.offsetX, y: e.offsetY });
+      drawAll();
+    });
+
+    // 双击闭合 polygon 并判断哪些点落入
+    canvas.addEventListener('dblclick', () => {
+      if (polygon.length < 3) return;
+
+      // 闭合多边形
+      ctx.beginPath();
+      ctx.moveTo(polygon[0].x, polygon[0].y);
+      for (let i = 1; i < polygon.length; i++) {
+        ctx.lineTo(polygon[i].x, polygon[i].y);
+      }
+      ctx.closePath();
+      ctx.stroke();
+
+      // 判断点是否在 polygon 中
+      const selected = points.filter(p => pointInPolygon(p, polygon));
+
+      drawAll(selected);
+      console.log('选中点数量:', selected.length);
+
+      // 重置 polygon
+      polygon.length = 0;
+    });
+  </script>
+</body>
+</html>

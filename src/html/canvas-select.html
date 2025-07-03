@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Canvas 矩形圈选点示例</title>
+  <style>
+    canvas {
+      border: 1px solid #ccc;
+      cursor: crosshair;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" width="800" height="600"></canvas>
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    const points = [];
+    const POINT_COUNT = 1000;
+
+    // 初始化点
+    function drawPoints() {
+      points.length = 0;
+      for (let i = 0; i < POINT_COUNT; i++) {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height;
+        points.push({ x, y });
+        drawPoint(x, y, 'blue');
+      }
+    }
+
+    function drawPoint(x, y, color) {
+      ctx.beginPath();
+      ctx.arc(x, y, 2, 0, Math.PI * 2);
+      ctx.fillStyle = color;
+      ctx.fill();
+    }
+
+    drawPoints();
+
+    // 矩形选择逻辑
+    let startX = 0, startY = 0, endX = 0, endY = 0;
+    let isDragging = false;
+
+    canvas.addEventListener('mousedown', (e) => {
+      startX = e.offsetX;
+      startY = e.offsetY;
+      isDragging = true;
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      endX = e.offsetX;
+      endY = e.offsetY;
+
+      // 重绘全部点和拖动的矩形
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      points.forEach(p => drawPoint(p.x, p.y, 'blue'));
+
+      const rectX = Math.min(startX, endX);
+      const rectY = Math.min(startY, endY);
+      const rectW = Math.abs(endX - startX);
+      const rectH = Math.abs(endY - startY);
+
+      ctx.beginPath();
+      ctx.strokeStyle = 'red';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(rectX, rectY, rectW, rectH);
+    });
+
+    canvas.addEventListener('mouseup', () => {
+      isDragging = false;
+
+      const minX = Math.min(startX, endX);
+      const maxX = Math.max(startX, endX);
+      const minY = Math.min(startY, endY);
+      const maxY = Math.max(startY, endY);
+
+      let selected = [];
+      points.forEach(p => {
+        if (p.x >= minX && p.x <= maxX && p.y >= minY && p.y <= maxY) {
+          selected.push(p);
+        }
+      });
+
+      // 重绘全部，标红被选中的点
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      points.forEach(p => {
+        const color = selected.includes(p) ? 'red' : 'blue';
+        drawPoint(p.x, p.y, color);
+      });
+
+      console.log('选中的点数量:', selected.length);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>动态加载 CSS 和 JS 示例</title>
+</head>
+<body>
+  <h1>动态加载测试</h1>
+  <button id="load">加载资源</button>
+  <button id="unload">卸载资源</button>
+
+  <div id="app" class="text-success"></div>
+
+  <script>
+    const jsURL = 'https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js';
+    const cssURL = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css'; // ✅ 换成你自己的
+
+    let scriptEl = null;
+    let linkEl = null;
+
+    document.getElementById('load').onclick = () => {
+      // 加载 JS
+      if (!scriptEl) {
+        scriptEl = document.createElement('script');
+        scriptEl.src = jsURL;
+        scriptEl.id = 'lodash-js';
+        scriptEl.onload = () => {
+          console.log('✅ lodash loaded:', _.VERSION);
+          document.getElementById('app').innerHTML = `<p>Hello, Lodash ${_.VERSION}</p>`;
+        };
+        document.body.appendChild(scriptEl);
+      }
+
+      // 加载 CSS
+      if (!linkEl) {
+        linkEl = document.createElement('link');
+        linkEl.rel = 'stylesheet';
+        linkEl.href = cssURL;
+        linkEl.id = 'custom-css';
+        document.head.appendChild(linkEl);
+      }
+    };
+
+    document.getElementById('unload').onclick = () => {
+      if (scriptEl) {
+        scriptEl.remove();
+        scriptEl = null;
+        console.log('🧹 lodash卸载完毕');
+      }
+
+      if (linkEl) {
+        linkEl.remove();
+        linkEl = null;
+        console.log('🧹 CSS卸载完毕');
+      }
+
+    //   document.getElementById('app').innerHTML = '';
+    };
+  </script>
+</body>
+</html>
