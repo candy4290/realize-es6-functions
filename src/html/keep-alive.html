@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Keep-Alive 模拟（物理插入/移除DOM）</title>
+<style>
+  .component {
+    border: 1px solid #666;
+    padding: 16px;
+    margin: 10px 0;
+  }
+  button {
+    margin-right: 10px;
+  }
+</style>
+</head>
+<body>
+
+<h2>模拟 Vue2 keep-alive 的物理插入/移除DOM</h2>
+
+<button id="btn1">显示组件A</button>
+<button id="btn2">显示组件B</button>
+
+<div id="container">
+  <!-- 组件会被挂载到这里 -->
+</div>
+
+<script>
+  function createComponentA() {
+    const div = document.createElement('div');
+    div.className = 'component';
+    div.id = 'compA';
+    div.innerHTML = `
+      <h3>组件 A</h3>
+      <input type="text" placeholder="组件A输入内容" />
+    `;
+    return div;
+  }
+
+  function createComponentB() {
+    const div = document.createElement('div');
+    div.className = 'component';
+    div.id = 'compB';
+    div.innerHTML = `
+      <h3>组件 B</h3>
+      <input type="text" placeholder="组件B输入内容" />
+    `;
+    return div;
+  }
+
+  const container = document.getElementById('container');
+
+  const cache = {
+    compA: null,
+    compB: null,
+  };
+
+  let current = null;
+
+  function showComponent(id) {
+    if (current === id) return;
+
+    // 从 container 移除当前组件DOM（物理卸载）
+    if (current && cache[current] && container.contains(cache[current])) {
+      container.removeChild(cache[current]);
+    }
+
+    // 如果缓存中无，创建并缓存
+    if (!cache[id]) {
+      if (id === 'compA') cache[id] = createComponentA();
+      else if (id === 'compB') cache[id] = createComponentB();
+    }
+
+    // 把对应组件DOM重新插入container（物理挂载）
+    container.appendChild(cache[id]);
+
+    current = id;
+  }
+
+  document.getElementById('btn1').addEventListener('click', () => {
+    showComponent('compA');
+  });
+
+  document.getElementById('btn2').addEventListener('click', () => {
+    showComponent('compB');
+  });
+
+  // 默认显示组件A
+  showComponent('compA');
+</script>
+
+</body>
+</html>

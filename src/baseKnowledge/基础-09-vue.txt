@@ -130,3 +130,7 @@ vue2中使用defineProperty,vue3使用proxy
 vue2中监听到变化后，将渲染函数放入nextTick. vue3放入到Promise中
 
 21.vue2,vue3 diff算法过程。
+
+22.keep-alive实现原理
+缓存vnode，vnode中包含了组件实例，包含了$el（真实dom）。
+LRU，优先移除最久没使用的信息。vue2中是基于数组来实现的。

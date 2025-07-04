@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>localStorage 监听示例</title>
+</head>
+<body>
+  <h1>localStorage 监听示例</h1>
+
+  <input id="inputKey" placeholder="key" value="testKey" />
+  <input id="inputValue" placeholder="value" />
+  <button id="btnSet">设置 localStorage</button>
+
+  <div id="log"></div>
+
+  <script>
+    const logEl = document.getElementById('log');
+    const inputKey = document.getElementById('inputKey');
+    const inputValue = document.getElementById('inputValue');
+    const btnSet = document.getElementById('btnSet');
+
+    btnSet.onclick = () => {
+      const key = inputKey.value;
+      const value = inputValue.value;
+      localStorage.setItem(key, value);
+      addLog(`本页设置了 localStorage: key=${key}, value=${value}`);
+    };
+
+    window.addEventListener('storage', (event) => {
+      addLog(`收到 storage 事件: key=${event.key}, newValue=${event.newValue}, oldValue=${event.oldValue}, url=${event.url}`);
+    });
+
+    function addLog(msg) {
+      const p = document.createElement('p');
+      p.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+      logEl.appendChild(p);
+    }
+  </script>
+</body>
+</html>
