@@ -55,10 +55,11 @@
     回流：初次渲染或者位置大小发生变化。或者是读取了clientWidth,offsetWidth,scrollWidth等属性
     重绘：不改变位置大小。比如颜色变化。
     减少回流和重绘：使用element.style.cssText或者提供class类名来合并样式修改；脱离文档流（使用absolute或者fixed布局）
-    减少重绘：如上下跳动的css动画，原本通过改变top值来实现。现在通过transform:translateY(xxx)来实现。【translate利用gpu加速，不会导致重绘】
+    减少回流和重绘：如上下跳动的css动画，原本通过改变top值来实现。现在通过transform:translateY(xxx)来实现。【translate利用gpu加速，不会导致重绘】
 
 7.JSONP跨域原理
     利用script标签可以加载跨域资源，数据被当做js代码返回，并会自动执行。
+    利用promise来封装，动态加载script标签，结合onload,onerror。Promise.race来处理加载超时的情况。
 
 8.性能指标
   0.1【导航阶段】TTFB（Time to first byte），首字节时间，浏览器收到服务器响应的第一个字节所花费的时间。(发出请求，到收到第一个字节响应的时间)
