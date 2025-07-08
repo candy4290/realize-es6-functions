@@ -20,8 +20,7 @@ useEffect 是异步执行的钩子函数，在浏览器完成绘制后延迟执�
 React16.x 原生事件捕获+冒泡->合成事件捕获+冒泡【W形状】；本质是通过事件委托，所以合成事件取消冒泡，还是会触发document上原生click事件。
 react17,18,原生事件捕获->合成事件捕获+冒泡->原生事件冒泡【V形状】
 3>取消事件池【现在js引擎优化，创建销毁对象开销可忽略。解决之前setTimeout中访问事件对象，为空的问题，因为事件对象已经被回收了。react16中可以通过调用event.persist()来阻止合成时间对象被回收】
-4>useEffect的清理函数，由原先的同步执行改为异步执行。
-5>forwardRef和memo包裹的组件返回undefined不会报错，现在也改为会报错。不允许返回undefined。防止用户忘记写return;
+4>forwardRef和memo包裹的组件返回undefined不会报错，现在也改为会报错。不允许返回undefined。防止用户忘记写return;
 .react18
 1>自动批处理
 2>并发特性(lanes车道模型)/过渡更新 (渲染可中断)---优先队列&多级缓冲

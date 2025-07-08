@@ -163,5 +163,5 @@ DOM 型 XSS | 发生在前端 JS 操作 DOM 时，没有做安全处理，例如
 1>使用CSRF Token
 2>Cookie设置SameSite=Strict
 3>后端检查header头中的Referer、Origin
-origin---请求来自于那个站点
+origin---请求来自于哪个站点
 referer---请求来自于哪个具体的页面

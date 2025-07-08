@@ -30,7 +30,7 @@
         }
     }
 3.webpack打包优化，说5个具体措施
-    1>使用缓存，以空间换时间，cache: {type: 'filesystem'} 提升打包速度
+    1>使用缓存，以空间换时间，cache: {type: 'filesystem'} 提升打包速度【node-modules/.cache中，缓存的模块转换的二进制数据，还有一些json文件】
     2>使用TerserWebpackPlugin压缩js,CssMinimizerWebpackPlugin压缩JS 减小打包体积
     3>优化loader配置，确保loader配置尽可能精确
     4>分包，配置splitChunks，提取公共的包

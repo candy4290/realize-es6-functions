@@ -42,7 +42,7 @@ destroyed
 逻辑复用。【字典值获取】
 this.$options.xxx (自定义选项)。
 
-7.动态组件：按需渲染，而不是一次性全部加载。使用:is="xxx"。与v-if区别是，动态组件可以缓存起来。
+7.动态组件：按需渲染，而不是一次性全部加载。使用:is="xxx"。与v-if区别是，动态组件可以缓存起来(配合keep-alive使用才行哦)。
 
 8.插件
 插件通常用来为 Vue 添加全局功能。
@@ -140,6 +140,7 @@ vue2中监听到变化后，将渲染函数放入nextTick. vue3放入到Promise�
 LRU，优先移除最久没使用的信息。vue2中是基于数组来实现的。
 
 23.vue2全家桶构成
+vue2+elementui+vue-router+vuex+echarts+decimal.js+vue-virtual-scroll-list;+husky+lintstaged+prettier+jest;
 
 24.vue2 delete arr[1]与Vue.delete(arr, 1)区别。
 1>delete 不会改变数组长度，被删除的元素变为empty。

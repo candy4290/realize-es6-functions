@@ -37,5 +37,9 @@ svg,getPointAtLength(),getTotalLength();
 三、threejs
 场景-Mesh（物体+材质）+相机+控制器+渲染器。
 调研(车辆轨迹播放、暂停、sharder保护罩及电子围栏效果，射线碰撞检测。)
+视角跟随(camera.position,camera.lookAt)；
+
 
 threejs自己实现的3d看房效果(全景图切片组合，加快渲染速度)。
+
+经纬度转墨卡托->设置中心点位->坐标缩放->得到threejs坐标。
