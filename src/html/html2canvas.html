@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>html2canvas 截图并绘制标记</title>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <style>
+    #captureArea {
+      width: 300px;
+      height: 200px;
+      border: 2px solid #000;
+      padding: 10px;
+      background-color: #f5f5f5;
+    }
+
+    #outputContainer {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body style="padding:8px;margin:0">
+    <div style="width:100px;height:100px;background: #000;"></div>
+    <div style="display: flex; height: 200px;">
+        <div style="background: #eee; width: 100px;"></div>
+        <div id="b" style="background: orange; flex: 1;"></div>
+        <div style="background: red; width: 100px;"></div>
+        </div>
+        <div>-------------------------------------</div>
+    </div>
+</body>
+
+    <script>
+        html2canvas(document.getElementById("b"), {
+            scrollX: 0,
+            scrollY: 0,
+            x: 0,
+            y: 0,
+            windowWidth: document.documentElement.scrollWidth,
+            windowHeight: document.documentElement.scrollHeight
+        }).then(function (canvas) {
+        const ctx = canvas.getContext("2d");
+        ctx.font = "20px PingFangSC";
+        ctx.fillStyle = "rgb(0, 0, 0)";
+        ctx.fillRect(108, 108, 100, 100); // I want to start from (0,0) ctx.fillRect(0, 0, 100, 100);
+        document.body.appendChild(canvas);
+        });
+    </script>
+</html>

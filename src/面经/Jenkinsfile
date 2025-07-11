@@ -1,0 +1,72 @@
+pipeline {
+  agent any
+
+  parameters {
+    choice(name: 'ENV', choices: ['test', 'prod'], description: '部署环境')
+    booleanParam(name: 'CLEAN_INSTALL', defaultValue: true, description: '是否重新安装依赖')
+    booleanParam(name: 'ROLLBACK', defaultValue: false, description: '是否执行回滚')
+  }
+
+  environment {
+    FRONT_HOME = '/home/xxx/nginx/html/project' // 根据你实际部署目录设置
+  }
+
+  stages {
+    stage('Install') {
+      when { expression { return params.CLEAN_INSTALL } }
+      steps {
+        sh 'rm -rf node_modules'
+        sh 'npm install'
+      }
+    }
+
+    stage('Build') {
+      steps {
+        script {
+          if (params.ENV == 'test') {
+            sh 'npm run build'
+          } else {
+            sh 'npm run build:prod'
+          }
+        }
+      }
+    }
+
+    stage('Deploy') {
+      when { expression { return !params.ROLLBACK } }
+      steps {
+        script {
+          if (params.ENV == 'test') {
+            sh '''
+              cd $FRONT_HOME
+              rm -rf build.bk
+              mv build build.bk || true
+              cp -r $WORKSPACE/build ./
+            '''
+          } else {
+            sh '''
+              cd $FRONT_HOME
+              rm -rf build.tar
+              cp -r $WORKSPACE/build ./
+              tar -zcvf build.tar build
+              rm -rf build
+            '''
+          }
+        }
+      }
+    }
+
+    stage('Rollback') {
+      when { expression { return params.ROLLBACK } }
+      steps {
+        script {
+          sh '''
+            cd $FRONT_HOME
+            rm -rf build
+            mv build.bk build
+          '''
+        }
+      }
+    }
+  }
+}
